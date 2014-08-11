@@ -1,3 +1,33 @@
-from django.shortcuts import render
-
 # Create your views here.
+from django.views.generic.base import TemplateView
+from rest_framework.viewsets import ModelViewSet
+from werapp.models import Player, MagicGame, GameRound, GameMatch, GamePlayer
+
+from werapp.serializers import PlayerSerializer, MagicGameSerializer, GameRoundSerializer, GameMatchSerializer, \
+    GamePlayerSerializer
+
+
+class PlayerViewSet(ModelViewSet):
+    model = Player
+    serializer_class = PlayerSerializer
+
+class MagicGameViewSet(ModelViewSet):
+    model = MagicGame
+    serializer_class = MagicGameSerializer
+
+class GameRoundViewSet(ModelViewSet):
+    model = GameRound
+    serializer_class = GameRoundSerializer
+
+class GameMatchViewSet(ModelViewSet):
+    model = GameMatch
+    serializer_class = GameMatchSerializer
+
+class GamePlayerViewSet(ModelViewSet):
+    model = GamePlayer
+    serializer_class = GamePlayerSerializer
+
+
+
+class HomeView(TemplateView):
+    template_name = "angular.html"
