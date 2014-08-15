@@ -6,7 +6,7 @@ from werapp.models import Player, MagicGame, GameRound, GameMatch, GamePlayer
 class PlayerSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Player
-        fields = ("url", "first_name", "last_name", "username", "email", "dcinumber", "is_judge",)
+        fields = ("id", "url", "first_name", "last_name", "username", "email", "dcinumber", "is_judge",)
 
 class MagicGameSerializer(HyperlinkedModelSerializer):
     class Meta:

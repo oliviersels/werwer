@@ -29,5 +29,11 @@ class GamePlayerViewSet(ModelViewSet):
 
 
 
+class WerView(TemplateView):
+    template_name = "wer.html"
+
 class HomeView(TemplateView):
-    template_name = "angular.html"
+    template_name = "partials/home.html"
+
+class PlayerView(TemplateView):
+    template_name = "partials/players.html"
