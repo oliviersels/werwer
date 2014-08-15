@@ -1,8 +1,26 @@
 {% verbatim %}
 
-<div ng-repeat="player in players">
-    {{ player }}
-</div>
+<table class="table table-striped table-responsive">
+    <thead>
+        <tr>
+            <th>Player name</th>
+            <th>DCI number</th>
+            <th>Judge</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="player in players">
+            <td>{{ player.first_name + " " + player.last_name }}</td>
+            <td>{{ player.dcinumber }}</td>
+            <td class="vert-align">
+                <div>
+                    <input type="checkbox" ng-model="player.is_judge" ng-show="!player.is_judge">
+                    <span class="glyphicon glyphicon-ok-circle" ng-show="player.is_judge"></span>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
 {{ admin }}
 <div ng-repeat="game in games">
     {{ game }}
