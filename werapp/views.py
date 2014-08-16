@@ -37,3 +37,6 @@ class HomeView(TemplateView):
 
 class PlayerView(TemplateView):
     template_name = "partials/players.html"
+
+class EditPlayerView(TemplateView):
+    template_name = "partials/edit-player.html"

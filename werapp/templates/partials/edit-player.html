@@ -1,0 +1,40 @@
+{% verbatim %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="h1">Edit player</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-warning" role="alert" ng-show="error == 404">Player not found</div>
+            <form role="form" name="EditPlayerForm" ng-show="player" ng-submit="submit()">
+                <div class="form-group">
+                    <label for="inputFirstName">First name</label>
+                    <input type="text" class="form-control" id="inputFirstName" placeholder="Enter first name" ng-model="player.first_name"/>
+                </div>
+                <div class="form-group">
+                    <label for="inputLastName">Last name</label>
+                    <input type="text" class="form-control" id="inputLastName" placeholder="Enter last name" ng-model="player.last_name"/>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail">Email address</label>
+                    <input type="email" class="form-control" id="inputEmail" placeholder="Enter email" ng-model="player.email"/>
+                </div>
+                <div class="form-group">
+                    <label for="inputDCINumber">DCI number</label>
+                    <input type="text" class="form-control" id="inputDCINumber" placeholder="Enter DCI number" ng-model="player.dcinumber"/>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="player.is_judge"> Judge
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endverbatim %}

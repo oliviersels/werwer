@@ -2,7 +2,7 @@
 (function() {
   var werControllers;
 
-  werControllers = angular.module('werControllers', ['werServices']);
+  werControllers = angular.module('werControllers', ['werServices', 'ngRoute']);
 
   werControllers.controller('HomeController', [
     '$scope', function($scope) {
@@ -11,16 +11,43 @@
   ]);
 
   werControllers.controller('PlayerController', [
-    '$scope', 'werApi', function($scope, werApi) {
+    '$scope', '$location', 'werApi', function($scope, $location, werApi) {
       werApi.Player.then(function(Player) {
+        var player, _i, _len, _ref, _results;
         $scope.players = Player.query();
-        return $scope.admin = Player.get({
-          id: 1
+        _ref = $scope.players;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          player = _ref[_i];
+          _results.push($scope.$watchCollection(player, function(newPlayer) {
+            return newPlayer.$update();
+          }));
+        }
+        return _results;
+      });
+      return $scope.editPlayer = function(player) {
+        return $location.path('/edit-player/' + player.id + '/');
+      };
+    }
+  ]);
+
+  werControllers.controller('EditPlayerController', [
+    '$scope', '$location', 'werApi', '$routeParams', function($scope, $location, werApi, $routeParams) {
+      werApi.Player.then(function(Player) {
+        return Player.get({
+          id: $routeParams.playerId
+        }, function(player, response) {
+          return $scope.player = player;
+        }, function(response) {
+          $scope.player = null;
+          return $scope.error = response.status;
         });
       });
-      return werApi.Game.then(function(Game) {
-        return $scope.games = Game.query();
-      });
+      return $scope.submit = function() {
+        return $scope.player.$update({}, function(data) {
+          return $location.path('/players/');
+        });
+      };
     }
   ]);
 

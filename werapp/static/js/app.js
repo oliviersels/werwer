@@ -11,16 +11,20 @@
   ]);
 
   werApp.config([
-    '$routeProvider', function($routeProvider) {
-      return $routeProvider.when('/', {
+    '$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+      $routeProvider.when('/', {
         templateUrl: '/partials/home/',
         controller: 'HomeController'
       }).when('/players/', {
         templateUrl: '/partials/players/',
         controller: 'PlayerController'
+      }).when('/edit-player/:playerId/', {
+        templateUrl: '/partials/edit-player/',
+        controller: 'EditPlayerController'
       }).otherwise({
         redirectTo: '/'
       });
+      return $locationProvider.html5Mode(true);
     }
   ]);
 

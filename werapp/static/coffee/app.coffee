@@ -5,7 +5,7 @@ werApp.config ['$resourceProvider', ($resourceProvider) ->
   $resourceProvider.defaults.stripTrailingSlashes = false
 ]
 
-werApp.config ['$routeProvider', ($routeProvider) ->
+werApp.config ['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) ->
   $routeProvider
     .when '/',
       templateUrl: '/partials/home/',
@@ -13,6 +13,10 @@ werApp.config ['$routeProvider', ($routeProvider) ->
     .when '/players/',
       templateUrl: '/partials/players/',
       controller: 'PlayerController'
+    .when '/edit-player/:playerId/',
+      templateUrl: '/partials/edit-player/',
+      controller: 'EditPlayerController'
     .otherwise
       redirectTo: '/'
+  $locationProvider.html5Mode(true)
 ]
