@@ -16,6 +16,9 @@ werApp.config ['$routeProvider', '$locationProvider', ($routeProvider, $location
     .when '/edit-player/:playerId/',
       templateUrl: '/partials/edit-player/',
       controller: 'EditPlayerController'
+    .when '/add-player/',
+      templateUrl: '/partials/add-player/',
+      controller: 'AddPlayerController'
     .otherwise
       redirectTo: '/'
   $locationProvider.html5Mode(true)

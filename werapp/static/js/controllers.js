@@ -2,7 +2,7 @@
 (function() {
   var werControllers;
 
-  werControllers = angular.module('werControllers', ['werServices', 'ngRoute']);
+  werControllers = angular.module('werControllers', ['werServices', 'ngRoute', 'ui.bootstrap']);
 
   werControllers.controller('HomeController', [
     '$scope', function($scope) {
@@ -32,7 +32,7 @@
   ]);
 
   werControllers.controller('EditPlayerController', [
-    '$scope', '$location', 'werApi', '$routeParams', function($scope, $location, werApi, $routeParams) {
+    '$scope', '$location', 'werApi', '$routeParams', '$modal', function($scope, $location, werApi, $routeParams, $modal) {
       werApi.Player.then(function(Player) {
         return Player.get({
           id: $routeParams.playerId
@@ -43,8 +43,54 @@
           return $scope.error = response.status;
         });
       });
-      return $scope.submit = function() {
+      $scope.submit = function() {
         return $scope.player.$update({}, function(data) {
+          return $location.path('/players/');
+        });
+      };
+      $scope.confirmDelete = function() {
+        var modal;
+        modal = $modal.open({
+          templateUrl: "/partials/edit-player-confirm/",
+          controller: 'EditPlayerConfirmController',
+          resolve: {
+            player: function() {
+              return $scope.player;
+            }
+          }
+        });
+        return modal.result.then(function() {
+          return $scope["delete"]();
+        });
+      };
+      return $scope["delete"] = function() {
+        return $scope.player.$delete({}, function(data) {
+          return $location.path('/players/');
+        });
+      };
+    }
+  ]);
+
+  werControllers.controller('EditPlayerConfirmController', [
+    '$scope', '$modalInstance', 'player', function($scope, $modalInstance, player) {
+      $scope.player = player;
+      $scope["delete"] = function() {
+        return $modalInstance.close();
+      };
+      return $scope.close = function() {
+        return $modalInstance.dismiss('cancel');
+      };
+    }
+  ]);
+
+  werControllers.controller('AddPlayerController', [
+    '$scope', 'werApi', '$location', function($scope, werApi, $location) {
+      werApi.Player.then(function(Player) {
+        return $scope.player = new Player();
+      });
+      return $scope.submit = function() {
+        $scope.player.username = $scope.player.first_name + '.' + $scope.player.last_name;
+        return $scope.player.$save({}, function() {
           return $location.path('/players/');
         });
       };

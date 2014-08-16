@@ -1,5 +1,5 @@
 
-werControllers = angular.module 'werControllers', ['werServices', 'ngRoute']
+werControllers = angular.module 'werControllers', ['werServices', 'ngRoute', 'ui.bootstrap']
 
 
 werControllers.controller 'HomeController', ['$scope', ($scope) ->
@@ -38,7 +38,8 @@ werControllers.controller 'EditPlayerController', ['$scope',
                                                    '$location',
                                                    'werApi',
                                                    '$routeParams',
-  ($scope, $location, werApi, $routeParams) ->
+                                                   '$modal',
+  ($scope, $location, werApi, $routeParams, $modal) ->
     werApi.Player.then (Player) ->
       Player.get({id: $routeParams.playerId}, (player, response) ->
         $scope.player = player
@@ -51,10 +52,49 @@ werControllers.controller 'EditPlayerController', ['$scope',
       $scope.player.$update({}, (data) ->
         $location.path('/players/')
       )
+
+    $scope.confirmDelete = () ->
+      modal = $modal.open(
+        templateUrl: "/partials/edit-player-confirm/",
+        controller: 'EditPlayerConfirmController',
+        resolve:
+          player: () ->
+            $scope.player
+      )
+
+      modal.result.then(
+        () ->
+          $scope.delete()
+      )
+
+
+    $scope.delete = () ->
+      $scope.player.$delete({}, (data) ->
+        $location.path('/players/')
+      )
 ]
 
-#    $scope.admin = Player.get(id: 1)
-#  werApi.Game.then (Game) ->
-#    $scope.games = Game.query()
-  #$scope.players = Player.query()
-#  $scope.players = ['a', 'b']
+werControllers.controller 'EditPlayerConfirmController', ['$scope',
+                                                          '$modalInstance',
+                                                          'player',
+  ($scope, $modalInstance, player) ->
+    $scope.player = player
+
+    $scope.delete = () ->
+      $modalInstance.close()
+
+    $scope.close = () ->
+      $modalInstance.dismiss('cancel')
+]
+
+werControllers.controller 'AddPlayerController', ['$scope', 'werApi', '$location'
+  ($scope, werApi, $location) ->
+    werApi.Player.then (Player) ->
+      $scope.player = new Player()
+
+    $scope.submit = () ->
+      $scope.player.username = $scope.player.first_name + '.' + $scope.player.last_name
+      $scope.player.$save({}, () ->
+        $location.path('/players/')
+      )
+]

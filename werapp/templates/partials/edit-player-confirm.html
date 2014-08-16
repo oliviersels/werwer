@@ -1,0 +1,19 @@
+{% verbatim %}
+
+
+  <div class="modal-header">
+    <h4 class="modal-title">Delete {{ player.first_name + ' ' + player.last_name }}?</h4>
+  </div>
+
+  <div class="modal-body">
+    <p>This will delete player {{ player.first_name + ' ' + player.last_name }}. You will no longer be able to add this player to games.</p>
+    <p>Are you sure?</p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="close()">Close</button>
+    <button type="button" class="btn btn-danger" ng-click="delete()">Delete player</button>
+  </div>
+
+
+{% endverbatim %}

@@ -2,11 +2,21 @@
 
 <div class="container-fluid">
     <div class="row">
+        <div class="col-md-2">
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" ng-click="playerSearch = ''">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </span>
+                <input type="text" class="form-control" placeholder="Search" ng-model="playerSearch" />
+            </div>
+        </div>
         <div class="col-md-1 pull-right">
-            <button type="button" class="btn btn-primary" title="Add player">
+            <a role="button" class="btn btn-primary" title="Add player" ng-href="/add-player/">
                 <span class="glyphicon glyphicon-plus"></span>
                 <span class="glyphicon glyphicon-user"></span>
-            </button>
+            </a>
         </div>
     </div>
     <div class="row">
@@ -20,7 +30,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="player in players" ng-dblclick="editPlayer(player)">
+                    <tr ng-repeat="player in players | filter:playerSearch" ng-dblclick="editPlayer(player)">
                         <td>{{ player.first_name + " " + player.last_name }} <a class="small" ng-href="/edit-player/{{ player.id }}/" showonhoverparent>edit</a></td>
                         <td>{{ player.dcinumber }}</td>
                         <td><span class="glyphicon glyphicon-ok-circle" ng-show="player.is_judge"></span></td>

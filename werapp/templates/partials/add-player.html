@@ -1,15 +1,13 @@
 {% verbatim %}
 
 <div class="container-fluid">
-    <div class="row" ng-show="player">
+    <div class="row">
         <div class="col-md-12">
-            <h1 class="h1" style="display: inline-block;">{{ player.first_name + ' ' + player.last_name }}</h1>
-            <a href="" ng-click="confirmDelete()" class="text-danger small">delete</a>
+            <h1 class="h1">{{ player.first_name && (player.first_name + ' ' + player.last_name) || ('Add new player') }}</h1>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="alert alert-warning" role="alert" ng-show="error == 404">Player not found</div>
             <form role="form" name="EditPlayerForm" ng-show="player" ng-submit="submit()">
                 <div class="form-group">
                     <label for="inputFirstName">First name</label>
@@ -32,7 +30,7 @@
                         <input type="checkbox" ng-model="player.is_judge"> Judge
                     </label>
                 </div>
-                <button type="submit" class="btn btn-primary">Edit player</button>
+                <button type="submit" class="btn btn-primary">Add player</button>
             </form>
         </div>
     </div>

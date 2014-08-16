@@ -40,3 +40,9 @@ class PlayerView(TemplateView):
 
 class EditPlayerView(TemplateView):
     template_name = "partials/edit-player.html"
+
+class EditPlayerConfirmView(TemplateView):
+    template_name = "partials/edit-player-confirm.html"
+
+class AddPlayerView(TemplateView):
+    template_name = "partials/add-player.html"
