@@ -80,14 +80,17 @@ werControllers.controller 'AddPlayerController', ['$scope', 'werApi', '$location
       )
 ]
 
-werControllers.controller 'GamesController', ['$scope', 'werApi',
-  ($scope, werApi) ->
+werControllers.controller 'GamesOverviewController', ['$scope', '$location', 'werApi',
+  ($scope, $location, werApi) ->
     werApi.Game.then (Game) ->
       $scope.games = Game.query()
+
+    $scope.openGame = (game) ->
+      $location.path('/game/' + game.id + '/')
 ]
 
-werControllers.controller 'NewGameController', ['$scope', '$filter', 'werApi', 'djangoEnums',
-  ($scope, $filter, werApi, djangoEnums) ->
+werControllers.controller 'NewGameController', ['$scope', '$filter', '$location', 'werApi', 'djangoEnums',
+  ($scope, $filter, $location, werApi, djangoEnums) ->
     werApi.Game.then (Game) ->
       # Create a new game with sensible defaults
       $scope.game = new Game(
@@ -109,5 +112,21 @@ werControllers.controller 'NewGameController', ['$scope', '$filter', 'werApi', '
     $scope.submit = () ->
       console.log $scope.game
       $scope.game.date = $filter('date')($scope.game.date, 'yyyy-MM-dd')
-      $scope.game.$save()
+      $scope.game.$save({}, () ->
+        $location.path('/game/' + $scope.game.id + '/')
+      )
+]
+
+werControllers.controller 'GameController', ['$scope',
+                                             '$location',
+                                             'werApi',
+                                             '$routeParams'
+  ($scope, $location, werApi, $routeParams) ->
+    werApi.Game.then (Game) ->
+      Game.get({id: $routeParams.gameId}, (game, response) ->
+        $scope.game = game
+      , (response) ->
+        $scope.game = null
+        $scope.error = response.status
+      )
 ]

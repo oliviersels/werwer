@@ -55,8 +55,11 @@ class EditPlayerConfirmView(TemplateView):
 class AddPlayerView(TemplateView):
     template_name = "partials/add-player.html"
 
-class GamesView(TemplateView):
-    template_name = "partials/games.html"
+class GamesOverviewView(TemplateView):
+    template_name = "partials/games-overview.html"
 
 class NewGameView(TemplateView):
     template_name = "partials/new-game.html"
+
+class GameView(TemplateView):
+    template_name = "partials/game.html"
