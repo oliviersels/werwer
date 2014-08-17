@@ -80,6 +80,12 @@ werControllers.controller 'AddPlayerController', ['$scope', 'werApi', '$location
       )
 ]
 
+werControllers.controller 'GamesController', ['$scope', 'werApi',
+  ($scope, werApi) ->
+    werApi.Game.then (Game) ->
+      $scope.games = Game.query()
+]
+
 werControllers.controller 'NewGameController', ['$scope', '$filter', 'werApi', 'djangoEnums',
   ($scope, $filter, werApi, djangoEnums) ->
     werApi.Game.then (Game) ->

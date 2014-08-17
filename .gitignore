@@ -2,4 +2,4 @@
 *.pyc
 
 # Compiled coffeescript
-/static/js/compiled/*.js
+*/static/js/compiled/*.js

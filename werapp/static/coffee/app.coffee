@@ -19,6 +19,9 @@ werApp.config ['$routeProvider', '$locationProvider', ($routeProvider, $location
     .when '/add-player/',
       templateUrl: '/partials/add-player/',
       controller: 'AddPlayerController'
+    .when '/games/',
+      templateUrl: '/partials/games/',
+      controller: 'GamesController'
     .when '/new-game/',
       templateUrl: '/partials/new-game/',
       controller: 'NewGameController'
