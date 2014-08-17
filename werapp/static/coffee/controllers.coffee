@@ -3,32 +3,13 @@ werControllers = angular.module 'werControllers', ['werServices', 'ngRoute', 'ui
 
 
 werControllers.controller 'HomeController', ['$scope', ($scope) ->
-#  $scope.players = Player.query()
-#
-#  # Some fun with updating an instance
-#  admin = Player.get(id: 1, ->
-#    admin.first_name = 'Olivier'
-#    admin.last_name = 'Sels'
-#    admin.$update()
-#  )
-#
-#  # Some fun with creating a new player
-#  newPlayer = new Player(
-#    first_name: 'Olivier',
-#    last_name: 'Sels',
-#    email: 'test@mail.com',
-#    username: 'test'
-#  )
-#  newPlayer.$save()
-  $scope.welcome = 'Welcome!'
+  werApi.Match.then (Match) ->
+    $scope.previousMatches = Match.query()
 ]
 
 werControllers.controller 'PlayerController', ['$scope', '$location', 'werApi', ($scope, $location, werApi) ->
   werApi.Player.then (Player) ->
     $scope.players = Player.query()
-    $scope.$watchCollection(player, (newPlayer) ->
-      newPlayer.$update()
-    ) for player in $scope.players
 
   $scope.editPlayer = (player) ->
     $location.path('/edit-player/' + player.id + '/')
@@ -97,4 +78,10 @@ werControllers.controller 'AddPlayerController', ['$scope', 'werApi', '$location
       $scope.player.$save({}, () ->
         $location.path('/players/')
       )
+]
+
+werControllers.controller 'NewGameController', ['$scope', 'werApi',
+  ($scope, werApi) ->
+    werApi.Game.then (Game) ->
+      $scope.game = new Game()
 ]

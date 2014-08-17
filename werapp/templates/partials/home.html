@@ -1,5 +1,29 @@
 {% verbatim %}
 
-<h1>{{ welcome }}</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Welcome to Werwer!</h1>
+        </div>
+        <div class="col-md-12">
+            <p>This application allows for the scheduling and running of casual Magic the gathering games.</p>
+        </div>
+        <div class="col-md-12" ng-show="previousMatches">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Scheduled games</h3>
+                </div>
+                <div class="panel-body">
+                    Show scheduled games here
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p>Show most used options here</p>
+        </div>
+    </div>
+</div>
 
 {% endverbatim %}

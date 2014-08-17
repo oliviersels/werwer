@@ -6,24 +6,16 @@
 
   werControllers.controller('HomeController', [
     '$scope', function($scope) {
-      return $scope.welcome = 'Welcome!';
+      return werApi.Match.then(function(Match) {
+        return $scope.previousMatches = Match.query();
+      });
     }
   ]);
 
   werControllers.controller('PlayerController', [
     '$scope', '$location', 'werApi', function($scope, $location, werApi) {
       werApi.Player.then(function(Player) {
-        var player, _i, _len, _ref, _results;
-        $scope.players = Player.query();
-        _ref = $scope.players;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          player = _ref[_i];
-          _results.push($scope.$watchCollection(player, function(newPlayer) {
-            return newPlayer.$update();
-          }));
-        }
-        return _results;
+        return $scope.players = Player.query();
       });
       return $scope.editPlayer = function(player) {
         return $location.path('/edit-player/' + player.id + '/');
@@ -94,6 +86,14 @@
           return $location.path('/players/');
         });
       };
+    }
+  ]);
+
+  werControllers.controller('NewGameController', [
+    '$scope', 'werApi', function($scope, werApi) {
+      return werApi.Game.then(function(Game) {
+        return $scope.game = new Game();
+      });
     }
   ]);
 

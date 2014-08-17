@@ -1,0 +1,31 @@
+{% verbatim %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="h1">New game</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form role="form" name="NewGameForm" ng-show="game" ng-submit="submit()">
+                <div class="form-group">
+                    <label for="inputFirstName">Name</label>
+                    <input type="text" class="form-control" id="inputName" placeholder="Enter a name for this game" ng-model="game.name"/>
+                </div>
+                <div class="form-group">
+                    <label for="inputDate">Date</label>
+                    <input type="date" class="form-control" id="inputDate" placeholder="Enter the date of when this game will occur" ng-model="player.date"/>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="player.is_paid"> Paid game?
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Game</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endverbatim %}
