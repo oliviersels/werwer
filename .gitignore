@@ -1,2 +1,5 @@
 .idea
 *.pyc
+
+# Compiled coffeescript
+/static/js/compiled/*.js
