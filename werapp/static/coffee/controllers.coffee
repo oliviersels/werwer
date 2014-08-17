@@ -1,5 +1,5 @@
 
-werControllers = angular.module 'werControllers', ['werServices', 'ngRoute', 'ui.bootstrap']
+werControllers = angular.module 'werControllers', ['werServices', 'ngRoute', 'ui.bootstrap', 'djangoDynamics']
 
 
 werControllers.controller 'HomeController', ['$scope', ($scope) ->
@@ -80,8 +80,28 @@ werControllers.controller 'AddPlayerController', ['$scope', 'werApi', '$location
       )
 ]
 
-werControllers.controller 'NewGameController', ['$scope', 'werApi',
-  ($scope, werApi) ->
+werControllers.controller 'NewGameController', ['$scope', '$filter', 'werApi', 'djangoEnums',
+  ($scope, $filter, werApi, djangoEnums) ->
     werApi.Game.then (Game) ->
-      $scope.game = new Game()
+      # Create a new game with sensible defaults
+      $scope.game = new Game(
+        game_type: 'casual_limited',
+        pairing_method: 'swiss',
+        date: new Date()
+      )
+
+    $scope.datepickerOpened = false
+
+    $scope.openDatepicker = ($event) ->
+      $event.preventDefault();
+      $event.stopPropagation();
+      $scope.datepickerOpened = true
+
+    $scope.optionsGameType = djangoEnums.GameType
+    $scope.optionsPairingMethod = djangoEnums.PairingMethod
+
+    $scope.submit = () ->
+      console.log $scope.game
+      $scope.game.date = $filter('date')($scope.game.date, 'yyyy-MM-dd')
+      $scope.game.$save()
 ]

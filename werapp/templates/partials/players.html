@@ -30,8 +30,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="player in players | filter:playerSearch" ng-dblclick="editPlayer(player)">
-                        <td>{{ player.first_name + " " + player.last_name }} <a class="small" ng-href="/edit-player/{{ player.id }}/" showonhoverparent>edit</a></td>
+                    <tr ng-repeat="player in players | filter:playerSearch" ng-click="editPlayer(player)">
+                        <td>{{ player.first_name + " " + player.last_name }}</td>
                         <td>{{ player.dcinumber }}</td>
                         <td><span class="glyphicon glyphicon-ok-circle" ng-show="player.is_judge"></span></td>
                     </tr>

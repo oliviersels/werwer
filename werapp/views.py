@@ -1,6 +1,7 @@
 # Create your views here.
 from django.views.generic.base import TemplateView
 from rest_framework.viewsets import ModelViewSet
+from werapp.enums import GameType, PairingMethod
 from werapp.models import Player, MagicGame, GameRound, GameMatch, GamePlayer
 
 from werapp.serializers import PlayerSerializer, MagicGameSerializer, GameRoundSerializer, GameMatchSerializer, \
@@ -31,6 +32,13 @@ class GamePlayerViewSet(ModelViewSet):
 
 class WerView(TemplateView):
     template_name = "wer.html"
+
+class DynamicJavascript(TemplateView):
+    template_name = "js/dynamic-javascript.js"
+
+    def get_context_data(self, **kwargs):
+        kwargs['enums'] = (GameType, PairingMethod,)
+        return kwargs
 
 class HomeView(TemplateView):
     template_name = "partials/home.html"

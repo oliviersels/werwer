@@ -11,19 +11,19 @@ class PlayerSerializer(HyperlinkedModelSerializer):
 class MagicGameSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = MagicGame
-        fields = ("url", "date", "is_paid", "gameround_set")
+        fields = ("id", "url", "date", "is_paid", "game_type", "pairing_method", "gameround_set")
 
 class GameRoundSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = GameRound
-        fields = ("url", "game", "gamematch_set")
+        fields = ("id", "url", "game", "gamematch_set")
 
 class GameMatchSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = GameMatch
-        fields = ("url", "round", "gameplayer_set")
+        fields = ("id", "url", "round", "gameplayer_set")
 
 class GamePlayerSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = GamePlayer
-        fields = ("url", "player", "magicgame", "matches")
+        fields = ("id", "url", "player", "magicgame", "matches")

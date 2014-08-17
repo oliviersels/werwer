@@ -7,7 +7,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-sm-4">
             <form role="form" name="NewGameForm" ng-show="game" ng-submit="submit()">
                 <div class="form-group">
                     <label for="inputFirstName">Name</label>
@@ -15,11 +15,26 @@
                 </div>
                 <div class="form-group">
                     <label for="inputDate">Date</label>
-                    <input type="date" class="form-control" id="inputDate" placeholder="Enter the date of when this game will occur" ng-model="player.date"/>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" ng-click="openDatepicker($event)">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </button>
+                        </span>
+                        <input type="datetime" class="form-control" id="inputDate" datepicker-popup is-open="datepickerOpened" ng-model="game.date"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputGameType">Game type</label>
+                    <select id="inputGameType" class="form-control" ng-model="game.game_type" ng-options="value as label for (value, label) in optionsGameType"></select>
+                </div>
+                <div class="form-group">
+                    <label for="inputPairingMethod">Pairing method</label>
+                    <select id="inputPairingMethod" class="form-control" ng-model="game.pairing_method" ng-options="value as label for (value, label) in optionsPairingMethod"></select>
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" ng-model="player.is_paid"> Paid game?
+                        <input type="checkbox" ng-model="game.is_paid"> Paid game?
                     </label>
                 </div>
                 <button type="submit" class="btn btn-primary">Add Game</button>

@@ -2,7 +2,7 @@
 (function() {
   var werControllers;
 
-  werControllers = angular.module('werControllers', ['werServices', 'ngRoute', 'ui.bootstrap']);
+  werControllers = angular.module('werControllers', ['werServices', 'ngRoute', 'ui.bootstrap', 'djangoDynamics']);
 
   werControllers.controller('HomeController', [
     '$scope', function($scope) {
@@ -90,10 +90,27 @@
   ]);
 
   werControllers.controller('NewGameController', [
-    '$scope', 'werApi', function($scope, werApi) {
-      return werApi.Game.then(function(Game) {
-        return $scope.game = new Game();
+    '$scope', '$filter', 'werApi', 'djangoEnums', function($scope, $filter, werApi, djangoEnums) {
+      werApi.Game.then(function(Game) {
+        return $scope.game = new Game({
+          game_type: 'casual_limited',
+          pairing_method: 'swiss',
+          date: new Date()
+        });
       });
+      $scope.datepickerOpened = false;
+      $scope.openDatepicker = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        return $scope.datepickerOpened = true;
+      };
+      $scope.optionsGameType = djangoEnums.GameType;
+      $scope.optionsPairingMethod = djangoEnums.PairingMethod;
+      return $scope.submit = function() {
+        console.log($scope.game);
+        $scope.game.date = $filter('date')($scope.game.date, 'yyyy-MM-dd');
+        return $scope.game.$save();
+      };
     }
   ]);
 
