@@ -1,5 +1,6 @@
 # Create your views here.
 from django.views.generic.base import TemplateView
+from rest_framework.filters import DjangoFilterBackend
 from rest_framework.viewsets import ModelViewSet
 from werapp.enums import GameType, PairingMethod
 from werapp.models import Player, MagicGame, GameRound, GameMatch, GamePlayer
@@ -11,6 +12,8 @@ from werapp.serializers import PlayerSerializer, MagicGameSerializer, GameRoundS
 class PlayerViewSet(ModelViewSet):
     model = Player
     serializer_class = PlayerSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('first_name', 'last_name', 'dcinumber')
 
 class MagicGameViewSet(ModelViewSet):
     model = MagicGame
@@ -63,3 +66,6 @@ class NewGameView(TemplateView):
 
 class GameView(TemplateView):
     template_name = "partials/game.html"
+
+class GamePlanningView(TemplateView):
+    template_name = "partials/game-planning.html"

@@ -1,8 +1,13 @@
 
 werControllers = angular.module 'werControllers', ['werServices', 'ngRoute', 'ui.bootstrap', 'djangoDynamics']
 
+werControllers.controller 'NavbarController', ['$scope', '$location',
+  ($scope, $location) ->
+    $scope.isActive = (urls...) ->
+      (new RegExp(url).test $location.path() for url in urls).some((x) -> x)
+]
 
-werControllers.controller 'HomeController', ['$scope', ($scope) ->
+werControllers.controller 'HomeController', ['$scope', 'werApi', ($scope, werApi) ->
   werApi.Match.then (Match) ->
     $scope.previousMatches = Match.query()
 ]
@@ -110,7 +115,6 @@ werControllers.controller 'NewGameController', ['$scope', '$filter', '$location'
     $scope.optionsPairingMethod = djangoEnums.PairingMethod
 
     $scope.submit = () ->
-      console.log $scope.game
       $scope.game.date = $filter('date')($scope.game.date, 'yyyy-MM-dd')
       $scope.game.$save({}, () ->
         $location.path('/game/' + $scope.game.id + '/')
@@ -129,4 +133,42 @@ werControllers.controller 'GameController', ['$scope',
         $scope.game = null
         $scope.error = response.status
       )
+]
+
+werControllers.controller 'GamePlanningController', ['$scope',
+                                                     '$location',
+                                                     'werApi',
+                                                     '$routeParams'
+  ($scope, $location, werApi, $routeParams) ->
+    getGame = () ->
+      werApi.Game.then (Game) ->
+        Game.get({id: $routeParams.gameId}, (game, response) ->
+          $scope.game = game
+          console.log game
+        , (response) ->
+          $scope.game = null
+          $scope.error = response.status
+        )
+
+    getAvailablePlayers = () ->
+      werApi.Player.then (Player) ->
+        $scope.availablePlayers = Player.query()
+
+    getGame()
+    getAvailablePlayers()
+
+
+    $scope.addPlayer = (player) ->
+      werApi.GamePlayer.then (GamePlayer) ->
+        gamePlayer = new GamePlayer(
+          player: player.url
+          magicgame: $scope.game.url
+        )
+        gamePlayer.$save({}, () ->
+          getGame()
+          getAvailablePlayers()
+        )
+
+    $scope.filterAdded = (player) ->
+      !$scope.game || !$scope.game.$resolved || !(gameplayer1 in $scope.game.gameplayer_set for gameplayer1 in player.gameplayer_set).some((x) -> x)
 ]

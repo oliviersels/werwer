@@ -28,6 +28,9 @@ werApp.config ['$routeProvider', '$locationProvider', ($routeProvider, $location
     .when '/game/:gameId/',
       templateUrl: '/partials/game/',
       controller: 'GameController'
+    .when '/game/:gameId/planning/',
+      templateUrl: '/partials/game-planning/',
+      controller: 'GamePlanningController'
     .otherwise
       redirectTo: '/'
   $locationProvider.html5Mode(true)

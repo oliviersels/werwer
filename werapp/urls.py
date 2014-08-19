@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from werapp.views import WerView, PlayerView, HomeView, EditPlayerView, EditPlayerConfirmView, AddPlayerView, \
-    NewGameView, DynamicJavascript, GamesOverviewView, GameView
+    NewGameView, DynamicJavascript, GamesOverviewView, GameView, GamePlanningView
 
 urlpatterns = (
     url(r'^$', WerView.as_view()),
@@ -12,6 +12,7 @@ urlpatterns = (
     url(r'^new-game/$', WerView.as_view(), name='new-game'),
     url(r'^games-overview/$', WerView.as_view(), name='games-overview'),
     url(r'^game/\d+/$', WerView.as_view(), name='game'),
+    url(r'^game/\d+/planning/$', WerView.as_view(), name='game-planning'),
 
     url(r'^partials/home/$', HomeView.as_view(), name='partial-home'),
 
@@ -23,5 +24,5 @@ urlpatterns = (
     url(r'^partials/games-overview/$', GamesOverviewView.as_view(), name='partial-games-overview'),
     url(r'^partials/new-game/$', NewGameView.as_view(), name='partial-new-game'),
     url(r'^partials/game/$', GameView.as_view(), name='partial-game'),
-
+    url(r'^partials/game-planning/$', GamePlanningView.as_view(), name='partial-game-planning'),
 )

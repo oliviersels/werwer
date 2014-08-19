@@ -1,0 +1,63 @@
+{% extends "partials/game-base.html" %}
+{% block menu_phases_active %}active{% endblock %}
+{% block submenu_planning_active %}active{% endblock %}
+
+{% block content %}
+{% verbatim %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="row">
+                <p>
+                    <div class="col-sm-10 col-xs-10">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search player">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-xs-2">
+                        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
+                    </div>
+                </p>
+            </div>
+            <div class="row">
+                <p>
+                    <div class="col-sm-12">
+                        <table class="table table-responsive table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>DCI number</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="player in availablePlayers | filter : filterAdded" ng-click="addPlayer(player)">
+                                    <td>{{ player.first_name + ' ' + player.last_name }}</td>
+                                    <td>{{ player.dcinumber }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </p>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <table class="table table-responsive table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>DCI number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="gameplayer in game.gameplayer_set">
+                        <td>{{ gameplayer.url }}</td>
+                        <td>{{ gameplayer.dcinumber }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endverbatim %}
+{% endblock %}

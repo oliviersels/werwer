@@ -20,9 +20,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="game in games" ng-click="openGame(game)">
+                    <tr ng-repeat="game in games | orderBy : '-date'" ng-click="openGame(game)">
                         <td>{{ game.name }}</td>
-                        <td>{{ game.date }}</td>
+                        <td>{{ game.date | date : 'longDate' }}</td>
                         <td>{{ game.status }}</td>
                     </tr>
                 </tbody>

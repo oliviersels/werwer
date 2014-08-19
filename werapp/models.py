@@ -29,3 +29,6 @@ class GamePlayer(models.Model):
     player = models.ForeignKey(Player)
     magicgame = models.ForeignKey(MagicGame)
     matches = models.ManyToManyField(to=GameMatch)
+
+    class Meta:
+        unique_together = ("player", "magicgame")

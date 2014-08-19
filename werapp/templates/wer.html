@@ -3,7 +3,7 @@
 {% block angularbody %}
     {% verbatim %}
 
-    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" ng-controller="NavbarController">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
@@ -16,16 +16,16 @@
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="dropdown">
+                    <li class="dropdown" ng-class="{ active: isActive('/new-game/', '/add-player/')}">
                         <a href="" class="dropdown-toggle">New <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="/new-game/">Game</a></li>
-                            <li><a href="/add-player/">Player</a></li>
+                            <li ng-class="{ active: isActive('/new-game/')}"><a href="/new-game/">Game</a></li>
+                            <li ng-class="{ active: isActive('/add-player/')}"><a href="/add-player/">Player</a></li>
                         </ul>
                     </li>
-                    <li><a href="/games-overview/">Games</a></li>
-                    <li><a href="/players/">Players</a></li>
-                    <li><a href="/">History</a></li>
+                    <li ng-class="{ active: isActive('/games-overview/')}"><a href="/games-overview/">Games</a></li>
+                    <li ng-class="{ active: isActive('/players/')}"><a href="/players/">Players</a></li>
+                    <li ng-class="{ active: isActive('/history/')}"><a href="/">History</a></li>
                 </ul>
             </div>
         </div>

@@ -1,0 +1,30 @@
+<div class="container-fluid" ng-show="game">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="h1">{% verbatim %}{{ game.name }}{% endverbatim %}</h1>
+        </div>
+    </div>
+    <div class="row" ng-show="game">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="{% block menu_overview_active %}{% endblock %}"><a href="/game/{% verbatim %}{{ game.id }}{% endverbatim %}/">Overview</a></li>
+                <li class="dropdown {% block menu_phases_active %}{% endblock %}">
+                    <a href="" class="dropdown-toggle">Phases <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class="{% block submenu_planning_active %}{% endblock %}"><a href="/game/{% verbatim %}{{ game.id }}{% endverbatim %}/planning/">Planning</a></li>
+                        <li><a href="/">Draft</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/">Round 1</a></li>
+                        <li><a href="/">Round 2</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/">Conclusion</a></li>
+                    </ul>
+                </li>
+                <li><a href="/">Standings</a></li>
+            </ul>
+        </div>
+    </div>
+    {% block content %}
+    {% endblock %}
+</div>
+
