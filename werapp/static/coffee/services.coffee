@@ -1,6 +1,8 @@
 werServices = angular.module 'werServices', ['ngResource']
 
 werServices.factory 'werApi', ['$q', '$http', '$resource', ($q, $http, $resource) ->
+  resourceCache = {}
+
   createService = (serviceName, serviceUrl, linkedResources) ->
     _convertDate = (obj, key) ->
       value = Date.parse(obj[key])
@@ -16,7 +18,7 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', ($q, $http, $resource
           if options.isArray
             value = $q.all(($http.get(res) for res in oldValue)).then((results) ->
               if options.resource
-                options.resource.then((Resource) ->
+                resourceCache[options.resource].then((Resource) ->
                   value = (new Resource(result.data) for result in results)
                 )
               else
@@ -26,7 +28,7 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', ($q, $http, $resource
           else
             value = $http.get(oldValue).success((data) ->
               if options.resource
-                options.resource.then((Resource) ->
+                resourceCache[options.resource].then((Resource) ->
                   value = new Resource(data)
                 )
               else
@@ -85,18 +87,19 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', ($q, $http, $resource
     deferred.promise
 
   # Create the resources
-  GamePlayer = createResource('game-players', {})
+  resourceCache.GamePlayer = createResource('game-players', {})
 
-  Player: createResource('players',
+  resourceCache.Player = createResource('players',
     gameplayer_set:
       isArray: true
-      resource: GamePlayer
+      resource: "GamePlayer"
   )
-  Game: createResource('games',
+  resourceCache.Game = createResource('games',
     gameplayer_set:
       isArray: true
-      resource: GamePlayer
+      resource: "GamePlayer"
   )
-  Match: createResource('matches', {})
-  GamePlayer: GamePlayer
+  resourceCache.Match = createResource('matches', {})
+
+  resourceCache
 ]
