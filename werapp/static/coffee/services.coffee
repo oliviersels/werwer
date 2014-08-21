@@ -19,7 +19,7 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', ($q, $http, $resource
             value = $q.all(($http.get(res) for res in oldValue)).then((results) ->
               if options.resource
                 resourceCache[options.resource].then((Resource) ->
-                  value = (new Resource(result.data) for result in results)
+                  value = (Resource.createResource(result.data) for result in results)
                 )
               else
                 value = (result.data for result in results)
@@ -29,7 +29,7 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', ($q, $http, $resource
             value = $http.get(oldValue).success((data) ->
               if options.resource
                 resourceCache[options.resource].then((Resource) ->
-                  value = new Resource(data)
+                  value = Resource.createResource(data)
                 )
               else
                 value = data
@@ -37,12 +37,13 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', ($q, $http, $resource
         else
           value
 
-    convertLinkedResources = (obj, linkedResources) ->
+    convertLinkedResources = (obj, linkedResources, enumerable) ->
+      enumerable ?= false
       for resourceName, options of linkedResources
         # Create a getter for the resources
         Object.defineProperty(obj, resourceName,
           get: createLazyProperty(obj[resourceName], options)
-          enumerable: true
+          enumerable: enumerable
 
         )
 
@@ -50,7 +51,7 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', ($q, $http, $resource
       (response) ->
         convertObj = (obj) ->
           searchAndconvertDates(obj)
-          convertLinkedResources(obj, linkedResources)
+          convertLinkedResources(obj, linkedResources, true)
 
         if isArray
           convertObj(obj) for obj in response.resource
@@ -58,7 +59,7 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', ($q, $http, $resource
           convertObj(response.resource)
         response.resource
 
-    $resource serviceUrl + ':id/', id: "@id", {
+    resourceClass = $resource serviceUrl + ':id/', id: "@id", {
       update:
         method: 'PUT'
       query:
@@ -71,6 +72,13 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', ($q, $http, $resource
         interceptor:
           response: convertResponse(linkedResources, false)
     }
+
+    resourceClass.createResource = (args) ->
+      resource = new this(args)
+      convertLinkedResources(resource, linkedResources, false)
+      resource
+
+    resourceClass
 
   createResource = (resourceName, linkedResources) ->
     deferred = $q.defer()
@@ -87,7 +95,14 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', ($q, $http, $resource
     deferred.promise
 
   # Create the resources
-  resourceCache.GamePlayer = createResource('game-players', {})
+  resourceCache.GamePlayer = createResource('game-players',
+    player:
+      isArray: false
+      resource: "Player"
+    magicgame:
+      isArray: false
+      resource: "Game"
+  )
 
   resourceCache.Player = createResource('players',
     gameplayer_set:
@@ -98,8 +113,23 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', ($q, $http, $resource
     gameplayer_set:
       isArray: true
       resource: "GamePlayer"
+    gameround_set:
+      isArray: true
+      resource: "Round"
   )
-  resourceCache.Match = createResource('matches', {})
+  resourceCache.Match = createResource('matches',
+    round:
+      isArray: false
+      resource: "Round"
+  )
+  resourceCache.Round = createResource('rounds',
+    game:
+      isArray: false
+      resource: "Game"
+    gamematch_set:
+      isArray: true
+      resource: "Match"
+  )
 
   resourceCache
 ]

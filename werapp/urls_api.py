@@ -5,7 +5,7 @@ router = routers.DefaultRouter()
 router.register("players", PlayerViewSet)
 router.register("games", MagicGameViewSet)
 router.register("matches", GameMatchViewSet)
-router.register("round", GameRoundViewSet)
+router.register("rounds", GameRoundViewSet)
 router.register("game-players", GamePlayerViewSet)
 
 urlpatterns = router.get_urls()

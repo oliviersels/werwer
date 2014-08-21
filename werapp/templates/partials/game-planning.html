@@ -51,8 +51,8 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="gameplayer in game.gameplayer_set">
-                        <td>{{ gameplayer.url }}</td>
-                        <td>{{ gameplayer.dcinumber }}</td>
+                        <td>{{ gameplayer.player.first_name + ' ' + gameplayer.player.last_name }}</td>
+                        <td>{{ gameplayer.player.dcinumber }}</td>
                     </tr>
                 </tbody>
             </table>
