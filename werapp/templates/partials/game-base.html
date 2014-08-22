@@ -11,8 +11,10 @@
                 <li class="dropdown {% block menu_phases_active %}{% endblock %}">
                     <a href="" class="dropdown-toggle">Phases <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li class="{% block submenu_planning_active %}{% endblock %}"><a href="/game/{% verbatim %}{{ game.id }}{% endverbatim %}/planning/">Planning</a></li>
-                        <li><a href="/">Draft</a></li>
+                        <li class="{% block submenu_planning_active %}{% endblock %}">
+                            <a href="/game/{% verbatim %}{{ game.id }}{% endverbatim %}/planning/">Planning <span class="glyphicon glyphicon-ok"></span></a>
+                        </li>
+                        <li class="{% block submenu_draft_active %}{% endblock %}"><a href="/game/{% verbatim %}{{ game.id }}{% endverbatim %}/draft/">Draft</a></li>
                         <li class="divider"></li>
                         <li><a href="/">Round 1</a></li>
                         <li><a href="/">Round 2</a></li>

@@ -1,9 +1,9 @@
 werServices = angular.module 'werServices', ['ngResource']
 
-werServices.factory 'werApi', ['$q', '$http', '$resource', ($q, $http, $resource) ->
+werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http, $resource, $filter) ->
   resourceCache = {}
 
-  createService = (serviceName, serviceUrl, linkedResources) ->
+  createService = (serviceName, serviceUrl, linkedResources, postableHandler) ->
     _convertDate = (obj, key) ->
       value = Date.parse(obj[key])
       obj[key] = new Date(value) if !isNaN(value)
@@ -78,9 +78,20 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', ($q, $http, $resource
       convertLinkedResources(resource, linkedResources, false)
       resource
 
+    resourceClass.prototype['postable'] = () ->
+      result = {}
+      for prop, value of this.toJSON()
+        if not (prop of linkedResources)
+          result[prop] = if postableHandler then postableHandler(prop, value) else value
+        else if linkedResources[prop].isArray
+          result[prop] = (p.url for p in value)
+        else
+          result[prop] = value.url
+      new resourceClass(result)
+
     resourceClass
 
-  createResource = (resourceName, linkedResources) ->
+  createResource = (resourceName, linkedResources, postableHandler) ->
     deferred = $q.defer()
 
     $http
@@ -88,7 +99,7 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', ($q, $http, $resource
       url: '/api/',
       cache: true
     .success (data) ->
-      deferred.resolve(createService resourceName, data[resourceName], linkedResources)
+      deferred.resolve(createService resourceName, data[resourceName], linkedResources, postableHandler)
     .error (data) ->
       deferred.reject("Error retrieving API endpoint: " + data)
 
@@ -115,7 +126,12 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', ($q, $http, $resource
       resource: "GamePlayer"
     gameround_set:
       isArray: true
-      resource: "Round"
+      resource: "Round",
+    (prop, value) ->
+      if prop == 'date'
+        $filter('date')(value, 'yyyy-MM-dd')
+      else
+        value
   )
   resourceCache.Match = createResource('matches',
     round:

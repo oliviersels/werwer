@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from werapp.views import WerView, PlayerView, HomeView, EditPlayerView, EditPlayerConfirmView, AddPlayerView, \
-    NewGameView, DynamicJavascript, GamesOverviewView, GameView, GamePlanningView
+    NewGameView, DynamicJavascript, GamesOverviewView, GameView, GamePlanningView, StartEventConfirmView, GameDraftView, \
+    ConfirmCancelModalView
 
 urlpatterns = (
     url(r'^$', WerView.as_view()),
@@ -13,6 +14,7 @@ urlpatterns = (
     url(r'^games-overview/$', WerView.as_view(), name='games-overview'),
     url(r'^game/\d+/$', WerView.as_view(), name='game'),
     url(r'^game/\d+/planning/$', WerView.as_view(), name='game-planning'),
+    url(r'^game/\d+/draft/$', WerView.as_view(), name='game-draft'),
 
     url(r'^partials/home/$', HomeView.as_view(), name='partial-home'),
 
@@ -25,4 +27,7 @@ urlpatterns = (
     url(r'^partials/new-game/$', NewGameView.as_view(), name='partial-new-game'),
     url(r'^partials/game/$', GameView.as_view(), name='partial-game'),
     url(r'^partials/game-planning/$', GamePlanningView.as_view(), name='partial-game-planning'),
+    url(r'^partials/start-event-confirm/$', StartEventConfirmView.as_view(), name='partial-start-event-confirm'),
+    url(r'^partials/game-draft/$', GameDraftView.as_view(), name='partial-game-draft'),
+    url(r'^partials/confirm-cancel-modal/$', ConfirmCancelModalView.as_view(), name='partial-confirm-cancel-modal'),
 )

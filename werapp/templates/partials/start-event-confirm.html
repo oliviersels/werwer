@@ -1,0 +1,23 @@
+{% verbatim %}
+
+
+  <div class="modal-header">
+    <h4 class="modal-title">Start event {{ game.name }}?</h4>
+  </div>
+
+  <div class="modal-body">
+    <p>
+        You are about to start event {{ game.name }}. The recommended number of rounds is {{ recommended_rounds }}. How many rounds do you want to play?
+    </p>
+    <p>
+        <input type="number" ng-model="game.nr_of_rounds" />
+    </p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" ng-click="start()">Start event</button>
+    <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+  </div>
+
+
+{% endverbatim %}

@@ -69,3 +69,12 @@ class GameView(TemplateView):
 
 class GamePlanningView(TemplateView):
     template_name = "partials/game-planning.html"
+
+class StartEventConfirmView(TemplateView):
+    template_name = "partials/start-event-confirm.html"
+
+class GameDraftView(TemplateView):
+    template_name = "partials/game-draft.html"
+
+class ConfirmCancelModalView(TemplateView):
+    template_name = "partials/confirm-cancel-modal.html"

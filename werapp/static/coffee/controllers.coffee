@@ -138,37 +138,114 @@ werControllers.controller 'GameController', ['$scope',
 werControllers.controller 'GamePlanningController', ['$scope',
                                                      '$location',
                                                      'werApi',
-                                                     '$routeParams'
-  ($scope, $location, werApi, $routeParams) ->
-    getGame = () ->
-      werApi.Game.then (Game) ->
-        Game.get({id: $routeParams.gameId}, (game, response) ->
-          $scope.game = game
-          console.log game
-        , (response) ->
-          $scope.game = null
-          $scope.error = response.status
+                                                     '$routeParams',
+                                                     '$modal'
+  ($scope, $location, werApi, $routeParams, $modal) ->
+    werApi.Game.then (Game) ->
+      Game.get({id: $routeParams.gameId}, (game, response) ->
+        $scope.game = game
+      , (response) ->
+        $scope.game = null
+        $scope.error = response.status
+      )
+
+    werApi.Player.then (Player) ->
+      $scope.availablePlayers = Player.query()
+
+
+    $scope.addPlayer = (player, confirm) ->
+      if $scope.game.state == 'planning' || confirm
+        werApi.GamePlayer.then (GamePlayer) ->
+          gamePlayer = new GamePlayer(
+            player: player.url
+            magicgame: $scope.game.url
+          )
+          gamePlayer.$save({}, () ->
+            resourceGamePlayer = GamePlayer.createResource(gamePlayer.toJSON())
+            $scope.game.gameplayer_set.push(resourceGamePlayer)
+            player.gameplayer_set.push(resourceGamePlayer)
+          )
+      else
+        modal = $modal.open(
+          templateUrl: "/partials/confirm-cancel-modal/",
+          controller: 'ConfirmCancelModalController',
+          resolve:
+            title: () ->
+              "Add player?"
+            body: () ->
+              "The event has already started. Are you sure you want to add player " + player.first_name + " " + player.last_name + "?"
         )
 
-    getAvailablePlayers = () ->
-      werApi.Player.then (Player) ->
-        $scope.availablePlayers = Player.query()
-
-    getGame()
-    getAvailablePlayers()
-
-
-    $scope.addPlayer = (player) ->
-      werApi.GamePlayer.then (GamePlayer) ->
-        gamePlayer = new GamePlayer(
-          player: player.url
-          magicgame: $scope.game.url
-        )
-        gamePlayer.$save({}, () ->
-          getGame()
-          getAvailablePlayers()
+        modal.result.then(
+          () ->
+            $scope.addPlayer(player, true)
         )
 
     $scope.filterAdded = (player) ->
-      !$scope.game || !$scope.game.$resolved || !(gameplayer1 in $scope.game.gameplayer_set for gameplayer1 in player.gameplayer_set).some((x) -> x)
+      !$scope.game || !$scope.game.$resolved || !(gameplayer1.url in (gameplayer2.url for gameplayer2 in $scope.game.gameplayer_set) for gameplayer1 in player.gameplayer_set).some((x) -> x)
+
+    $scope.startEventConfirm = () ->
+      modal = $modal.open(
+        templateUrl: "/partials/start-event-confirm/",
+        controller: 'StartEventConfirmController',
+        resolve:
+          game: () ->
+            $scope.game
+      )
+
+      modal.result.then(
+        (nr_of_rounds) ->
+          $scope.game.nr_of_rounds = nr_of_rounds
+          $scope.startEvent()
+      )
+
+    $scope.startEvent = () ->
+      $scope.game.state = 'draft'
+      $scope.game.postable().$update({}, (data) ->
+        $location.path('/game/' + $scope.game.id + '/draft/')
+      )
+]
+
+werControllers.controller 'StartEventConfirmController', ['$scope',
+                                                          '$modalInstance',
+                                                          'game'
+  ($scope, $modalInstance, game) ->
+    $scope.game = game
+    $scope.recommended_rounds = Math.max(3, Math.floor(Math.log(game.gameplayer_set.length) / Math.log(2)))
+    $scope.game.nr_of_rounds = $scope.recommended_rounds
+
+    $scope.start = () ->
+      $modalInstance.close($scope.game.nr_of_rounds)
+
+    $scope.cancel = () ->
+      $modalInstance.dismiss('cancel')
+]
+
+werControllers.controller 'GameDraftController', ['$scope',
+                                                  '$location',
+                                                  'werApi',
+                                                  '$routeParams',
+  ($scope, $location, werApi, $routeParams) ->
+    werApi.Game.then (Game) ->
+      Game.get({id: $routeParams.gameId}, (game, response) ->
+        $scope.game = game
+      , (response) ->
+        $scope.game = null
+        $scope.error = response.status
+      )
+]
+
+werControllers.controller 'ConfirmCancelModalController', ['$scope',
+                                                           '$modalInstance',
+                                                           'title',
+                                                           'body'
+  ($scope, $modalInstance, title, body) ->
+    $scope.title = title
+    $scope.body = body
+
+    $scope.confirm = () ->
+      $modalInstance.close()
+
+    $scope.cancel = () ->
+      $modalInstance.dismiss('cancel')
 ]

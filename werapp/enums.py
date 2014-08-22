@@ -21,3 +21,12 @@ class PairingMethod(Enum):
         (SWISS, 'Swiss'),
         (SINGLE_ELIMINATION, 'Single elimination'),
     )
+
+class MagicGameState(Enum):
+    PLANNING = 'planning'
+    DRAFT = 'draft'
+
+    choices = (
+        (PLANNING, 'Planning'),
+        (DRAFT, 'Draft'),
+    )

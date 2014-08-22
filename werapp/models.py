@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 from django.utils import timezone
-from werapp.enums import GameType, PairingMethod
+from werapp.enums import GameType, PairingMethod, MagicGameState
 
 
 class Player(AbstractUser):
@@ -18,6 +18,8 @@ class MagicGame(models.Model):
     game_type = models.CharField(max_length=250, choices=GameType.choices)
     pairing_method = models.CharField(max_length=250, choices=PairingMethod.choices)
     is_paid = models.BooleanField(default=True)
+    state = models.CharField(max_length=250, choices=MagicGameState.choices, default=MagicGameState.PLANNING)
+    nr_of_rounds = models.IntegerField(null=True, blank=True)
 
 class GameRound(models.Model):
     game = models.ForeignKey(MagicGame)

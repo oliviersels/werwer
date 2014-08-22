@@ -11,7 +11,8 @@ class PlayerSerializer(HyperlinkedModelSerializer):
 class MagicGameSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = MagicGame
-        fields = ("id", "url", "name", "date", "is_paid", "game_type", "pairing_method", "gameround_set", "gameplayer_set")
+        fields = ("id", "url", "name", "date", "is_paid", "game_type", "pairing_method", "state", "nr_of_rounds",
+                  "gameround_set", "gameplayer_set")
 
 class GameRoundSerializer(HyperlinkedModelSerializer):
     class Meta:
