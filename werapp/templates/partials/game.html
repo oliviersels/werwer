@@ -1,3 +1,8 @@
 {% extends "partials/game-base.html" %}
-{% block menu_overview_active %}active{% endblock %}
-
+{% block content %}
+    {% verbatim %}
+    <div ng-show="false">
+        {{ page.menuName = 'overview' }}
+    </div>
+    {% endverbatim %}
+{% endblock %}

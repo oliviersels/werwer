@@ -7,19 +7,15 @@
     <div class="row" ng-show="game">
         <div class="col-md-12">
             <ul class="nav nav-tabs" role="tablist">
-                <li class="{% block menu_overview_active %}{% endblock %}"><a href="/game/{% verbatim %}{{ game.id }}{% endverbatim %}/">Overview</a></li>
-                <li class="dropdown {% block menu_phases_active %}{% endblock %}">
-                    <a href="" class="dropdown-toggle">Phases <span class="caret"></span></a>
+                <li ng-class="{active: page.menuName == 'overview'}"><a ng-href="/game/{% verbatim %}{{ game.id }}{% endverbatim %}/">Overview</a></li>
+                <li class="dropdown" ng-class="{active: page.menuName == 'phases'}">
+                    <a href="" class="dropdown-toggle">Phases<span ng-show="page.menuName == 'phases'"> ({% verbatim %}{{ game.gameState.getPhase(page.phaseMenuName).displayName }}{% endverbatim %})</span> </span> <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li class="{% block submenu_planning_active %}{% endblock %}">
-                            <a href="/game/{% verbatim %}{{ game.id }}{% endverbatim %}/planning/">Planning <span class="glyphicon glyphicon-ok"></span></a>
+                        <li ng-class="{active: phase.name == page.phaseMenuName, disabled: phase.disabled}" ng-repeat="phase in game.gameState.phases">
+                            <a ng-href="/game/{% verbatim %}{{ game.id }}/{{ phase.name }}{% endverbatim %}/">
+                                {% verbatim %}{{ phase.displayName }} <span class="glyphicon glyphicon-ok" ng-show="phase.completed"></span>{% endverbatim %}
+                            </a>
                         </li>
-                        <li class="{% block submenu_draft_active %}{% endblock %}"><a href="/game/{% verbatim %}{{ game.id }}{% endverbatim %}/draft/">Draft</a></li>
-                        <li class="divider"></li>
-                        <li><a href="/">Round 1</a></li>
-                        <li><a href="/">Round 2</a></li>
-                        <li class="divider"></li>
-                        <li><a href="/">Conclusion</a></li>
                     </ul>
                 </li>
                 <li><a href="/">Standings</a></li>

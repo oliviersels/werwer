@@ -149,3 +149,4 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
 
   resourceCache
 ]
+

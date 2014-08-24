@@ -1,5 +1,5 @@
 
-werControllers = angular.module 'werControllers', ['werServices', 'ngRoute', 'ui.bootstrap', 'djangoDynamics']
+werControllers = angular.module 'werControllers', ['werServices', 'werGameState', 'ngRoute', 'ui.bootstrap', 'djangoDynamics']
 
 werControllers.controller 'NavbarController', ['$scope', '$location',
   ($scope, $location) ->
@@ -123,11 +123,14 @@ werControllers.controller 'NewGameController', ['$scope', '$filter', '$location'
 
 werControllers.controller 'GameController', ['$scope',
                                              '$location',
-                                             'werApi',
                                              '$routeParams'
-  ($scope, $location, werApi, $routeParams) ->
+                                             'werApi',
+                                             'gameStateFactory'
+  ($scope, $location, $routeParams, werApi, gameStateFactory) ->
     werApi.Game.then (Game) ->
       Game.get({id: $routeParams.gameId}, (game, response) ->
+        game.gameState = gameStateFactory.createGameState(game)
+        console.log game
         $scope.game = game
       , (response) ->
         $scope.game = null
@@ -137,12 +140,14 @@ werControllers.controller 'GameController', ['$scope',
 
 werControllers.controller 'GamePlanningController', ['$scope',
                                                      '$location',
-                                                     'werApi',
                                                      '$routeParams',
                                                      '$modal'
-  ($scope, $location, werApi, $routeParams, $modal) ->
+                                                     'werApi',
+                                                     'gameStateFactory'
+  ($scope, $location, $routeParams, $modal, werApi, gameStateFactory) ->
     werApi.Game.then (Game) ->
       Game.get({id: $routeParams.gameId}, (game, response) ->
+        game.gameState = gameStateFactory.createGameState(game)
         $scope.game = game
       , (response) ->
         $scope.game = null
@@ -223,11 +228,13 @@ werControllers.controller 'StartEventConfirmController', ['$scope',
 
 werControllers.controller 'GameDraftController', ['$scope',
                                                   '$location',
-                                                  'werApi',
                                                   '$routeParams',
-  ($scope, $location, werApi, $routeParams) ->
+                                                  'werApi',
+                                                  'gameStateFactory'
+  ($scope, $location, $routeParams, werApi, gameStateFactory) ->
     werApi.Game.then (Game) ->
       Game.get({id: $routeParams.gameId}, (game, response) ->
+        game.gameState = gameStateFactory.createGameState(game)
         $scope.game = game
       , (response) ->
         $scope.game = null
