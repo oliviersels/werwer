@@ -1,6 +1,19 @@
 
 werControllers = angular.module 'werControllers', ['werServices', 'werGameState', 'ngRoute', 'ui.bootstrap', 'djangoDynamics']
 
+# Shuffle array in place
+fisherYates = (arr) ->
+    i = arr.length;
+    if i == 0 then return false
+
+    while --i
+        j = Math.floor(Math.random() * (i+1))
+        tempi = arr[i]
+        tempj = arr[j]
+        arr[i] = tempj
+        arr[j] = tempi
+    return arr
+
 werControllers.controller 'NavbarController', ['$scope', '$location',
   ($scope, $location) ->
     $scope.isActive = (urls...) ->
@@ -206,9 +219,11 @@ werControllers.controller 'GamePlanningController', ['$scope',
 
     $scope.startEvent = () ->
       $scope.game.state = 'draft'
-      $scope.game.postable().$update({}, (data) ->
-        $location.path('/game/' + $scope.game.id + '/draft/')
+      postableGame = $scope.game.postable()
+      postableGame.$update({}, (data) ->
+        $location.path('/game/' + data.id + '/draft/')
       )
+      return
 ]
 
 werControllers.controller 'StartEventConfirmController', ['$scope',
@@ -229,9 +244,11 @@ werControllers.controller 'StartEventConfirmController', ['$scope',
 werControllers.controller 'GameDraftController', ['$scope',
                                                   '$location',
                                                   '$routeParams',
+                                                  '$q',
+                                                  '$modal'
                                                   'werApi',
                                                   'gameStateFactory'
-  ($scope, $location, $routeParams, werApi, gameStateFactory) ->
+  ($scope, $location, $routeParams, $q, $modal, werApi, gameStateFactory) ->
     werApi.Game.then (Game) ->
       Game.get({id: $routeParams.gameId}, (game, response) ->
         game.gameState = gameStateFactory.createGameState(game)
@@ -240,6 +257,35 @@ werControllers.controller 'GameDraftController', ['$scope',
         $scope.game = null
         $scope.error = response.status
       )
+
+    $scope.seatingsRandom = (confirm) ->
+      doSeatings = (gameplayers) ->
+          $scope.seatings = fisherYates((gp.player for gp in gameplayers))
+
+      if confirm || !$scope.seatings
+        if 'then' of $scope.game.gameplayer_set
+          $scope.game.gameplayer_set.then((gameplayers) ->
+            $q.all((gp.player for gp in gameplayers)).then(() ->
+              doSeatings(gameplayers)
+            )
+          )
+        else
+          doSeatings($scope.game.gameplayer_set)
+      else
+        modal = $modal.open(
+          templateUrl: "/partials/confirm-cancel-modal/",
+          controller: 'ConfirmCancelModalController',
+          resolve:
+            title: () ->
+              "New seatings?"
+            body: () ->
+              "Seatings have already been generated. Are you sure you want to generate new seatings?"
+        )
+
+        modal.result.then(
+          () ->
+            $scope.seatingsRandom(true)
+        )
 ]
 
 werControllers.controller 'ConfirmCancelModalController', ['$scope',

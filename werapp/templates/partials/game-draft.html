@@ -10,9 +10,38 @@
     <div class="row">
         <p>
             <div class="col-md-12">
-                The draft has started!
+                <div class="btn-group">
+                    <button class="btn btn-default" ng-click="seatingsRandom()">Seatings</button>
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="" ng-click="seatingsRandom()">Random</a></li>
+                        <li><a href="">Manual</a></li>
+                    </ul>
+                </div>
+                <button class="btn btn-default">Deck building</button>
+                <button class="btn btn-success">End draft</button>
             </div>
         </p>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-responsive" ng-show="seatings">
+                <thead>
+                    <tr>
+                        <th style="width: 30px;">#</th>
+                        <th>Name</th>
+                        <th>DCI number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="player in seatings">
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ player.first_name + ' ' + player.last_name }}</td>
+                        <td>{{ player.dcinumber }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 {% endverbatim %}

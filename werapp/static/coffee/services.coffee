@@ -130,6 +130,8 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
     (prop, value) ->
       if prop == 'date'
         $filter('date')(value, 'yyyy-MM-dd')
+      else if prop == 'gameState'
+        undefined
       else
         value
   )
