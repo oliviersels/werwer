@@ -1,0 +1,29 @@
+{% extends "partials/game-base.html" %}
+
+{% block content %}
+{% verbatim %}
+<div ng-show="false">
+    {{ page.menuName = 'phases' }}
+    {{ page.phaseMenuName = 'rounds' }}
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <p>
+            <div class="col-md-12">
+                <h2>Round {{ round.roundNr }}</h2>
+            </div>
+            <div class="col-md-12">
+                <div class="btn-group">
+                    <button class="btn btn-default" ng-click="createMatchesRandom()">Create matches</button>
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="" ng-click="createMatchesRandom()">Random</a></li>
+                        <li><a href="">Manual</a></li>
+                    </ul>
+                </div>
+            </div>
+        </p>
+    </div>
+</div>
+{% endverbatim %}
+{% endblock %}

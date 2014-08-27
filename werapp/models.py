@@ -34,3 +34,10 @@ class GamePlayer(models.Model):
 
     class Meta:
         unique_together = ("player", "magicgame")
+
+    def score(self):
+        return {
+            'points': 0,
+            'opponents_match_win_percentage': 50,
+        }
+

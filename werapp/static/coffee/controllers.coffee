@@ -286,6 +286,25 @@ werControllers.controller 'GameDraftController', ['$scope',
           () ->
             $scope.seatingsRandom(true)
         )
+
+    $scope.endDraft = () ->
+      $scope.game.state = 'rounds'
+      postableGame = $scope.game.postable()
+      postableGame.$update({}, (data) ->
+        # Create the first round
+        if !$scope.game.gameround_set || $scope.game.gameround_set.length == 0
+          werApi.Round.then((Round) ->
+            newRound = new Round(
+              game: $scope.game.url
+            )
+            newRound.$save({}, () ->
+              $location.path('/game/' + data.id + '/round/1/')
+            )
+          )
+        else
+          $location.path('/game/' + data.id + '/round/1/')
+      )
+      return
 ]
 
 werControllers.controller 'ConfirmCancelModalController', ['$scope',
@@ -301,4 +320,27 @@ werControllers.controller 'ConfirmCancelModalController', ['$scope',
 
     $scope.cancel = () ->
       $modalInstance.dismiss('cancel')
+]
+
+werControllers.controller 'GameRoundController' , ['$scope',
+                                                   '$location',
+                                                   '$routeParams',
+                                                   'werApi',
+                                                   'gameStateFactory',
+  ($scope, $location, $routeParams, werApi, gameStateFactory) ->
+    werApi.Game.then (Game) ->
+      Game.get({id: $routeParams.gameId}, (game, response) ->
+        game.gameState = gameStateFactory.createGameState(game)
+        $scope.game = game
+        if 'then' of game.gameround_set
+          game.gameround_set.then((gamerounds) ->
+            $scope.round = gamerounds[parseInt($routeParams.roundId) - 1]
+            $scope.round.roundNr = $routeParams.roundId
+          )
+        else
+          $scope.round = game.gameround_set[parseInt($routeParams.roundId) - 1]
+          $scope.round.roundNr = $routeParams.roundId
+      , (response) ->
+        $scope.error = response.status
+      )
 ]

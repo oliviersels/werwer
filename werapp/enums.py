@@ -25,8 +25,10 @@ class PairingMethod(Enum):
 class MagicGameState(Enum):
     PLANNING = 'planning'
     DRAFT = 'draft'
+    ROUNDS = 'rounds'
 
     choices = (
         (PLANNING, 'Planning'),
         (DRAFT, 'Draft'),
+        (ROUNDS, 'Rounds'),
     )

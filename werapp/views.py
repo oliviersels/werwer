@@ -78,3 +78,6 @@ class GameDraftView(TemplateView):
 
 class ConfirmCancelModalView(TemplateView):
     template_name = "partials/confirm-cancel-modal.html"
+
+class GameRoundView(TemplateView):
+    template_name = "partials/game-round.html"
