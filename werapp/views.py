@@ -1,12 +1,15 @@
 # Create your views here.
 from django.views.generic.base import TemplateView
+from rest_framework import status
 from rest_framework.filters import DjangoFilterBackend
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from werapp.enums import GameType, PairingMethod
-from werapp.models import Player, MagicGame, GameRound, GameMatch, GamePlayer
+from werapp.models import Player, MagicGame, GameRound, GameMatch, GamePlayer, RandomMatchesRequest
 
 from werapp.serializers import PlayerSerializer, MagicGameSerializer, GameRoundSerializer, GameMatchSerializer, \
-    GamePlayerSerializer
+    GamePlayerSerializer, RandomMatchesRequestSerializer
+from werapp.tasks import create_random_matches
 
 
 class PlayerViewSet(ModelViewSet):
@@ -31,7 +34,14 @@ class GamePlayerViewSet(ModelViewSet):
     model = GamePlayer
     serializer_class = GamePlayerSerializer
 
+class RandomMatchesRequestViewSet(ModelViewSet):
+    model = RandomMatchesRequest
+    serializer_class = RandomMatchesRequestSerializer
 
+    def post_save(self, obj, created=False):
+        if created:
+            # Create the random matches task
+            create_random_matches.delay(obj.id)
 
 class WerView(TemplateView):
     template_name = "wer.html"

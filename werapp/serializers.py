@@ -1,7 +1,7 @@
 from rest_framework.fields import IntegerField, FloatField
 from rest_framework.serializers import HyperlinkedModelSerializer, Serializer
 from rest_framework.tests.test_serializer import HyperlinkedForeignKeySourceSerializer
-from werapp.models import Player, MagicGame, GameRound, GameMatch, GamePlayer
+from werapp.models import Player, MagicGame, GameRound, GameMatch, GamePlayer, RandomMatchesRequest
 
 
 class PlayerSerializer(HyperlinkedModelSerializer):
@@ -35,3 +35,9 @@ class GamePlayerSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = GamePlayer
         fields = ("id", "url", "player", "magicgame", "matches", "score")
+
+class RandomMatchesRequestSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = RandomMatchesRequest
+        fields = ("id", "url", "round", "state")
+        read_only_fields = ("state",)

@@ -86,3 +86,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'werapp.Player'
+
+# Celery
+BROKER_URL = 'amqp://guest:guest@localhost:5672//'

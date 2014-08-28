@@ -32,3 +32,16 @@ class MagicGameState(Enum):
         (DRAFT, 'Draft'),
         (ROUNDS, 'Rounds'),
     )
+
+class RandomMatchesRequestState(Enum):
+    NEW = 'new'
+    PROCESSING = 'processing'
+    COMPLETED = 'completed'
+    ABORTED = 'aborted'
+
+    choices = (
+        (NEW, 'New'),
+        (PROCESSING, 'Processing'),
+        (COMPLETED, 'Completed'),
+        (ABORTED, 'Aborted'),
+    )

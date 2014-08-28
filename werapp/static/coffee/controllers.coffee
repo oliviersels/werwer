@@ -325,9 +325,10 @@ werControllers.controller 'ConfirmCancelModalController', ['$scope',
 werControllers.controller 'GameRoundController' , ['$scope',
                                                    '$location',
                                                    '$routeParams',
+                                                   '$filter',
                                                    'werApi',
                                                    'gameStateFactory',
-  ($scope, $location, $routeParams, werApi, gameStateFactory) ->
+  ($scope, $location, $routeParams, $filter, werApi, gameStateFactory) ->
     werApi.Game.then (Game) ->
       Game.get({id: $routeParams.gameId}, (game, response) ->
         game.gameState = gameStateFactory.createGameState(game)
@@ -343,4 +344,42 @@ werControllers.controller 'GameRoundController' , ['$scope',
       , (response) ->
         $scope.error = response.status
       )
+
+    $scope.createMatchesRandom = (gameplayers) ->
+      if !gameplayers
+        if 'then' of $scope.round.game
+          $scope.round.game.then((game) ->
+            game.gameplayer_set.then((gameplayer_set) ->
+              $scope.createMatchesRandom(gameplayer_set[..])
+            )
+          )
+        else if 'then' of $scope.round.game.gameplayer_set
+          $scope.round.game.gameplayer_set.then((gameplayer_set) ->
+            $scope.createMatchesRandom(gameplayer_set[..])
+          )
+        else
+          $scope.createMatchesRandom($scope.round.game.gameplayer_set[..])
+      else
+        # Do the shuffling
+        fisherYates(gameplayers)
+        # Sort by standing (sorting does NOT destroy the shuffling)
+        comparator = (x, y) ->
+          y.score.points - x.score.points
+
+        gameplayers.sort(comparator)
+        werApi.Match.then((Match) ->
+          matches = []
+          for player, i in gameplayers
+            if i % 2 == 0
+              matches.push(new Match(
+                round: $scope.round.url
+                gameplayer_set: [player.url]
+              ))
+            else
+              matches[-1..][0].gameplayer_set.push(player.url)
+
+          for match in matches
+            match.$save()
+        )
+
 ]
