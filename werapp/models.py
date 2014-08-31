@@ -38,9 +38,16 @@ class GamePlayer(models.Model):
     class Meta:
         unique_together = ("player", "magicgame")
 
+    @property
+    def points(self):
+        # Make a separate function for points as it is often
+        # used and the other score statistics take more time to calculate.
+        return sum(match.points_for_player(self) for match in self.matches.all())
+
+    @property
     def score(self):
         return {
-            'points': sum(match.points_for_player(self) for match in self.matches.all()),
+            'points': self.points,
             'opponents_match_win_percentage': 50,
         }
 

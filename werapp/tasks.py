@@ -1,8 +1,9 @@
 from __future__ import absolute_import
+import random
 
 from celery import shared_task
-from werapp.enums import RandomMatchesRequestState
-from werapp.models import RandomMatchesRequest
+from werapp.enums import RandomMatchesRequestState, PairingMethod
+from werapp.models import RandomMatchesRequest, GameMatch
 
 
 @shared_task
@@ -11,7 +12,23 @@ def create_random_matches(random_matches_request_id):
     random_matches_request.state = RandomMatchesRequestState.PROCESSING
     random_matches_request.save()
 
-    # Do stuff
+    # Creating random matches
+    # Official rules for swiss: http://www.wizards.com/dci/downloads/Swiss_Pairings.pdf
+    # Short explanation: Random pair players with same score (ONLY SCORE, NO TIEBREAKERS)
+    #
+    # Algorithm:
+    #   - Randomize players
+    #   - Sort players by score
+    gameplayers = list(random_matches_request.round.game.gameplayer_set.all()) # TODO filter on not dropped
+    assert random_matches_request.round.game.pairing_method == PairingMethod.SWISS
+    random.shuffle(gameplayers)
+    gameplayers.sort(key=lambda p: p.points)
+
+    for i in range(0, len(gameplayers) - 1, 2):
+        match = GameMatch.objects.create(round=random_matches_request.round)
+        match.gameplayer_set.add(gameplayers[i])
+        if i + 1 != len(gameplayers):
+            match.gameplayer_set.add(gameplayers[i + 1])
 
     random_matches_request.state = RandomMatchesRequestState.COMPLETED
     random_matches_request.save()
