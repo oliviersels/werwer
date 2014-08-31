@@ -19,24 +19,24 @@ werApp.config ['$routeProvider', '$locationProvider', ($routeProvider, $location
     .when '/add-player/',
       templateUrl: '/partials/add-player/',
       controller: 'AddPlayerController'
-    .when '/games-overview/',
-      templateUrl: '/partials/games-overview/',
-      controller: 'GamesOverviewController'
-    .when '/new-game/',
-      templateUrl: '/partials/new-game/',
-      controller: 'NewGameController'
-    .when '/game/:gameId/',
-      templateUrl: '/partials/game/',
-      controller: 'GameController'
-    .when '/game/:gameId/planning/',
-      templateUrl: '/partials/game-planning/',
-      controller: 'GamePlanningController'
-    .when '/game/:gameId/draft/',
-      templateUrl: '/partials/game-draft/',
-      controller: 'GameDraftController'
-    .when '/game/:gameId/round/:roundId/',
-      templateUrl: '/partials/game-round/',
-      controller: 'GameRoundController'
+    .when '/events-overview/',
+      templateUrl: '/partials/events-overview/',
+      controller: 'EventsOverviewController'
+    .when '/new-event/',
+      templateUrl: '/partials/new-event/',
+      controller: 'NewEventController'
+    .when '/event/:eventId/',
+      templateUrl: '/partials/event/',
+      controller: 'EventController'
+    .when '/event/:eventId/planning/',
+      templateUrl: '/partials/event-planning/',
+      controller: 'EventPlanningController'
+    .when '/event/:eventId/draft/',
+      templateUrl: '/partials/event-draft/',
+      controller: 'EventDraftController'
+    .when '/event/:eventId/round/:roundId/',
+      templateUrl: '/partials/event-round/',
+      controller: 'EventRoundController'
 
     .otherwise
       redirectTo: '/'

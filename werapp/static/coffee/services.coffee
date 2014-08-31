@@ -106,31 +106,31 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
     deferred.promise
 
   # Create the resources
-  resourceCache.GamePlayer = createResource('game-players',
+  resourceCache.Participant = createResource('participants',
     player:
       isArray: false
       resource: "Player"
-    magicgame:
+    event:
       isArray: false
-      resource: "Game"
+      resource: "Event"
   )
 
   resourceCache.Player = createResource('players',
-    gameplayer_set:
+    participant_set:
       isArray: true
-      resource: "GamePlayer"
+      resource: "Participant"
   )
-  resourceCache.Game = createResource('games',
-    gameplayer_set:
+  resourceCache.Event = createResource('events',
+    participant_set:
       isArray: true
-      resource: "GamePlayer"
-    gameround_set:
+      resource: "Participant"
+    round_set:
       isArray: true
       resource: "Round",
     (prop, value) ->
       if prop == 'date'
         $filter('date')(value, 'yyyy-MM-dd')
-      else if prop == 'gameState'
+      else if prop == 'eventState'
         undefined
       else
         value
@@ -141,10 +141,10 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
       resource: "Round"
   )
   resourceCache.Round = createResource('rounds',
-    game:
+    event:
       isArray: false
-      resource: "Game"
-    gamematch_set:
+      resource: "Event"
+    match_set:
       isArray: true
       resource: "Match"
   )

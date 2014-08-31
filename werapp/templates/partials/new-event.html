@@ -3,15 +3,15 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h1 class="h1">New game</h1>
+            <h1 class="h1">New event</h1>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-4">
-            <form role="form" name="NewGameForm" ng-show="game" ng-submit="submit()">
+            <form role="form" name="NewEventForm" ng-show="event" ng-submit="submit()">
                 <div class="form-group">
                     <label for="inputFirstName">Name</label>
-                    <input type="text" class="form-control" id="inputName" placeholder="Enter a name for this game" ng-model="game.name"/>
+                    <input type="text" class="form-control" id="inputName" placeholder="Enter a name for this event" ng-model="event.name"/>
                 </div>
                 <div class="form-group">
                     <label for="inputDate">Date</label>
@@ -21,23 +21,23 @@
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </button>
                         </span>
-                        <input type="datetime" class="form-control" id="inputDate" datepicker-popup is-open="datepickerOpened" ng-model="game.date"/>
+                        <input type="datetime" class="form-control" id="inputDate" datepicker-popup is-open="datepickerOpened" ng-model="event.date"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputGameType">Game type</label>
-                    <select id="inputGameType" class="form-control" ng-model="game.game_type" ng-options="value as label for (value, label) in optionsGameType"></select>
+                    <label for="inputEventType">Event type</label>
+                    <select id="inputEventType" class="form-control" ng-model="event.event_type" ng-options="value as label for (value, label) in optionsEventType"></select>
                 </div>
                 <div class="form-group">
                     <label for="inputPairingMethod">Pairing method</label>
-                    <select id="inputPairingMethod" class="form-control" ng-model="game.pairing_method" ng-options="value as label for (value, label) in optionsPairingMethod"></select>
+                    <select id="inputPairingMethod" class="form-control" ng-model="event.pairing_method" ng-options="value as label for (value, label) in optionsPairingMethod"></select>
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" ng-model="game.is_paid"> Paid game?
+                        <input type="checkbox" ng-model="event.is_paid"> Paid event?
                     </label>
                 </div>
-                <button type="submit" class="btn btn-primary">Add Game</button>
+                <button type="submit" class="btn btn-primary">Add Event</button>
             </form>
         </div>
     </div>

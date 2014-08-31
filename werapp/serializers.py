@@ -1,40 +1,40 @@
 from rest_framework.fields import IntegerField, FloatField
 from rest_framework.serializers import HyperlinkedModelSerializer, Serializer
 from rest_framework.tests.test_serializer import HyperlinkedForeignKeySourceSerializer
-from werapp.models import Player, MagicGame, GameRound, GameMatch, GamePlayer, RandomMatchesRequest
+from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest
 
 
 class PlayerSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Player
-        fields = ("id", "url", "first_name", "last_name", "username", "email", "dcinumber", "is_judge", "gameplayer_set")
+        fields = ("id", "url", "first_name", "last_name", "username", "email", "dcinumber", "is_judge", "participant_set")
 
-class MagicGameSerializer(HyperlinkedModelSerializer):
+class EventSerializer(HyperlinkedModelSerializer):
     class Meta:
-        model = MagicGame
-        fields = ("id", "url", "name", "date", "is_paid", "game_type", "pairing_method", "state", "nr_of_rounds",
-                  "gameround_set", "gameplayer_set")
+        model = Event
+        fields = ("id", "url", "name", "date", "is_paid", "event_type", "pairing_method", "state", "nr_of_rounds",
+                  "round_set", "participant_set")
 
-class GameRoundSerializer(HyperlinkedModelSerializer):
+class RoundSerializer(HyperlinkedModelSerializer):
     class Meta:
-        model = GameRound
-        fields = ("id", "url", "game", "gamematch_set")
+        model = Round
+        fields = ("id", "url", "event", "match_set")
 
-class GameMatchSerializer(HyperlinkedModelSerializer):
+class MatchSerializer(HyperlinkedModelSerializer):
     class Meta:
-        model = GameMatch
-        fields = ("id", "url", "round", "gameplayer_set")
+        model = Match
+        fields = ("id", "url", "round", "participant_set")
 
-class GamePlayerScoreSerializer(Serializer):
+class ParticipantScoreSerializer(Serializer):
     points = IntegerField()
     opponents_match_win_percentage = FloatField()
 
-class GamePlayerSerializer(HyperlinkedModelSerializer):
-    score = GamePlayerScoreSerializer(read_only = True)
+class ParticipantSerializer(HyperlinkedModelSerializer):
+    score = ParticipantScoreSerializer(read_only = True)
 
     class Meta:
-        model = GamePlayer
-        fields = ("id", "url", "player", "magicgame", "matches", "score")
+        model = Participant
+        fields = ("id", "url", "player", "event", "matches", "score")
 
 class RandomMatchesRequestSerializer(HyperlinkedModelSerializer):
     class Meta:

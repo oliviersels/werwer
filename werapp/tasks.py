@@ -3,7 +3,7 @@ import random
 
 from celery import shared_task
 from werapp.enums import RandomMatchesRequestState, PairingMethod
-from werapp.models import RandomMatchesRequest, GameMatch
+from werapp.models import RandomMatchesRequest, Match
 
 
 @shared_task
@@ -19,16 +19,16 @@ def create_random_matches(random_matches_request_id):
     # Algorithm:
     #   - Randomize players
     #   - Sort players by score
-    gameplayers = list(random_matches_request.round.game.gameplayer_set.all()) # TODO filter on not dropped
-    assert random_matches_request.round.game.pairing_method == PairingMethod.SWISS
-    random.shuffle(gameplayers)
-    gameplayers.sort(key=lambda p: p.points)
+    participants = list(random_matches_request.round.event.participant_set.all()) # TODO filter on not dropped
+    assert random_matches_request.round.event.pairing_method == PairingMethod.SWISS
+    random.shuffle(participants)
+    participants.sort(key=lambda p: p.points)
 
-    for i in range(0, len(gameplayers) - 1, 2):
-        match = GameMatch.objects.create(round=random_matches_request.round)
-        match.gameplayer_set.add(gameplayers[i])
-        if i + 1 != len(gameplayers):
-            match.gameplayer_set.add(gameplayers[i + 1])
+    for i in range(0, len(participants) - 1, 2):
+        match = Match.objects.create(round=random_matches_request.round)
+        match.participant_set.add(participants[i])
+        if i + 1 != len(participants):
+            match.participant_set.add(participants[i + 1])
 
     random_matches_request.state = RandomMatchesRequestState.COMPLETED
     random_matches_request.save()

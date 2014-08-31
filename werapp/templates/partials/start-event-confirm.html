@@ -2,15 +2,15 @@
 
 
   <div class="modal-header">
-    <h4 class="modal-title">Start event {{ game.name }}?</h4>
+    <h4 class="modal-title">Start event {{ event.name }}?</h4>
   </div>
 
   <div class="modal-body">
     <p>
-        You are about to start event {{ game.name }}. The recommended number of rounds is {{ recommended_rounds }}. How many rounds do you want to play?
+        You are about to start event {{ event.name }}. The recommended number of rounds is {{ recommended_rounds }}. How many rounds do you want to play?
     </p>
     <p>
-        <input type="number" ng-model="game.nr_of_rounds" />
+        <input type="number" ng-model="event.nr_of_rounds" />
     </p>
   </div>
 

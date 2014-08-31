@@ -3,7 +3,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-1 pull-right">
-            <a role="button" class="btn btn-primary" title="New game" ng-href="/new-game/">
+            <a role="button" class="btn btn-primary" title="New event" ng-href="/new-event/">
                 <span class="glyphicon glyphicon-plus"></span>
                 <span class="glyphicon glyphicon-file"></span>
             </a>
@@ -20,10 +20,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="game in games | orderBy : '-date'" ng-click="openGame(game)">
-                        <td>{{ game.name }}</td>
-                        <td>{{ game.date | date : 'longDate' }}</td>
-                        <td>{{ game.status }}</td>
+                    <tr ng-repeat="event in events | orderBy : '-date'" ng-click="openEvent(event)">
+                        <td>{{ event.name }}</td>
+                        <td>{{ event.date | date : 'longDate' }}</td>
+                        <td>{{ event.status }}</td>
                     </tr>
                 </tbody>
             </table>

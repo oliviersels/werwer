@@ -1,4 +1,4 @@
-{% extends "partials/game-base.html" %}
+{% extends "partials/event-base.html" %}
 
 {% block content %}
 {% verbatim %}
@@ -9,10 +9,10 @@
 <div class="container-fluid">
     <div class="row">
         <p>
-            <div class="alert alert-warning" role="alert" ng-show="game.state == 'draft'">
+            <div class="alert alert-warning" role="alert" ng-show="event.state == 'draft'">
                 <p>The event has already started but you can still add players in this phase.</p>
             </div>
-            <div class="alert alert-danger" role="alert" ng-show="game.state != 'planning' && game.state != 'draft'">
+            <div class="alert alert-danger" role="alert" ng-show="event.state != 'planning' && event.state != 'draft'">
                 <p>You can no longer add players in this phase of the event!</p>
             </div>
         </p>
@@ -27,7 +27,7 @@
             </div>
             <div class="col-sm-2 col-xs-4">
                 <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
-                <button type="button" class="btn btn-success" ng-show="game.state == 'planning'" ng-click="startEventConfirm()">Start event</button>
+                <button type="button" class="btn btn-success" ng-show="event.state == 'planning'" ng-click="startEventConfirm()">Start event</button>
             </div>
         </p>
     </div>
@@ -43,10 +43,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="gameplayer in game.gameplayer_set | filter : searchPlayer" class="success">
+                    <tr ng-repeat="participant in event.participant_set | filter : searchPlayer" class="success">
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ gameplayer.player.first_name + ' ' + gameplayer.player.last_name }}</td>
-                        <td>{{ gameplayer.player.dcinumber }}</td>
+                        <td>{{ participant.player.first_name + ' ' + participant.player.last_name }}</td>
+                        <td>{{ participant.player.dcinumber }}</td>
                     </tr>
                         <tr ng-repeat="player in availablePlayers | filter : filterAdded | filter : searchPlayer" ng-click="addPlayer(player)">
                             <td></td>

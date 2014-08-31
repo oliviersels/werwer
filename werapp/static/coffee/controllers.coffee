@@ -1,5 +1,5 @@
 
-werControllers = angular.module 'werControllers', ['werServices', 'werGameState', 'ngRoute', 'ui.bootstrap', 'djangoDynamics']
+werControllers = angular.module 'werControllers', ['werServices', 'werEventState', 'ngRoute', 'ui.bootstrap', 'djangoDynamics']
 
 # Shuffle array in place
 fisherYates = (arr) ->
@@ -98,21 +98,21 @@ werControllers.controller 'AddPlayerController', ['$scope', 'werApi', '$location
       )
 ]
 
-werControllers.controller 'GamesOverviewController', ['$scope', '$location', 'werApi',
+werControllers.controller 'EventsOverviewController', ['$scope', '$location', 'werApi',
   ($scope, $location, werApi) ->
-    werApi.Game.then (Game) ->
-      $scope.games = Game.query()
+    werApi.Event.then (Event) ->
+      $scope.events = Event.query()
 
-    $scope.openGame = (game) ->
-      $location.path('/game/' + game.id + '/')
+    $scope.openEvent = (event) ->
+      $location.path('/event/' + event.id + '/')
 ]
 
-werControllers.controller 'NewGameController', ['$scope', '$filter', '$location', 'werApi', 'djangoEnums',
+werControllers.controller 'NewEventController', ['$scope', '$filter', '$location', 'werApi', 'djangoEnums',
   ($scope, $filter, $location, werApi, djangoEnums) ->
-    werApi.Game.then (Game) ->
-      # Create a new game with sensible defaults
-      $scope.game = new Game(
-        game_type: 'casual_limited',
+    werApi.Event.then (Event) ->
+      # Create a new event with sensible defaults
+      $scope.event = new Event(
+        event_type: 'casual_limited',
         pairing_method: 'swiss',
         date: new Date()
       )
@@ -124,46 +124,46 @@ werControllers.controller 'NewGameController', ['$scope', '$filter', '$location'
       $event.stopPropagation();
       $scope.datepickerOpened = true
 
-    $scope.optionsGameType = djangoEnums.GameType
+    $scope.optionsEventType = djangoEnums.EventType
     $scope.optionsPairingMethod = djangoEnums.PairingMethod
 
     $scope.submit = () ->
-      $scope.game.date = $filter('date')($scope.game.date, 'yyyy-MM-dd')
-      $scope.game.$save({}, () ->
-        $location.path('/game/' + $scope.game.id + '/')
+      $scope.event.date = $filter('date')($scope.event.date, 'yyyy-MM-dd')
+      $scope.event.$save({}, () ->
+        $location.path('/event/' + $scope.event.id + '/')
       )
 ]
 
-werControllers.controller 'GameController', ['$scope',
+werControllers.controller 'EventController', ['$scope',
                                              '$location',
                                              '$routeParams'
                                              'werApi',
-                                             'gameStateFactory'
-  ($scope, $location, $routeParams, werApi, gameStateFactory) ->
-    werApi.Game.then (Game) ->
-      Game.get({id: $routeParams.gameId}, (game, response) ->
-        game.gameState = gameStateFactory.createGameState(game)
-        console.log game
-        $scope.game = game
+                                             'eventStateFactory'
+  ($scope, $location, $routeParams, werApi, eventStateFactory) ->
+    werApi.Event.then (Event) ->
+      Event.get({id: $routeParams.eventId}, (event, response) ->
+        event.eventState = eventStateFactory.createEventState(event)
+        console.log event
+        $scope.event = event
       , (response) ->
-        $scope.game = null
+        $scope.event = null
         $scope.error = response.status
       )
 ]
 
-werControllers.controller 'GamePlanningController', ['$scope',
+werControllers.controller 'EventPlanningController', ['$scope',
                                                      '$location',
                                                      '$routeParams',
                                                      '$modal'
                                                      'werApi',
-                                                     'gameStateFactory'
-  ($scope, $location, $routeParams, $modal, werApi, gameStateFactory) ->
-    werApi.Game.then (Game) ->
-      Game.get({id: $routeParams.gameId}, (game, response) ->
-        game.gameState = gameStateFactory.createGameState(game)
-        $scope.game = game
+                                                     'eventStateFactory'
+  ($scope, $location, $routeParams, $modal, werApi, eventStateFactory) ->
+    werApi.Event.then (Event) ->
+      Event.get({id: $routeParams.eventId}, (event, response) ->
+        event.eventState = eventStateFactory.createEventState(event)
+        $scope.event = event
       , (response) ->
-        $scope.game = null
+        $scope.event = null
         $scope.error = response.status
       )
 
@@ -172,16 +172,16 @@ werControllers.controller 'GamePlanningController', ['$scope',
 
 
     $scope.addPlayer = (player, confirm) ->
-      if $scope.game.state == 'planning' || confirm
-        werApi.GamePlayer.then (GamePlayer) ->
-          gamePlayer = new GamePlayer(
+      if $scope.event.state == 'planning' || confirm
+        werApi.Participant.then (Participant) ->
+          participant = new Participant(
             player: player.url
-            magicgame: $scope.game.url
+            event: $scope.event.url
           )
-          gamePlayer.$save({}, () ->
-            resourceGamePlayer = GamePlayer.createResource(gamePlayer.toJSON())
-            $scope.game.gameplayer_set.push(resourceGamePlayer)
-            player.gameplayer_set.push(resourceGamePlayer)
+          participant.$save({}, () ->
+            resourceParticipant = Participant.createResource(participant.toJSON())
+            $scope.event.participant_set.push(resourceParticipant)
+            player.participant_set.push(resourceParticipant)
           )
       else
         modal = $modal.open(
@@ -200,77 +200,77 @@ werControllers.controller 'GamePlanningController', ['$scope',
         )
 
     $scope.filterAdded = (player) ->
-      !$scope.game || !$scope.game.$resolved || !(gameplayer1.url in (gameplayer2.url for gameplayer2 in $scope.game.gameplayer_set) for gameplayer1 in player.gameplayer_set).some((x) -> x)
+      !$scope.event || !$scope.event.$resolved || !(participant1.url in (participant2.url for participant2 in $scope.event.participant_set) for participant1 in player.participant_set).some((x) -> x)
 
     $scope.startEventConfirm = () ->
       modal = $modal.open(
         templateUrl: "/partials/start-event-confirm/",
         controller: 'StartEventConfirmController',
         resolve:
-          game: () ->
-            $scope.game
+          event: () ->
+            $scope.event
       )
 
       modal.result.then(
         (nr_of_rounds) ->
-          $scope.game.nr_of_rounds = nr_of_rounds
+          $scope.event.nr_of_rounds = nr_of_rounds
           $scope.startEvent()
       )
 
     $scope.startEvent = () ->
-      $scope.game.state = 'draft'
-      postableGame = $scope.game.postable()
-      postableGame.$update({}, (data) ->
-        $location.path('/game/' + data.id + '/draft/')
+      $scope.event.state = 'draft'
+      postableEvent = $scope.event.postable()
+      postableEvent.$update({}, (data) ->
+        $location.path('/event/' + data.id + '/draft/')
       )
       return
 ]
 
 werControllers.controller 'StartEventConfirmController', ['$scope',
                                                           '$modalInstance',
-                                                          'game'
-  ($scope, $modalInstance, game) ->
-    $scope.game = game
-    $scope.recommended_rounds = Math.max(3, Math.floor(Math.log(game.gameplayer_set.length) / Math.log(2)))
-    $scope.game.nr_of_rounds = $scope.recommended_rounds
+                                                          'event'
+  ($scope, $modalInstance, event) ->
+    $scope.event = event
+    $scope.recommended_rounds = Math.max(3, Math.floor(Math.log(event.participant_set.length) / Math.log(2)))
+    $scope.event.nr_of_rounds = $scope.recommended_rounds
 
     $scope.start = () ->
-      $modalInstance.close($scope.game.nr_of_rounds)
+      $modalInstance.close($scope.event.nr_of_rounds)
 
     $scope.cancel = () ->
       $modalInstance.dismiss('cancel')
 ]
 
-werControllers.controller 'GameDraftController', ['$scope',
+werControllers.controller 'EventDraftController', ['$scope',
                                                   '$location',
                                                   '$routeParams',
                                                   '$q',
                                                   '$modal'
                                                   'werApi',
-                                                  'gameStateFactory'
-  ($scope, $location, $routeParams, $q, $modal, werApi, gameStateFactory) ->
-    werApi.Game.then (Game) ->
-      Game.get({id: $routeParams.gameId}, (game, response) ->
-        game.gameState = gameStateFactory.createGameState(game)
-        $scope.game = game
+                                                  'eventStateFactory'
+  ($scope, $location, $routeParams, $q, $modal, werApi, eventStateFactory) ->
+    werApi.Event.then (Event) ->
+      Event.get({id: $routeParams.eventId}, (event, response) ->
+        event.eventState = eventStateFactory.createEventState(event)
+        $scope.event = event
       , (response) ->
-        $scope.game = null
+        $scope.event = null
         $scope.error = response.status
       )
 
     $scope.seatingsRandom = (confirm) ->
-      doSeatings = (gameplayers) ->
-          $scope.seatings = fisherYates((gp.player for gp in gameplayers))
+      doSeatings = (participants) ->
+          $scope.seatings = fisherYates((p.player for p in participants))
 
       if confirm || !$scope.seatings
-        if 'then' of $scope.game.gameplayer_set
-          $scope.game.gameplayer_set.then((gameplayers) ->
-            $q.all((gp.player for gp in gameplayers)).then(() ->
-              doSeatings(gameplayers)
+        if 'then' of $scope.event.participant_set
+          $scope.event.participant_set.then((participants) ->
+            $q.all((p.player for p in participants)).then(() ->
+              doSeatings(participants)
             )
           )
         else
-          doSeatings($scope.game.gameplayer_set)
+          doSeatings($scope.event.participant_set)
       else
         modal = $modal.open(
           templateUrl: "/partials/confirm-cancel-modal/",
@@ -288,21 +288,21 @@ werControllers.controller 'GameDraftController', ['$scope',
         )
 
     $scope.endDraft = () ->
-      $scope.game.state = 'rounds'
-      postableGame = $scope.game.postable()
-      postableGame.$update({}, (data) ->
+      $scope.event.state = 'rounds'
+      postableEvent = $scope.event.postable()
+      postableEvent.$update({}, (data) ->
         # Create the first round
-        if !$scope.game.gameround_set || $scope.game.gameround_set.length == 0
+        if !$scope.event.round_set || $scope.event.round_set.length == 0
           werApi.Round.then((Round) ->
             newRound = new Round(
-              game: $scope.game.url
+              event: $scope.event.url
             )
             newRound.$save({}, () ->
-              $location.path('/game/' + data.id + '/round/1/')
+              $location.path('/event/' + data.id + '/round/1/')
             )
           )
         else
-          $location.path('/game/' + data.id + '/round/1/')
+          $location.path('/event/' + data.id + '/round/1/')
       )
       return
 ]
@@ -322,64 +322,32 @@ werControllers.controller 'ConfirmCancelModalController', ['$scope',
       $modalInstance.dismiss('cancel')
 ]
 
-werControllers.controller 'GameRoundController' , ['$scope',
+werControllers.controller 'EventRoundController' , ['$scope',
                                                    '$location',
                                                    '$routeParams',
                                                    '$filter',
                                                    'werApi',
-                                                   'gameStateFactory',
-  ($scope, $location, $routeParams, $filter, werApi, gameStateFactory) ->
-    werApi.Game.then (Game) ->
-      Game.get({id: $routeParams.gameId}, (game, response) ->
-        game.gameState = gameStateFactory.createGameState(game)
-        $scope.game = game
-        if 'then' of game.gameround_set
-          game.gameround_set.then((gamerounds) ->
-            $scope.round = gamerounds[parseInt($routeParams.roundId) - 1]
+                                                   'eventStateFactory',
+  ($scope, $location, $routeParams, $filter, werApi, eventStateFactory) ->
+    werApi.Event.then (Event) ->
+      Event.get({id: $routeParams.eventId}, (event, response) ->
+        event.eventState = eventStateFactory.createEventState(event)
+        $scope.event = event
+        if 'then' of event.round_set
+          event.round_set.then((rounds) ->
+            $scope.round = rounds[parseInt($routeParams.roundId) - 1]
             $scope.round.roundNr = $routeParams.roundId
           )
         else
-          $scope.round = game.gameround_set[parseInt($routeParams.roundId) - 1]
+          $scope.round = event.round_set[parseInt($routeParams.roundId) - 1]
           $scope.round.roundNr = $routeParams.roundId
       , (response) ->
         $scope.error = response.status
       )
 
-    $scope.createMatchesRandom = (gameplayers) ->
-      if !gameplayers
-        if 'then' of $scope.round.game
-          $scope.round.game.then((game) ->
-            game.gameplayer_set.then((gameplayer_set) ->
-              $scope.createMatchesRandom(gameplayer_set[..])
-            )
-          )
-        else if 'then' of $scope.round.game.gameplayer_set
-          $scope.round.game.gameplayer_set.then((gameplayer_set) ->
-            $scope.createMatchesRandom(gameplayer_set[..])
-          )
-        else
-          $scope.createMatchesRandom($scope.round.game.gameplayer_set[..])
-      else
-        # Do the shuffling
-        fisherYates(gameplayers)
-        # Sort by standing (sorting does NOT destroy the shuffling)
-        comparator = (x, y) ->
-          y.score.points - x.score.points
-
-        gameplayers.sort(comparator)
-        werApi.Match.then((Match) ->
-          matches = []
-          for player, i in gameplayers
-            if i % 2 == 0
-              matches.push(new Match(
-                round: $scope.round.url
-                gameplayer_set: [player.url]
-              ))
-            else
-              matches[-1..][0].gameplayer_set.push(player.url)
-
-          for match in matches
-            match.$save()
-        )
+    $scope.createMatchesRandom = () ->
+      # 1) Create the random creation request.
+      # 2) Do polling to see when it is ready.
+      # 3) Display the results
 
 ]

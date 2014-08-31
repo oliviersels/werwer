@@ -4,11 +4,11 @@ from rest_framework import status
 from rest_framework.filters import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from werapp.enums import GameType, PairingMethod
-from werapp.models import Player, MagicGame, GameRound, GameMatch, GamePlayer, RandomMatchesRequest
+from werapp.enums import EventType, PairingMethod
+from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest
 
-from werapp.serializers import PlayerSerializer, MagicGameSerializer, GameRoundSerializer, GameMatchSerializer, \
-    GamePlayerSerializer, RandomMatchesRequestSerializer
+from werapp.serializers import PlayerSerializer, EventSerializer, RoundSerializer, MatchSerializer, \
+    ParticipantSerializer, RandomMatchesRequestSerializer
 from werapp.tasks import create_random_matches
 
 
@@ -18,21 +18,21 @@ class PlayerViewSet(ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('first_name', 'last_name', 'dcinumber')
 
-class MagicGameViewSet(ModelViewSet):
-    model = MagicGame
-    serializer_class = MagicGameSerializer
+class EventViewSet(ModelViewSet):
+    model = Event
+    serializer_class = EventSerializer
 
-class GameRoundViewSet(ModelViewSet):
-    model = GameRound
-    serializer_class = GameRoundSerializer
+class RoundViewSet(ModelViewSet):
+    model = Round
+    serializer_class = RoundSerializer
 
-class GameMatchViewSet(ModelViewSet):
-    model = GameMatch
-    serializer_class = GameMatchSerializer
+class MatchViewSet(ModelViewSet):
+    model = Match
+    serializer_class = MatchSerializer
 
-class GamePlayerViewSet(ModelViewSet):
-    model = GamePlayer
-    serializer_class = GamePlayerSerializer
+class ParticipantViewSet(ModelViewSet):
+    model = Participant
+    serializer_class = ParticipantSerializer
 
 class RandomMatchesRequestViewSet(ModelViewSet):
     model = RandomMatchesRequest
@@ -50,7 +50,7 @@ class DynamicJavascript(TemplateView):
     template_name = "js/dynamic-javascript.js"
 
     def get_context_data(self, **kwargs):
-        kwargs['enums'] = (GameType, PairingMethod,)
+        kwargs['enums'] = (EventType, PairingMethod,)
         return kwargs
 
 class HomeView(TemplateView):
@@ -68,26 +68,26 @@ class EditPlayerConfirmView(TemplateView):
 class AddPlayerView(TemplateView):
     template_name = "partials/add-player.html"
 
-class GamesOverviewView(TemplateView):
-    template_name = "partials/games-overview.html"
+class EventsOverviewView(TemplateView):
+    template_name = "partials/events-overview.html"
 
-class NewGameView(TemplateView):
-    template_name = "partials/new-game.html"
+class NewEventView(TemplateView):
+    template_name = "partials/new-event.html"
 
-class GameView(TemplateView):
-    template_name = "partials/game.html"
+class EventView(TemplateView):
+    template_name = "partials/event.html"
 
-class GamePlanningView(TemplateView):
-    template_name = "partials/game-planning.html"
+class EventPlanningView(TemplateView):
+    template_name = "partials/event-planning.html"
 
 class StartEventConfirmView(TemplateView):
     template_name = "partials/start-event-confirm.html"
 
-class GameDraftView(TemplateView):
-    template_name = "partials/game-draft.html"
+class EventDraftView(TemplateView):
+    template_name = "partials/event-draft.html"
 
 class ConfirmCancelModalView(TemplateView):
     template_name = "partials/confirm-cancel-modal.html"
 
-class GameRoundView(TemplateView):
-    template_name = "partials/game-round.html"
+class EventRoundView(TemplateView):
+    template_name = "partials/event-round.html"

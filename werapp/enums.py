@@ -4,7 +4,7 @@ class Enum(object):
     def name(self):
         return self.__class__.__name__
 
-class GameType(Enum):
+class EventType(Enum):
     CASUAL_LIMITED = 'casual_limited'
     CASUAL_CONSTRUCTED = 'casual_constructed'
 
@@ -22,7 +22,7 @@ class PairingMethod(Enum):
         (SINGLE_ELIMINATION, 'Single elimination'),
     )
 
-class MagicGameState(Enum):
+class EventState(Enum):
     PLANNING = 'planning'
     DRAFT = 'draft'
     ROUNDS = 'rounds'
