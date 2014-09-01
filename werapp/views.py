@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.filters import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from werapp.enums import EventType, PairingMethod
+from werapp.enums import EventType, PairingMethod, EventState, RandomMatchesRequestState
 from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest
 
 from werapp.serializers import PlayerSerializer, EventSerializer, RoundSerializer, MatchSerializer, \
@@ -50,7 +50,7 @@ class DynamicJavascript(TemplateView):
     template_name = "js/dynamic-javascript.js"
 
     def get_context_data(self, **kwargs):
-        kwargs['enums'] = (EventType, PairingMethod,)
+        kwargs['enums'] = (EventType, PairingMethod, EventState, RandomMatchesRequestState)
         return kwargs
 
 class HomeView(TemplateView):

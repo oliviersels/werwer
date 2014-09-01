@@ -326,9 +326,11 @@ werControllers.controller 'EventRoundController' , ['$scope',
                                                    '$location',
                                                    '$routeParams',
                                                    '$filter',
+                                                   '$timeout',
                                                    'werApi',
                                                    'eventStateFactory',
-  ($scope, $location, $routeParams, $filter, werApi, eventStateFactory) ->
+                                                   'djangoEnums',
+  ($scope, $location, $routeParams, $filter, $timeout, werApi, eventStateFactory, djangoEnums) ->
     werApi.Event.then (Event) ->
       Event.get({id: $routeParams.eventId}, (event, response) ->
         event.eventState = eventStateFactory.createEventState(event)
@@ -349,5 +351,19 @@ werControllers.controller 'EventRoundController' , ['$scope',
       # 1) Create the random creation request.
       # 2) Do polling to see when it is ready.
       # 3) Display the results
+      werApi.RandomMatchesRequest.then (RandomMatchesRequest) ->
+        randomMatchesRequest = new RandomMatchesRequest(
+          round: $scope.round.url
+        )
+        randomMatchesRequest.$save({}, () ->
+          checkResults = () ->
+            RandomMatchesRequest.get({id: randomMatchesRequest.id}, (result) ->
+              if result.state == 'completed'
+                console.log 'done'
+              else
+                $timeout(checkResults, 1000)
+            )
+          checkResults()
+        )
 
 ]

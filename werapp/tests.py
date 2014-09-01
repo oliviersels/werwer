@@ -47,7 +47,7 @@ class CreateRandomMatchesTaskTest(TestCase):
         # Check the results
         matches = round.match_set.all()
         players = []
-        self.assertEqual(len(matches), 4)  # Expect 4 rounds
+        self.assertEqual(len(matches), 4)  # Expect 4 matches
         for match in matches:
             for player in match.participant_set.all():
                 self.assertNotIn(player, players)  # Every player should be unique
@@ -55,4 +55,25 @@ class CreateRandomMatchesTaskTest(TestCase):
         self.assertEqual(len(players), 8)  # Expect 8 players
 
     def test_initial_random_matches_with_bye(self):
-        pass
+        # Add another player so we have 9
+        player_guardian = Player.objects.create_user('guardian', 'guardian@lostfleet.com', 'password')
+        participant_guardian = Participant.objects.create(player=player_guardian, event=self.event)
+
+        # Create the first round
+        round = Round.objects.create(event=self.event)
+
+        # Create the random matches request
+        random_matches_request = RandomMatchesRequest.objects.create(round=round)
+
+        # Run the task
+        create_random_matches(random_matches_request.id)
+
+        # Check the results
+        matches = round.match_set.all()
+        players = []
+        self.assertEqual(len(matches), 5)  # Expect 5 matches
+        for match in matches:
+            for player in match.participant_set.all():
+                self.assertNotIn(player, players)  # Every player should be unique
+                players.append(player)
+        self.assertEqual(len(players), 9)  # Expect 9 players

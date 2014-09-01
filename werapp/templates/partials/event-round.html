@@ -22,6 +22,22 @@
                     </ul>
                 </div>
             </div>
+        <div class="col-md-12">
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Player 1</th>
+                        <th>Player 2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="match in round.match_set">
+                        <td>{{ match.participant_set[0].player.first_name }}</td>
+                        <td>{{ match.participant_set[1].player.first_name }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         </p>
     </div>
 </div>

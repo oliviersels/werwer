@@ -139,6 +139,9 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
     round:
       isArray: false
       resource: "Round"
+    participant_set:
+      isArray: true
+      resource: "Participant"
   )
   resourceCache.Round = createResource('rounds',
     event:
@@ -147,6 +150,12 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
     match_set:
       isArray: true
       resource: "Match"
+  )
+
+  resourceCache.RandomMatchesRequest = createResource('random-matches-request',
+    round:
+      isArray: false
+      resource: "Round"
   )
 
   resourceCache
