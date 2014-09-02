@@ -44,7 +44,9 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
         Object.defineProperty(obj, resourceName,
           get: createLazyProperty(obj[resourceName], options)
           enumerable: enumerable
-
+          set: (value) ->
+            delete obj[resourceName]
+            obj[resourceName] = value
         )
 
     convertResponse = (linkedResources, isArray) ->

@@ -359,7 +359,7 @@ werControllers.controller 'EventRoundController' , ['$scope',
           checkResults = () ->
             RandomMatchesRequest.get({id: randomMatchesRequest.id}, (result) ->
               if result.state == 'completed'
-                console.log 'done'
+                $scope.round.$get()
               else
                 $timeout(checkResults, 1000)
             )

@@ -24,6 +24,9 @@ def create_random_matches(random_matches_request_id):
     random.shuffle(participants)
     participants.sort(key=lambda p: p.points)
 
+    # Remove all previous matches
+    random_matches_request.round.match_set.all().delete()
+
     for i in range(0, len(participants), 2):
         match = Match.objects.create(round=random_matches_request.round)
         match.participant_set.add(participants[i])
