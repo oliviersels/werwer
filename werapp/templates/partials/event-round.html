@@ -22,22 +22,32 @@
                     </ul>
                 </div>
             </div>
-        <div class="col-md-12">
-            <table class="table table-responsive">
-                <thead>
-                    <tr>
-                        <th>Player 1</th>
-                        <th>Player 2</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="match in round.match_set">
-                        <td>{{ match.participant_set[0].player.first_name }}</td>
-                        <td>{{ match.participant_set[1].player.first_name }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <div class="col-md-3" ng-show="selectedMatch != undefined">
+                <h3>Result entry</h3>
+                <div class="btn-group-vertical center-block">
+                    <div class="btn btn-default btn-block"><span class="pull-left text-muted">{{ round.match_set[selectedMatch].participant_set[0].player.first_name }}</span><span class="pull-right text-muted">{{ round.match_set[selectedMatch].participant_set[1].player.first_name }}</span> 2 - 0</div>
+                    <div class="btn btn-default btn-block"><span class="pull-left text-muted">{{ round.match_set[selectedMatch].participant_set[0].player.first_name }}</span><span class="pull-right text-muted">{{ round.match_set[selectedMatch].participant_set[1].player.first_name }}</span> 2 - 1</div>
+                </div>
+                <p>These are the results</p>
+            </div>
+            <div class="col-md-9">
+                <table class="table table-responsive table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 30px">#</th>
+                            <th>Player 1</th>
+                            <th>Player 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="match in round.match_set" ng-click="$parent.selectedMatch = $index" ng-class="{success: $parent.selectedMatch == $index}">
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ match.participant_set[0].player.first_name }}</td>
+                            <td>{{ match.participant_set[1].player.first_name }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </p>
     </div>
 </div>

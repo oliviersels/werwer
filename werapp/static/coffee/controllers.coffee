@@ -331,6 +331,8 @@ werControllers.controller 'EventRoundController' , ['$scope',
                                                    'eventStateFactory',
                                                    'djangoEnums',
   ($scope, $location, $routeParams, $filter, $timeout, werApi, eventStateFactory, djangoEnums) ->
+    $scope.selectedMatch = null
+
     werApi.Event.then (Event) ->
       Event.get({id: $routeParams.eventId}, (event, response) ->
         event.eventState = eventStateFactory.createEventState(event)
