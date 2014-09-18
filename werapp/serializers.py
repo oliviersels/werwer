@@ -23,7 +23,7 @@ class RoundSerializer(HyperlinkedModelSerializer):
 class MatchSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Match
-        fields = ("id", "url", "round", "participant_set")
+        fields = ("id", "url", "round", "participant_set", "wins", "losses", "draws")
 
 class ParticipantScoreSerializer(Serializer):
     points = IntegerField()

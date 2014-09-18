@@ -26,9 +26,27 @@ class Round(models.Model):
 
 class Match(models.Model):
     round = models.ForeignKey(Round)
+    wins = models.PositiveIntegerField(default=0)
+    losses = models.PositiveIntegerField(default=0)
+    draws = models.PositiveIntegerField(default=0)
 
     def points_for_participant(self, participant):
-        return 0
+        if self.wins == 0 and self.losses == 0 and self.draws == 0:
+            # No results entry yet
+            return 0
+        if participant == self.participant_set.all()[0]:
+            player_wins = self.wins
+            player_losses = self.losses
+        else:
+            player_wins = self.losses
+            player_losses = self.wins
+
+        if player_wins > player_losses:
+            return 3
+        elif player_losses > player_wins:
+            return 0
+        else:
+            return 1
 
 class Participant(models.Model):
     player = models.ForeignKey(Player)
