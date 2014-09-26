@@ -332,6 +332,7 @@ werControllers.controller 'EventRoundController' , ['$scope',
                                                    'djangoEnums',
   ($scope, $location, $routeParams, $filter, $timeout, werApi, eventStateFactory, djangoEnums) ->
     $scope.selectedMatch = null
+    $scope.done = false
 
     werApi.Event.then (Event) ->
       Event.get({id: $routeParams.eventId}, (event, response) ->
@@ -341,10 +342,16 @@ werControllers.controller 'EventRoundController' , ['$scope',
           event.round_set.then((rounds) ->
             $scope.round = rounds[parseInt($routeParams.roundId) - 1]
             $scope.round.roundNr = $routeParams.roundId
+            console.log $scope.round.match_set
+            for match in $scope.round.match_set
+              match.done = match.wins != 0 || match.losses != 0 or match.draws != 0
           )
         else
           $scope.round = event.round_set[parseInt($routeParams.roundId) - 1]
           $scope.round.roundNr = $routeParams.roundId
+          for match in $scope.round.match_set
+            console.log match
+            match.done = match.wins != 0 || match.losses != 0 or match.draws != 0
       , (response) ->
         $scope.error = response.status
       )
@@ -368,4 +375,19 @@ werControllers.controller 'EventRoundController' , ['$scope',
           checkResults()
         )
 
+    $scope.updateScore = (matchNr, wins, losses, draws) ->
+      match = $scope.round.match_set[matchNr]
+      match.wins = wins ? 0
+      match.losses = losses ? 0
+      match.draws = draws ? 0
+      matchPostable = match.postable()
+      matchPostable.round = $scope.round.url
+      matchPostable.$update();
+
+      match.done = true
+      for match in $scope.round.match_set
+        if !match.done
+          return
+
+      $scope.done = true
 ]

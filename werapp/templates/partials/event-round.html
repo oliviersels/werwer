@@ -20,16 +20,17 @@
                         <li><a href="" ng-click="createMatchesRandom()">Random</a></li>
                         <li><a href="">Manual</a></li>
                     </ul>
+                    <button class="btn btn-success" ng-click="nextRound()" ng-show="done">Next round</button>
                 </div>
             </div>
             <div class="col-md-3" ng-show="selectedMatch != undefined">
                 <h3>Result entry</h3>
                 <div class="btn-group-vertical center-block">
-                    <div class="btn btn-default btn-block"><span class="pull-left text-muted">{{ round.match_set[selectedMatch].participant_set[0].player.first_name }}</span><span class="pull-right text-muted">{{ round.match_set[selectedMatch].participant_set[1].player.first_name }}</span> 2 - 0</div>
-                    <div class="btn btn-default btn-block"><span class="pull-left text-muted">{{ round.match_set[selectedMatch].participant_set[0].player.first_name }}</span><span class="pull-right text-muted">{{ round.match_set[selectedMatch].participant_set[1].player.first_name }}</span> 2 - 1</div>
-                    <div class="btn btn-default btn-block"><span class="pull-left text-muted">{{ round.match_set[selectedMatch].participant_set[0].player.first_name }}</span><span class="pull-right text-muted">{{ round.match_set[selectedMatch].participant_set[1].player.first_name }}</span> 1 - 1</div>
-                    <div class="btn btn-default btn-block"><span class="pull-left text-muted">{{ round.match_set[selectedMatch].participant_set[0].player.first_name }}</span><span class="pull-right text-muted">{{ round.match_set[selectedMatch].participant_set[1].player.first_name }}</span> 1 - 2</div>
-                    <div class="btn btn-default btn-block"><span class="pull-left text-muted">{{ round.match_set[selectedMatch].participant_set[0].player.first_name }}</span><span class="pull-right text-muted">{{ round.match_set[selectedMatch].participant_set[1].player.first_name }}</span> 0 - 2</div>
+                    <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 2, 0)"><span class="pull-left text-muted">{{ round.match_set[selectedMatch].participant_set[0].player.first_name }}</span><span class="pull-right text-muted">{{ round.match_set[selectedMatch].participant_set[1].player.first_name }}</span> 2 - 0</div>
+                    <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 2, 1)"><span class="pull-left text-muted">{{ round.match_set[selectedMatch].participant_set[0].player.first_name }}</span><span class="pull-right text-muted">{{ round.match_set[selectedMatch].participant_set[1].player.first_name }}</span> 2 - 1</div>
+                    <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 1, 1)"><span class="pull-left text-muted">{{ round.match_set[selectedMatch].participant_set[0].player.first_name }}</span><span class="pull-right text-muted">{{ round.match_set[selectedMatch].participant_set[1].player.first_name }}</span> 1 - 1</div>
+                    <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 1, 2)"><span class="pull-left text-muted">{{ round.match_set[selectedMatch].participant_set[0].player.first_name }}</span><span class="pull-right text-muted">{{ round.match_set[selectedMatch].participant_set[1].player.first_name }}</span> 1 - 2</div>
+                    <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 0, 2)"><span class="pull-left text-muted">{{ round.match_set[selectedMatch].participant_set[0].player.first_name }}</span><span class="pull-right text-muted">{{ round.match_set[selectedMatch].participant_set[1].player.first_name }}</span> 0 - 2</div>
                 </div>
                 <p>These are the results</p>
             </div>
@@ -43,7 +44,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="match in round.match_set" ng-click="$parent.selectedMatch = $index" ng-class="{success: $parent.selectedMatch == $index}">
+                        <tr ng-repeat="match in round.match_set | filter: {done: false}" ng-click="$parent.selectedMatch = $index" ng-class="{success: $parent.selectedMatch == $index}">
                             <td>{{ $index + 1 }}</td>
                             <td>{{ match.participant_set[0].player.first_name }}</td>
                             <td>{{ match.participant_set[1].player.first_name }}</td>

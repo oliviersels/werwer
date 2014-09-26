@@ -12,38 +12,43 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
 #      console.log(obj)
       _convertDate(obj, key) for key of obj when obj.hasOwnProperty(key) && toString.call(obj[key]) == '[object String]'
 
-    createLazyProperty = (oldValue, options, value) ->
+    createPromisedResult = (result) ->
+      deferred = $q.defer()
+      # Immediately solve
+      deferred.resolve(result)
+      return deferred.promise
+
+    createLazyProperty = (oldValue, options, result) ->
       () ->
-        if !value
+        if !result
           if options.isArray
-            value = $q.all(($http.get(res) for res in oldValue)).then((results) ->
+            result = $q.all(($http.get(res) for res in oldValue)).then((results) ->
               if options.resource
                 resourceCache[options.resource].then((Resource) ->
-                  value = (Resource.createResource(result.data) for result in results)
+                  result = createPromisedResult((Resource.createResource(result.data) for result in results))
                 )
               else
-                value = (result.data for result in results)
+                result = createPromisedResult((result.data for result in results))
 
             )
           else
-            value = $http.get(oldValue).success((data) ->
+            result = $http.get(oldValue).success((data) ->
               if options.resource
                 resourceCache[options.resource].then((Resource) ->
-                  value = Resource.createResource(data)
+                  result = createPromisedResult(Resource.createResource(data))
                 )
               else
-                value = data
+                result = createPromisedResult(data)
             )
         else
-          value
+          result
 
-    convertLinkedResources = (obj, linkedResources, enumerable) ->
-      enumerable ?= false
+    convertLinkedResources = (obj, linkedResources) ->
       for resourceName, options of linkedResources
         # Create a getter for the resources
         Object.defineProperty(obj, resourceName,
           get: createLazyProperty(obj[resourceName], options)
-          enumerable: enumerable
+          enumerable: true
           set: (value) ->
             delete obj[resourceName]
             obj[resourceName] = value
@@ -53,7 +58,7 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
       (response) ->
         convertObj = (obj) ->
           searchAndconvertDates(obj)
-          convertLinkedResources(obj, linkedResources, true)
+          convertLinkedResources(obj, linkedResources)
 
         if isArray
           convertObj(obj) for obj in response.resource
@@ -77,7 +82,7 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
 
     resourceClass.createResource = (args) ->
       resource = new this(args)
-      convertLinkedResources(resource, linkedResources, false)
+      convertLinkedResources(resource, linkedResources)
       resource
 
     resourceClass.prototype['postable'] = () ->
