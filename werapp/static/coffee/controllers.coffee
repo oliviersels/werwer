@@ -232,8 +232,9 @@ werControllers.controller 'StartEventConfirmController', ['$scope',
                                                           'event'
   ($scope, $modalInstance, event) ->
     $scope.event = event
-    $scope.recommended_rounds = Math.max(3, Math.floor(Math.log(event.participant_set.length) / Math.log(2)))
-    $scope.event.nr_of_rounds = $scope.recommended_rounds
+    event.participant_set.then (participants) ->
+      $scope.recommended_rounds = Math.max(3, Math.floor(Math.log(participants.length) / Math.log(2)))
+      $scope.event.nr_of_rounds = $scope.recommended_rounds
 
     $scope.start = () ->
       $modalInstance.close($scope.event.nr_of_rounds)
@@ -260,18 +261,12 @@ werControllers.controller 'EventDraftController', ['$scope',
       )
 
     $scope.seatingsRandom = (confirm) ->
-      doSeatings = (participants) ->
-          $scope.seatings = fisherYates((p.player for p in participants))
-
       if confirm || !$scope.seatings
-        if 'then' of $scope.event.participant_set
-          $scope.event.participant_set.then((participants) ->
-            $q.all((p.player for p in participants)).then(() ->
-              doSeatings(participants)
-            )
+        $scope.event.participant_set.then((participants) ->
+          $q.all((p.player for p in participants)).then(() ->
+            $scope.seatings = fisherYates((p.player__v for p in participants))
           )
-        else
-          doSeatings($scope.event.participant_set)
+        )
       else
         modal = $modal.open(
           templateUrl: "/partials/confirm-cancel-modal/",
@@ -293,17 +288,18 @@ werControllers.controller 'EventDraftController', ['$scope',
       postableEvent = $scope.event.postable()
       postableEvent.$update({}, (data) ->
         # Create the first round
-        if !$scope.event.round_set || $scope.event.round_set.length == 0
-          werApi.Round.then((Round) ->
-            newRound = new Round(
-              event: $scope.event.url
+        $scope.event.round_set.then (rounds) ->
+          if rounds.length == 0
+            werApi.Round.then((Round) ->
+              newRound = new Round(
+                event: $scope.event.url
+              )
+              newRound.$save({}, () ->
+                $location.path('/event/' + data.id + '/round/1/')
+              )
             )
-            newRound.$save({}, () ->
-              $location.path('/event/' + data.id + '/round/1/')
-            )
-          )
-        else
-          $location.path('/event/' + data.id + '/round/1/')
+          else
+            $location.path('/event/' + data.id + '/round/1/')
       )
       return
 ]
@@ -339,20 +335,13 @@ werControllers.controller 'EventRoundController' , ['$scope',
       Event.get({id: $routeParams.eventId}, (event, response) ->
         event.eventState = eventStateFactory.createEventState(event)
         $scope.event = event
-        if 'then' of event.round_set
-          event.round_set.then((rounds) ->
-            $scope.round = rounds[parseInt($routeParams.roundId) - 1]
-            $scope.round.roundNr = $routeParams.roundId
-            console.log $scope.round.match_set
-            for match in $scope.round.match_set
-              match.done = match.wins != 0 || match.losses != 0 or match.draws != 0
-          )
-        else
-          $scope.round = event.round_set[parseInt($routeParams.roundId) - 1]
+        event.round_set.then((rounds) ->
+          $scope.round = rounds[parseInt($routeParams.roundId) - 1]
           $scope.round.roundNr = $routeParams.roundId
-          for match in $scope.round.match_set
-            console.log match
-            match.done = match.wins != 0 || match.losses != 0 or match.draws != 0
+          $scope.round.match_set.then (matches) ->
+            for match in matches
+              match.done = match.wins != 0 || match.losses != 0 or match.draws != 0
+        )
       , (response) ->
         $scope.error = response.status
       )
@@ -377,18 +366,19 @@ werControllers.controller 'EventRoundController' , ['$scope',
         )
 
     $scope.updateScore = (matchNr, wins, losses, draws) ->
-      match = $scope.round.match_set[matchNr]
-      match.wins = wins ? 0
-      match.losses = losses ? 0
-      match.draws = draws ? 0
-      matchPostable = match.postable()
-      matchPostable.round = $scope.round.url
-      matchPostable.$update();
+      $scope.round.match_set.then (matches) ->
+        match = matches[matchNr]
+        match.wins = wins ? 0
+        match.losses = losses ? 0
+        match.draws = draws ? 0
+        matchPostable = match.postable()
+        matchPostable.round = $scope.round.url
+        matchPostable.$update();
 
-      match.done = true
-      for match in $scope.round.match_set
-        if !match.done
-          return
+        match.done = true
+        for match in $scope.round.match_set__v
+          if !match.done
+            return
 
-      $scope.done = true
+        $scope.done = true
 ]

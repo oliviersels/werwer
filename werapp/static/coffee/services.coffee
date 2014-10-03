@@ -77,6 +77,7 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
         Object.defineProperty(obj, resourceName,
           get: createLazyProperty(lazyPropertyResult)
           enumerable: false
+          configurable: true
           set: (value) ->
             delete obj[resourceName]
             obj[resourceName] = value
@@ -85,6 +86,7 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
         # Create a getter for the resource values
         Object.defineProperty(obj, resourceName + '__v',
           enumerable: false
+          configurable: true
           get: createLazyPropertyValues(lazyPropertyResult)
           set: (value) ->
             delete obj[resourceName]
