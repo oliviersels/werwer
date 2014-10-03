@@ -162,6 +162,7 @@ werControllers.controller 'EventPlanningController', ['$scope',
       Event.get({id: $routeParams.eventId}, (event, response) ->
         event.eventState = eventStateFactory.createEventState(event)
         $scope.event = event
+        console.log event
       , (response) ->
         $scope.event = null
         $scope.error = response.status
@@ -200,7 +201,7 @@ werControllers.controller 'EventPlanningController', ['$scope',
         )
 
     $scope.filterAdded = (player) ->
-      !$scope.event || !$scope.event.$resolved || !(participant1.url in (participant2.url for participant2 in $scope.event.participant_set) for participant1 in player.participant_set).some((x) -> x)
+      !$scope.event || !$scope.event.$resolved || !$scope.event.participant_set__v || !(participant1.url in (participant2.url for participant2 in $scope.event.participant_set__v) for participant1 in player.participant_set__v).some((x) -> x)
 
     $scope.startEventConfirm = () ->
       modal = $modal.open(

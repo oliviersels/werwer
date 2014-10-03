@@ -43,16 +43,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="participant in event.participant_set | filter : searchPlayer" class="success">
+                    <tr ng-repeat="participant in event.participant_set__v | filter : searchPlayer" class="success">
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ participant.player.first_name + ' ' + participant.player.last_name }}</td>
-                        <td>{{ participant.player.dcinumber }}</td>
+                        <td>{{ participant.player__v.first_name + ' ' + participant.player__v.last_name }}</td>
+                        <td>{{ participant.player__v.dcinumber }}</td>
                     </tr>
-                        <tr ng-repeat="player in availablePlayers | filter : filterAdded | filter : searchPlayer" ng-click="addPlayer(player)">
-                            <td></td>
-                            <td>{{ player.first_name + ' ' + player.last_name }}</td>
-                            <td>{{ player.dcinumber }}</td>
-                        </tr>
+                    <tr ng-repeat="player in availablePlayers | filter : filterAdded | filter : searchPlayer" ng-click="addPlayer(player)">
+                        <td></td>
+                        <td>{{ player.first_name + ' ' + player.last_name }}</td>
+                        <td>{{ player.dcinumber }}</td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
