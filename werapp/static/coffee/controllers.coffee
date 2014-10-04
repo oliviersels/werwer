@@ -343,7 +343,7 @@ werControllers.controller 'EventRoundController' , ['$scope',
           $scope.round.match_set.then (matches) ->
             $scope.done = true
             for match in matches
-              match.done = match.wins != 0 || match.losses != 0 or match.draws != 0
+              match.done = match.bye || match.wins != 0 || match.losses != 0 or match.draws != 0
               if !match.done
                 $scope.done = false
         )
@@ -364,10 +364,11 @@ werControllers.controller 'EventRoundController' , ['$scope',
             RandomMatchesRequest.get({id: randomMatchesRequest.id}, (result) ->
               if result.state == 'completed'
                 $scope.round.$get(() ->
+                  $scope.round.roundNr = $routeParams.roundId
                   $scope.round.match_set.then (matches) ->
                     $scope.done = true
                     for match in matches
-                      match.done = match.wins != 0 || match.losses != 0 or match.draws != 0
+                      match.done = match.bye || match.wins != 0 || match.losses != 0 or match.draws != 0
                       if !match.done
                         $scope.done = false
                 )
@@ -386,7 +387,6 @@ werControllers.controller 'EventRoundController' , ['$scope',
         match.losses = losses ? 0
         match.draws = draws ? 0
         matchPostable = match.postable()
-        matchPostable.round = $scope.round.url
         matchPostable.$update();
 
         match.done = true
@@ -395,4 +395,20 @@ werControllers.controller 'EventRoundController' , ['$scope',
             return
 
         $scope.done = true
+
+    $scope.nextRound = () ->
+      # If the round exists, just move to it
+      $scope.event.round_set.then (rounds) ->
+        roundNr = parseInt($scope.round.roundNr)
+        if rounds.length > roundNr
+          $location.path('/event/' + $scope.event.id + '/round/' + (roundNr + 1) + '/')
+        else
+          werApi.Round.then((Round) ->
+            newRound = new Round(
+              event: $scope.event.url
+            )
+            newRound.$save({}, () ->
+              $location.path('/event/' + $scope.event.id + '/round/' + (roundNr + 1) + '/')
+            )
+          )
 ]

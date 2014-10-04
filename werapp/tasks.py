@@ -1,10 +1,25 @@
 from __future__ import absolute_import
+from copy import copy
 import random
 
 from celery import shared_task
 from werapp.enums import RandomMatchesRequestState, PairingMethod
 from werapp.models import RandomMatchesRequest, Match
 
+def match_making(participants):
+    if len(participants) == 0:
+        return []
+
+    match_person = participants.pop(0)
+    match_candidate_index = 0
+    while match_candidate_index != len(participants):
+        if not match_person.has_played_against(participants[match_candidate_index]):
+            result = (match_person, participants.pop(match_candidate_index))
+            recursive_result = match_making(copy(participants))
+            if recursive_result is not None:
+                return [result] + recursive_result
+        match_candidate_index += 1
+    return None # No solution
 
 @shared_task
 def create_random_matches(random_matches_request_id):
@@ -21,17 +36,32 @@ def create_random_matches(random_matches_request_id):
     #   - Sort players by score
     participants = list(random_matches_request.round.event.participant_set.all()) # TODO filter on not dropped
     assert random_matches_request.round.event.pairing_method == PairingMethod.SWISS
-    random.shuffle(participants)
-    participants.sort(key=lambda p: p.points)
 
     # Remove all previous matches
     random_matches_request.round.match_set.all().delete()
 
-    for i in range(0, len(participants), 2):
+    random.shuffle(participants)
+    participants.sort(key=lambda p: p.points, reverse=True)
+
+    # The matchmaking algorithm
+    bye_player = []
+    # Search for the person with the bye (if needed)
+    if len(participants) % 2 == 1:
+        bye_candidate_index = len(participants) - 1
+        while participants[bye_candidate_index].has_received_bye() and not bye_candidate_index == -1:
+            bye_candidate_index -= 1
+        if bye_candidate_index == -1:
+            bye_candidate_index = len(participants) - 1
+        bye_player.append((participants.pop(bye_candidate_index), None))
+
+    results = match_making(copy(participants)) + bye_player
+    assert results is not None
+
+    for result in results:
         match = Match.objects.create(round=random_matches_request.round)
-        match.participant_set.add(participants[i])
-        if i + 1 != len(participants):
-            match.participant_set.add(participants[i + 1])
+        match.participant_set.add(result[0])
+        if result[1] is not None:
+            match.participant_set.add(result[1])
 
     random_matches_request.state = RandomMatchesRequestState.COMPLETED
     random_matches_request.save()
