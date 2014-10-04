@@ -223,6 +223,12 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
       resource: "Round"
   )
 
+  resourceCache.EndOfEventMailingRequest = createResource('end-of-event-mailing-request',
+    event:
+      isArray: false
+      resource: "Event"
+  )
+
   resourceCache
 ]
 

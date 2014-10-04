@@ -447,4 +447,11 @@ werControllers.controller 'EventConclusionController' , ['$scope',
         event.eventState = eventStateFactory.createEventState(event)
         $scope.event = event
       )
+
+    $scope.endOfEventMailing = () ->
+      werApi.EndOfEventMailingRequest.then (EndOfEventMailingRequest) ->
+        endOfEventMailingRequest = new EndOfEventMailingRequest(
+          event: $scope.event.url
+        )
+        endOfEventMailingRequest.$save({})
 ]

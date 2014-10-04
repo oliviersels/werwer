@@ -9,7 +9,7 @@ from werapp.models import Player, Event, Round, Match, Participant, RandomMatche
 
 from werapp.serializers import PlayerSerializer, EventSerializer, RoundSerializer, MatchSerializer, \
     ParticipantSerializer, RandomMatchesRequestSerializer, EndOfEventMailingRequestSerializer
-from werapp.tasks import create_random_matches
+from werapp.tasks import create_random_matches, end_of_event_mailing
 
 
 class PlayerViewSet(ModelViewSet):

@@ -80,11 +80,11 @@ def end_of_event_mailing(end_of_event_mailing_request_id):
     event = end_of_event_mailing_request.event
 
     # Calculate participant points for standing
-    participants = event.participant_set.all()
+    participants = list(event.participant_set.all())
     participants.sort(key=lambda p: p.points, reverse=True)
 
     # Send a mail to all players with their info
-    for index, participant in enumerate(event.participant_set.all()):
+    for index, participant in enumerate(participants):
         template = get_template("mails/end-of-event-mail.txt")
         context_dict = {
             "player": {
@@ -106,13 +106,14 @@ def end_of_event_mailing(end_of_event_mailing_request_id):
                 match_participants = match.participant_set.all()
                 for i, p in enumerate(match_participants):
                     if p.id == participant.id:
+                        points = match.points_for_participant(p)
                         context_dict["rounds"].append({
                             "nr": round_index + 1,
                             "opponent_name": match_participants[(i + 1) % 2].player.first_name + " " + match_participants[(i + 1) % 2].player.last_name,
-                            "result_text": "gewonnen" if match.points_for_participant(p) == 3 else "gelijk gespeeld" if match.points_for_participant(p) == 1 else "verloren",
-                            "result": match.points_for_participant(p),
+                            "result_text": "gewonnen" if points == 3 else "gelijk gespeeld" if points == 1 else "verloren",
+                            "result": "%s - %s | %s" % ((match.wins, match.losses, match.draws) if points == 3 else (match.losses, match.wins, match.draws)),
                         })
 
         context = Context(context_dict)
         message = template.render(context)
-        participant.player.email_user("Aether event summary", message)
+        participant.player.email_user("Aether event overzicht", message, "olivier_sels@gmail.com")

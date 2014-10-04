@@ -50,4 +50,5 @@ class RandomMatchesRequestSerializer(HyperlinkedModelSerializer):
 class EndOfEventMailingRequestSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = EndOfEventMailingRequest
-        fields = ("id", "url", "event")
+        fields = ("id", "url", "event",)
+        read_only_fields = ("id",)

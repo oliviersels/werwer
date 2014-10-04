@@ -89,3 +89,7 @@ AUTH_USER_MODEL = 'werapp.Player'
 
 # Celery
 BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+
+# Email backend
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+

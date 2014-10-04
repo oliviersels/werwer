@@ -1,18 +1,18 @@
 Hoi {{ player.first_name }},
 
 
-Je hebt op {{ event.date }} meegedaan aan het Aether event "{{ event.name }}". {% if first_event %}Hopelijk is het meegevallen.{% endif %}
+Je hebt op {{ event.date }} meegedaan aan het Aether event "{{ event.name }}". {% if first_event %}Hopelijk heb je je geamuseerd.{% endif %}
 
 Hier volgt een overzicht van hoe je het hebt gedaan:
 {% for round in rounds %}
- - Round {{ round.nr }}: tegen {{ round.opponent_name }} heb je {{ round.result_text }} ({{ round.result }})
+ - Ronde {{ round.nr }}: tegen {{ round.opponent_name }} heb je {{ round.result_text }} ({{ round.result }})
 {% endfor %}
 
-Je bent {{ event.standing }}e geworden met {{ event.points }}.
-{% if event.price_support > 0 %}Dit heeft je {{ event.price_support }} credits opgeleverd. Proficiat!{% else %}Je had helaas niet genoeg punten om credits te krijgen.{% endif %}
+Je bent {{ event.standing }}e geworden met {{ event.points }} punten.
+{% if event.price_support > 0 %}Dit heeft je {{ event.price_support }} credits opgeleverd.
+Proficiat! En tot de volgende keer,{% else %}Je had helaas niet genoeg punten om credits te krijgen.
+Tot de volgende keer,{% endif %}
 
-
-Tot een volgende keer,
 
 Aether magic & boardgaming club
 Olivier Sels
