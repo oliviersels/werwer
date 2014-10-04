@@ -18,7 +18,7 @@
                         </li>
                     </ul>
                 </li>
-                <li><a href="/">Standings</a></li>
+                <li ng-class="{active: page.menuName == 'standings'}"><a ng-href="/event/{% verbatim %}{{ event.id }}{% endverbatim %}/standings/">Standings</a></li>
             </ul>
         </div>
     </div>

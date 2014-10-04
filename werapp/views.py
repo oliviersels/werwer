@@ -91,3 +91,6 @@ class ConfirmCancelModalView(TemplateView):
 
 class EventRoundView(TemplateView):
     template_name = "partials/event-round.html"
+
+class EventStandingsView(TemplateView):
+    template_name = "partials/event-standings.html"
