@@ -94,3 +94,6 @@ class EventRoundView(TemplateView):
 
 class EventStandingsView(TemplateView):
     template_name = "partials/event-standings.html"
+
+class EventConclusionView(TemplateView):
+    template_name = "partials/event-conclusion.html"

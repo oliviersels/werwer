@@ -26,11 +26,13 @@ class EventState(Enum):
     PLANNING = 'planning'
     DRAFT = 'draft'
     ROUNDS = 'rounds'
+    CONCLUSION = 'conclusion'
 
     choices = (
         (PLANNING, 'Planning'),
         (DRAFT, 'Draft'),
         (ROUNDS, 'Rounds'),
+        (CONCLUSION, 'Conclusion'),
     )
 
 class RandomMatchesRequestState(Enum):

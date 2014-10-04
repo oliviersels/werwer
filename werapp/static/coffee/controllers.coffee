@@ -416,15 +416,33 @@ werControllers.controller 'EventRoundController' , ['$scope',
           )
 
     $scope.endEvent = () ->
-      console.log "Ending event!"
+      $scope.event.state = 'conclusion'
+      postableEvent = $scope.event.postable()
+      postableEvent.$update({}, (data) ->
+        $location.path('/event/' + $scope.event.id + '/conclusion/')
+      )
 ]
 
 werControllers.controller 'EventStandingsController' , ['$scope',
-                                                   '$location',
-                                                   '$routeParams',
-                                                   'werApi',
-                                                   'eventStateFactory',
-                                                   'djangoEnums',
+                                                        '$location',
+                                                        '$routeParams',
+                                                        'werApi',
+                                                        'eventStateFactory',
+                                                        'djangoEnums',
+  ($scope, $location, $routeParams, werApi, eventStateFactory, djangoEnums) ->
+    werApi.Event.then (Event) ->
+      Event.get({id: $routeParams.eventId}, (event, response) ->
+        event.eventState = eventStateFactory.createEventState(event)
+        $scope.event = event
+      )
+]
+
+werControllers.controller 'EventConclusionController' , ['$scope',
+                                                         '$location',
+                                                         '$routeParams',
+                                                         'werApi',
+                                                         'eventStateFactory',
+                                                         'djangoEnums',
   ($scope, $location, $routeParams, werApi, eventStateFactory, djangoEnums) ->
     werApi.Event.then (Event) ->
       Event.get({id: $routeParams.eventId}, (event, response) ->
