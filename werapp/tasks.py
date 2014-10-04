@@ -3,8 +3,11 @@ from copy import copy
 import random
 
 from celery import shared_task
+from django.template import Context
+from django.template.loader import get_template
 from werapp.enums import RandomMatchesRequestState, PairingMethod
-from werapp.models import RandomMatchesRequest, Match
+from werapp.models import RandomMatchesRequest, Match, EndOfEventMailingRequest
+
 
 def match_making(participants):
     if len(participants) == 0:
@@ -70,3 +73,46 @@ def create_random_matches(random_matches_request_id):
 
     random_matches_request.state = RandomMatchesRequestState.COMPLETED
     random_matches_request.save()
+
+@shared_task
+def end_of_event_mailing(end_of_event_mailing_request_id):
+    end_of_event_mailing_request = EndOfEventMailingRequest.objects.get(id=end_of_event_mailing_request_id)
+    event = end_of_event_mailing_request.event
+
+    # Calculate participant points for standing
+    participants = event.participant_set.all()
+    participants.sort(key=lambda p: p.points, reverse=True)
+
+    # Send a mail to all players with their info
+    for index, participant in enumerate(event.participant_set.all()):
+        template = get_template("mails/end-of-event-mail.txt")
+        context_dict = {
+            "player": {
+                "first_name": participant.player.first_name,
+            },
+            "event": {
+                "date": event.date,
+                "name": event.name,
+                "standing": index + 1,
+                "points": participant.points,
+                "price_support": participant.price_support,
+            },
+            "first_event": participant.player.participant_set.count() == 1,
+            "rounds": [],
+        }
+        # Fill the rounds context
+        for round_index, round in enumerate(event.round_set.all()):
+            for match in round.match_set.all():
+                match_participants = match.participant_set.all()
+                for i, p in enumerate(match_participants):
+                    if p.id == participant.id:
+                        context_dict["rounds"].append({
+                            "nr": round_index + 1,
+                            "opponent_name": match_participants[(i + 1) % 2].player.first_name + " " + match_participants[(i + 1) % 2].player.last_name,
+                            "result_text": "gewonnen" if match.points_for_participant(p) == 3 else "gelijk gespeeld" if match.points_for_participant(p) == 1 else "verloren",
+                            "result": match.points_for_participant(p),
+                        })
+
+        context = Context(context_dict)
+        message = template.render(context)
+        participant.player.email_user("Aether event summary", message)

@@ -5,10 +5,10 @@ from rest_framework.filters import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from werapp.enums import EventType, PairingMethod, EventState, RandomMatchesRequestState
-from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest
+from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest, EndOfEventMailingRequest
 
 from werapp.serializers import PlayerSerializer, EventSerializer, RoundSerializer, MatchSerializer, \
-    ParticipantSerializer, RandomMatchesRequestSerializer
+    ParticipantSerializer, RandomMatchesRequestSerializer, EndOfEventMailingRequestSerializer
 from werapp.tasks import create_random_matches
 
 
@@ -42,6 +42,15 @@ class RandomMatchesRequestViewSet(ModelViewSet):
         if created:
             # Create the random matches task
             create_random_matches.delay(obj.id)
+
+class EndOfEventMailingRequestViewSet(ModelViewSet):
+    model = EndOfEventMailingRequest
+    serializer_class = EndOfEventMailingRequestSerializer
+
+    def post_save(self, obj, created=False):
+        if created:
+            # Create the random matches task
+            end_of_event_mailing.delay(obj.id)
 
 class WerView(TemplateView):
     template_name = "wer.html"

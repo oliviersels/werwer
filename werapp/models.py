@@ -121,3 +121,6 @@ class Participant(models.Model):
 class RandomMatchesRequest(models.Model):
     round = models.ForeignKey(Round)
     state = models.CharField(max_length=250, choices=RandomMatchesRequestState.choices, default=RandomMatchesRequestState.NEW)
+
+class EndOfEventMailingRequest(models.Model):
+    event = models.ForeignKey(Event)
