@@ -181,8 +181,8 @@ werControllers.controller 'EventPlanningController', ['$scope',
           )
           participant.$save({}, () ->
             resourceParticipant = Participant.createResource(participant.toJSON())
-            $scope.event.participant_set.push(resourceParticipant)
-            player.participant_set.push(resourceParticipant)
+            $scope.event.participant_set__v.push(resourceParticipant)
+            player.participant_set__v.push(resourceParticipant)
           )
       else
         modal = $modal.open(
@@ -201,7 +201,9 @@ werControllers.controller 'EventPlanningController', ['$scope',
         )
 
     $scope.filterAdded = (player) ->
-      !$scope.event || !$scope.event.$resolved || !$scope.event.participant_set__v || !(participant1.url in (participant2.url for participant2 in $scope.event.participant_set__v) for participant1 in player.participant_set__v).some((x) -> x)
+      if !$scope.event
+        return true
+      return !(participant1.url in (participant2.url for participant2 in $scope.event.participant_set__v) for participant1 in player.participant_set__v).some((x) -> x)
 
     $scope.startEventConfirm = () ->
       modal = $modal.open(
@@ -339,8 +341,11 @@ werControllers.controller 'EventRoundController' , ['$scope',
           $scope.round = rounds[parseInt($routeParams.roundId) - 1]
           $scope.round.roundNr = $routeParams.roundId
           $scope.round.match_set.then (matches) ->
+            $scope.done = true
             for match in matches
               match.done = match.wins != 0 || match.losses != 0 or match.draws != 0
+              if !match.done
+                $scope.done = false
         )
       , (response) ->
         $scope.error = response.status
@@ -358,7 +363,14 @@ werControllers.controller 'EventRoundController' , ['$scope',
           checkResults = () ->
             RandomMatchesRequest.get({id: randomMatchesRequest.id}, (result) ->
               if result.state == 'completed'
-                $scope.round.$get()
+                $scope.round.$get(() ->
+                  $scope.round.match_set.then (matches) ->
+                    $scope.done = true
+                    for match in matches
+                      match.done = match.wins != 0 || match.losses != 0 or match.draws != 0
+                      if !match.done
+                        $scope.done = false
+                )
               else
                 $timeout(checkResults, 1000)
             )
@@ -367,7 +379,9 @@ werControllers.controller 'EventRoundController' , ['$scope',
 
     $scope.updateScore = (matchNr, wins, losses, draws) ->
       $scope.round.match_set.then (matches) ->
-        match = matches[matchNr]
+        remainingMatches = $filter('filter')(matches, {done: false})
+
+        match = remainingMatches[matchNr]
         match.wins = wins ? 0
         match.losses = losses ? 0
         match.draws = draws ? 0

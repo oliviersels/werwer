@@ -5,11 +5,14 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
 
   class LazyPropertyResult
     constructor: (@oldValue, @options) ->
-      @value = null
+      if @options.isArray
+        @value = []
+      else
+        @value = undefined
       @promise = null
 
     hasResult: () ->
-      return @value != null or @promise != null
+      return @promise != null
 
     getPromise: () ->
       if !@hasResult()
@@ -29,6 +32,9 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
         @promise.then (value) =>
           @value = value
       return @value
+
+    getOldValue: () ->
+      return @oldValue
 
     retrieveValue: () ->
       deferred = $q.defer()
@@ -70,6 +76,10 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
       () ->
         return lazyPropertyResult.getValue()
 
+    createLazyPropertyOldValue = (lazyPropertyResult) ->
+      () ->
+        return lazyPropertyResult.getOldValue()
+
     convertLinkedResources = (obj, linkedResources) ->
       for resourceName, options of linkedResources
         lazyPropertyResult = new LazyPropertyResult(obj[resourceName], options)
@@ -88,6 +98,16 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
           enumerable: false
           configurable: true
           get: createLazyPropertyValues(lazyPropertyResult)
+          set: (value) ->
+            delete obj[resourceName]
+            obj[resourceName] = value
+        )
+
+        # Create a getter for the old values
+        Object.defineProperty(obj, resourceName + '__ov',
+          enumerable: true
+          configurable: true
+          get: createLazyPropertyOldValue(lazyPropertyResult)
           set: (value) ->
             delete obj[resourceName]
             obj[resourceName] = value
@@ -127,12 +147,11 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
     resourceClass.prototype['postable'] = () ->
       result = {}
       for prop, value of this.toJSON()
-        if not (prop of linkedResources)
-          result[prop] = if postableHandler then postableHandler(prop, value) else value
-        else if linkedResources[prop].isArray
-          result[prop] = (p.url for p in value)
+        if /__ov$/.test(prop)
+          realProp = prop.substring(0, prop.length - 4)
+          result[realProp] = value
         else
-          result[prop] = value.url
+          result[prop] = if postableHandler then postableHandler(prop, value) else value
       new resourceClass(result)
 
     resourceClass
