@@ -118,6 +118,77 @@ class CreateRandomMatchesTaskTest(TestCase):
         self.assertSetEqual(losers, {self.participant_fearless, self.participant_valiant,
                                      self.participant_victorious, self.participant_invincible})
 
+    def test_random_matches_with_simple_results_bye(self):
+        # Test random matches with some simple results (all wins or losses)
+        # Add another player so we have 9
+        player_guardian = Player.objects.create_user('guardian', 'guardian@lostfleet.com', 'password')
+        participant_guardian = Participant.objects.create(player=player_guardian, event=self.event)
+
+        # Create the first round
+        round1 = Round.objects.create(event=self.event)
+
+        # Create the matches manually
+        match1 = Match.objects.create(round=round1, wins=2)
+        match1.participant_set.add(self.participant_dauntless)
+        match1.participant_set.add(self.participant_fearless)
+        match2 = Match.objects.create(round=round1, wins=2)
+        match2.participant_set.add(self.participant_courageous)
+        match2.participant_set.add(self.participant_valiant)
+        match3 = Match.objects.create(round=round1, wins=2)
+        match3.participant_set.add(self.participant_relentless)
+        match3.participant_set.add(self.participant_victorious)
+        match4 = Match.objects.create(round=round1, wins=2)
+        match4.participant_set.add(self.participant_dreadnaught)
+        match4.participant_set.add(self.participant_invincible)
+        match5 = Match.objects.create(round=round1)
+        match5.participant_set.add(participant_guardian)
+
+        # Create the second round
+        round2 = Round.objects.create(event=self.event)
+
+        # Create the random matches request
+        random_matches_request = RandomMatchesRequest.objects.create(round=round2)
+
+        # Run the task
+        create_random_matches(random_matches_request.id)
+
+        # Check the results
+        matches = round2.match_set.all()
+        players = []
+        self.assertEqual(len(matches), 5)  # Expect 5 matches
+        winners = set(list(matches[0].participant_set.all()) + list(matches[1].participant_set.all()))
+        ambiguous = list(matches[2].participant_set.all())
+        losers = set(list(matches[3].participant_set.all()))
+        byes = set(list(matches[4].participant_set.all()))
+
+        # Assert losers not in winners
+        self.assertNotIn(self.participant_fearless, winners)
+        self.assertNotIn(self.participant_valiant, winners)
+        self.assertNotIn(self.participant_victorious, winners)
+        self.assertNotIn(self.participant_invincible, winners)
+        # Assert winners not in losers
+        self.assertNotIn(self.participant_dauntless, losers)
+        self.assertNotIn(self.participant_courageous, losers)
+        self.assertNotIn(self.participant_relentless, losers)
+        self.assertNotIn(self.participant_dreadnaught, losers)
+        self.assertNotIn(participant_guardian, losers)
+        # Assert winners not in byes
+        self.assertNotIn(self.participant_dauntless, byes)
+        self.assertNotIn(self.participant_courageous, byes)
+        self.assertNotIn(self.participant_relentless, byes)
+        self.assertNotIn(self.participant_dreadnaught, byes)
+        self.assertNotIn(participant_guardian, byes)
+        # Check ambiguous, there should be one winner and one loser
+        self.assertNotEqual(self.participant_fearless, ambiguous[0])
+        self.assertNotEqual(self.participant_valiant, ambiguous[0])
+        self.assertNotEqual(self.participant_victorious, ambiguous[0])
+        self.assertNotEqual(self.participant_invincible, ambiguous[0])
+        self.assertNotEqual(self.participant_dauntless, ambiguous[1])
+        self.assertNotEqual(self.participant_courageous, ambiguous[1])
+        self.assertNotEqual(self.participant_relentless, ambiguous[1])
+        self.assertNotEqual(self.participant_dreadnaught, ambiguous[1])
+        self.assertNotEqual(participant_guardian, ambiguous[1])
+
 
 class ModelsTest(TestCase):
     def setUp(self):
