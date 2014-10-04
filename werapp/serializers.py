@@ -34,11 +34,12 @@ class ParticipantScoreSerializer(Serializer):
     opponents_match_win_percentage = FloatField()
 
 class ParticipantSerializer(HyperlinkedModelSerializer):
-    score = ParticipantScoreSerializer(read_only = True)
+    score = ParticipantScoreSerializer(read_only=True)
+    price_support = FloatField(read_only=True)
 
     class Meta:
         model = Participant
-        fields = ("id", "url", "player", "event", "matches", "score")
+        fields = ("id", "url", "player", "event", "matches", "score", "price_support")
 
 class RandomMatchesRequestSerializer(HyperlinkedModelSerializer):
     class Meta:

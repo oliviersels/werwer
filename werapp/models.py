@@ -21,6 +21,31 @@ class Event(models.Model):
     state = models.CharField(max_length=250, choices=EventState.choices, default=EventState.PLANNING)
     nr_of_rounds = models.IntegerField(null=True, blank=True)
 
+    def get_price_support_distribution(self):
+        # Returns a map of price support for each player
+        nr_of_players = self.participant_set.count()
+        price_support_amount = nr_of_players * 5  # TODO Should not be hardcoded!
+
+        participant_price_support_points = dict()
+        for participant in self.participant_set.all():
+            price_support_multiplier = 0.0
+            for match in participant.matches.all():
+                if match.points_for_participant(participant) == 3:
+                    price_support_multiplier += 1
+                elif match.points_for_participant(participant) == 3:
+                    price_support_multiplier += 0.5
+
+            participant_price_support_points[participant.id] = max(0, participant.points - 0) * price_support_multiplier
+        total_participant_price_support_points = sum(participant_price_support_points.values())
+
+        result_distribution = dict()
+        for participant in self.participant_set.all():
+            if total_participant_price_support_points == 0:
+                result_distribution[participant.id] = 0
+            else:
+                result_distribution[participant.id] = participant_price_support_points[participant.id] / total_participant_price_support_points * price_support_amount
+        return result_distribution
+
 class Round(models.Model):
     event = models.ForeignKey(Event)
 
@@ -61,6 +86,11 @@ class Participant(models.Model):
 
     class Meta:
         unique_together = ("player", "event")
+
+    @property
+    def price_support(self):
+        # How much this player has earned in price support
+        return self.event.get_price_support_distribution()[self.id]
 
     @property
     def points(self):

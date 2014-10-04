@@ -15,6 +15,7 @@
                         <tr>
                             <th style="width: 30px;">#</th>
                             <th>Points</th>
+                            <th>Price support</th>
                             <th>Name</th>
                             <th>DCI number</th>
                         </tr>
@@ -23,6 +24,7 @@
                     <tr ng-repeat="participant in event.participant_set__v | orderBy : '-score.points'">
                         <td>{{ $index + 1 }}</td>
                         <td>{{ participant.score.points }}</td>
+                        <td>{{ participant.price_support }}</td>
                         <td>{{ participant.player__v.first_name + ' ' + participant.player__v.last_name }}</td>
                         <td>{{ participant.player__v.dcinumber }}</td>
                     </tr>
