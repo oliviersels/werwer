@@ -1,4 +1,4 @@
-from rest_framework.fields import IntegerField, FloatField
+from rest_framework.fields import IntegerField, FloatField, BooleanField
 from rest_framework.serializers import HyperlinkedModelSerializer, Serializer
 from rest_framework.tests.test_serializer import HyperlinkedForeignKeySourceSerializer
 from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest
@@ -19,11 +19,15 @@ class RoundSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Round
         fields = ("id", "url", "event", "match_set")
+        read_only_fields = ("match_set",)
 
 class MatchSerializer(HyperlinkedModelSerializer):
+    bye = BooleanField(read_only=True)
+
     class Meta:
         model = Match
-        fields = ("id", "url", "round", "participant_set", "wins", "losses", "draws")
+        fields = ("id", "url", "round", "participant_set", "wins", "losses", "draws", "bye")
+        read_only_fields = ("participant_set", "round")
 
 class ParticipantScoreSerializer(Serializer):
     points = IntegerField()

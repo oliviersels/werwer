@@ -1,0 +1,35 @@
+{% extends "partials/event-base.html" %}
+
+{% block content %}
+{% verbatim %}
+<div ng-show="false">
+    {{ page.menuName = 'standings' }}
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <p>
+            <div class="col-sm-12">
+                <table class="table table-responsive table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 30px;">#</th>
+                            <th>Points</th>
+                            <th>Name</th>
+                            <th>DCI number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="participant in event.participant_set__v | orderBy : '-score.points'">
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ participant.score.points }}</td>
+                        <td>{{ participant.player__v.first_name + ' ' + participant.player__v.last_name }}</td>
+                        <td>{{ participant.player__v.dcinumber }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </p>
+    </div>
+</div>
+{% endverbatim %}
+{% endblock %}

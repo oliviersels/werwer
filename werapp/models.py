@@ -30,7 +30,13 @@ class Match(models.Model):
     losses = models.PositiveIntegerField(default=0)
     draws = models.PositiveIntegerField(default=0)
 
+    @property
+    def bye(self):
+        return self.participant_set.count() == 1
+
     def points_for_participant(self, participant):
+        if self.participant_set.count() == 1:
+            return 3 # Player has a bye
         if self.wins == 0 and self.losses == 0 and self.draws == 0:
             # No results entry yet
             return 0
@@ -68,6 +74,19 @@ class Participant(models.Model):
             'points': self.points,
             'opponents_match_win_percentage': 50,
         }
+
+    def has_received_bye(self):
+        for match in self.matches.all():
+            if match.participant_set.count() == 1:
+                return True
+        return False
+
+    def has_played_against(self, otherParticipant):
+        for match in self.matches.all():
+            for participant in match.participant_set.all():
+                if participant.id == otherParticipant.id:
+                    return True
+        return False
 
 class RandomMatchesRequest(models.Model):
     round = models.ForeignKey(Round)

@@ -3,6 +3,62 @@ werServices = angular.module 'werServices', ['ngResource']
 werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http, $resource, $filter) ->
   resourceCache = {}
 
+  class LazyPropertyResult
+    constructor: (@oldValue, @options) ->
+      if @options.isArray
+        @value = []
+      else
+        @value = undefined
+      @promise = null
+
+    hasResult: () ->
+      return @promise != null
+
+    getPromise: () ->
+      if !@hasResult()
+        @retrieveValue()
+        @promise.then (value) =>
+          @value = value
+      return @promise
+
+    setPromise: (promise) ->
+      @promise = promise
+      promise.then (data) ->
+        @value = data
+
+    getValue: () ->
+      if !@hasResult()
+        @retrieveValue()
+        @promise.then (value) =>
+          @value = value
+      return @value
+
+    getOldValue: () ->
+      return @oldValue
+
+    retrieveValue: () ->
+      deferred = $q.defer()
+      if @options.isArray
+        $q.all(($http.get(res) for res in @oldValue)).then((results) =>
+          if @options.resource
+            resourceCache[@options.resource].then((Resource) ->
+              deferred.resolve((Resource.createResource(result.data) for result in results))
+            )
+          else
+            deferred.resolve((result.data for result in results))
+
+        )
+      else
+        $http.get(@oldValue).success((data) =>
+          if @options.resource
+            resourceCache[@options.resource].then((Resource) ->
+              deferred.resolve(Resource.createResource(data))
+            )
+          else
+            deferred.resolve(data)
+        )
+      @setPromise(deferred.promise)
+
   createService = (serviceName, serviceUrl, linkedResources, postableHandler) ->
     _convertDate = (obj, key) ->
       value = Date.parse(obj[key])
@@ -12,38 +68,46 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
 #      console.log(obj)
       _convertDate(obj, key) for key of obj when obj.hasOwnProperty(key) && toString.call(obj[key]) == '[object String]'
 
-    createLazyProperty = (oldValue, options, value) ->
+    createLazyProperty = (lazyPropertyResult) ->
       () ->
-        if !value
-          if options.isArray
-            value = $q.all(($http.get(res) for res in oldValue)).then((results) ->
-              if options.resource
-                resourceCache[options.resource].then((Resource) ->
-                  value = (Resource.createResource(result.data) for result in results)
-                )
-              else
-                value = (result.data for result in results)
+        lazyPropertyResult.getPromise()
 
-            )
-          else
-            value = $http.get(oldValue).success((data) ->
-              if options.resource
-                resourceCache[options.resource].then((Resource) ->
-                  value = Resource.createResource(data)
-                )
-              else
-                value = data
-            )
-        else
-          value
+    createLazyPropertyValues = (lazyPropertyResult) ->
+      () ->
+        return lazyPropertyResult.getValue()
 
-    convertLinkedResources = (obj, linkedResources, enumerable) ->
-      enumerable ?= false
+    createLazyPropertyOldValue = (lazyPropertyResult) ->
+      () ->
+        return lazyPropertyResult.getOldValue()
+
+    convertLinkedResources = (obj, linkedResources) ->
       for resourceName, options of linkedResources
+        lazyPropertyResult = new LazyPropertyResult(obj[resourceName], options)
         # Create a getter for the resources
         Object.defineProperty(obj, resourceName,
-          get: createLazyProperty(obj[resourceName], options)
-          enumerable: enumerable
+          get: createLazyProperty(lazyPropertyResult)
+          enumerable: false
+          configurable: true
+          set: (value) ->
+            delete obj[resourceName]
+            obj[resourceName] = value
+        )
+
+        # Create a getter for the resource values
+        Object.defineProperty(obj, resourceName + '__v',
+          enumerable: false
+          configurable: true
+          get: createLazyPropertyValues(lazyPropertyResult)
+          set: (value) ->
+            delete obj[resourceName]
+            obj[resourceName] = value
+        )
+
+        # Create a getter for the old values
+        Object.defineProperty(obj, resourceName + '__ov',
+          enumerable: true
+          configurable: true
+          get: createLazyPropertyOldValue(lazyPropertyResult)
           set: (value) ->
             delete obj[resourceName]
             obj[resourceName] = value
@@ -53,7 +117,7 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
       (response) ->
         convertObj = (obj) ->
           searchAndconvertDates(obj)
-          convertLinkedResources(obj, linkedResources, true)
+          convertLinkedResources(obj, linkedResources)
 
         if isArray
           convertObj(obj) for obj in response.resource
@@ -77,18 +141,17 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
 
     resourceClass.createResource = (args) ->
       resource = new this(args)
-      convertLinkedResources(resource, linkedResources, false)
+      convertLinkedResources(resource, linkedResources)
       resource
 
     resourceClass.prototype['postable'] = () ->
       result = {}
       for prop, value of this.toJSON()
-        if not (prop of linkedResources)
-          result[prop] = if postableHandler then postableHandler(prop, value) else value
-        else if linkedResources[prop].isArray
-          result[prop] = (p.url for p in value)
+        if /__ov$/.test(prop)
+          realProp = prop.substring(0, prop.length - 4)
+          result[realProp] = value
         else
-          result[prop] = value.url
+          result[prop] = if postableHandler then postableHandler(prop, value) else value
       new resourceClass(result)
 
     resourceClass
