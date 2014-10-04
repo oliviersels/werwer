@@ -45,7 +45,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="match in round.match_set__v | filter: {done: false}" ng-click="$parent.selectedMatch = $index" ng-class="{success: $parent.selectedMatch == $index}">
+                        <tr ng-repeat="match in round.match_set__v" ng-show="!match.done" ng-click="$parent.selectedMatch = $index" ng-class="{success: $parent.selectedMatch == $index}">
                             <td>{{ $index + 1 }}</td>
                             <td>{{ match.participant_set__v[0].player__v.first_name }}</td>
                             <td>{{ match.participant_set__v[1].player__v.first_name }}</td>

@@ -383,9 +383,7 @@ werControllers.controller 'EventRoundController' , ['$scope',
 
     $scope.updateScore = (matchNr, wins, losses, draws) ->
       $scope.round.match_set.then (matches) ->
-        remainingMatches = $filter('filter')(matches, {done: false})
-
-        match = remainingMatches[matchNr]
+        match = matches[matchNr]
         match.wins = wins ? 0
         match.losses = losses ? 0
         match.draws = draws ? 0
