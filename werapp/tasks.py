@@ -54,8 +54,13 @@ def create_random_matches(random_matches_request_id):
             bye_candidate_index = len(participants) - 1
         bye_player.append((participants.pop(bye_candidate_index), None))
 
-    results = match_making(copy(participants)) + bye_player
-    assert results is not None
+    results = bye_player
+    match_making_result = match_making(copy(participants))
+    while match_making_result is None:
+        # Match the last two players together, even if they already played against each other
+        results = [(participants.pop(), participants.pop())] + results
+        match_making_result = match_making(copy(participants))
+    results = match_making_result + results
 
     for result in results:
         match = Match.objects.create(round=random_matches_request.round)
