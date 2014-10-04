@@ -332,6 +332,7 @@ werControllers.controller 'EventRoundController' , ['$scope',
   ($scope, $location, $routeParams, $filter, $timeout, werApi, eventStateFactory, djangoEnums) ->
     $scope.selectedMatch = null
     $scope.done = false
+    $scope.lastRound = false
 
     werApi.Event.then (Event) ->
       Event.get({id: $routeParams.eventId}, (event, response) ->
@@ -340,6 +341,8 @@ werControllers.controller 'EventRoundController' , ['$scope',
         event.round_set.then((rounds) ->
           $scope.round = rounds[parseInt($routeParams.roundId) - 1]
           $scope.round.roundNr = $routeParams.roundId
+          if parseInt($scope.round.roundNr) == $scope.event.nr_of_rounds
+            $scope.lastRound = true
           $scope.round.match_set.then (matches) ->
             $scope.done = true
             for match in matches
@@ -411,6 +414,9 @@ werControllers.controller 'EventRoundController' , ['$scope',
               $location.path('/event/' + $scope.event.id + '/round/' + (roundNr + 1) + '/')
             )
           )
+
+    $scope.endEvent = () ->
+      console.log "Ending event!"
 ]
 
 werControllers.controller 'EventStandingsController' , ['$scope',

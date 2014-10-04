@@ -20,7 +20,8 @@
                         <li><a href="" ng-click="createMatchesRandom()">Random</a></li>
                         <li><a href="">Manual</a></li>
                     </ul>
-                    <button class="btn btn-success" ng-click="nextRound()" ng-show="done">Next round</button>
+                    <button class="btn btn-success" ng-click="endEvent()" ng-show="done && lastRound">End event</button>
+                    <button class="btn btn-success" ng-click="nextRound()" ng-show="done && !lastRound">Next round</button>
                 </div>
             </div>
             <div class="col-md-3" ng-show="selectedMatch != undefined">
