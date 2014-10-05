@@ -27,11 +27,11 @@
             <div class="col-md-3" ng-show="selectedMatch != undefined">
                 <h3>Result entry</h3>
                 <div class="btn-group-vertical center-block">
-                    <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 2, 0)"><span class="pull-left text-muted">{{ round.match_set__v[selectedMatch].participant_set__v[0].player__v.first_name }}</span><span class="pull-right text-muted">{{ round.match_set__v[selectedMatch].participant_set__v[1].player__v.first_name }}</span> 2 - 0</div>
-                    <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 2, 1)"><span class="pull-left text-muted">{{ round.match_set__v[selectedMatch].participant_set__v[0].player__v.first_name }}</span><span class="pull-right text-muted">{{ round.match_set__v[selectedMatch].participant_set__v[1].player__v.first_name }}</span> 2 - 1</div>
-                    <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 1, 1)"><span class="pull-left text-muted">{{ round.match_set__v[selectedMatch].participant_set__v[0].player__v.first_name }}</span><span class="pull-right text-muted">{{ round.match_set__v[selectedMatch].participant_set__v[1].player__v.first_name }}</span> 1 - 1</div>
-                    <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 1, 2)"><span class="pull-left text-muted">{{ round.match_set__v[selectedMatch].participant_set__v[0].player__v.first_name }}</span><span class="pull-right text-muted">{{ round.match_set__v[selectedMatch].participant_set__v[1].player__v.first_name }}</span> 1 - 2</div>
-                    <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 0, 2)"><span class="pull-left text-muted">{{ round.match_set__v[selectedMatch].participant_set__v[0].player__v.first_name }}</span><span class="pull-right text-muted">{{ round.match_set__v[selectedMatch].participant_set__v[1].player__v.first_name }}</span> 0 - 2</div>
+                    <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 2, 0)"><span class="pull-left text-muted">{{ round.match_set__v[selectedMatch].participant1__v.player__v.first_name }}</span><span class="pull-right text-muted">{{ round.match_set__v[selectedMatch].participant2__v.player__v.first_name }}</span> 2 - 0</div>
+                    <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 2, 1)"><span class="pull-left text-muted">{{ round.match_set__v[selectedMatch].participant1__v.player__v.first_name }}</span><span class="pull-right text-muted">{{ round.match_set__v[selectedMatch].participant2__v.player__v.first_name }}</span> 2 - 1</div>
+                    <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 1, 1)"><span class="pull-left text-muted">{{ round.match_set__v[selectedMatch].participant1__v.player__v.first_name }}</span><span class="pull-right text-muted">{{ round.match_set__v[selectedMatch].participant2__v.player__v.first_name }}</span> 1 - 1</div>
+                    <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 1, 2)"><span class="pull-left text-muted">{{ round.match_set__v[selectedMatch].participant1__v.player__v.first_name }}</span><span class="pull-right text-muted">{{ round.match_set__v[selectedMatch].participant2__v.player__v.first_name }}</span> 1 - 2</div>
+                    <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 0, 2)"><span class="pull-left text-muted">{{ round.match_set__v[selectedMatch].participant1__v.player__v.first_name }}</span><span class="pull-right text-muted">{{ round.match_set__v[selectedMatch].participant2__v.player__v.first_name }}</span> 0 - 2</div>
                 </div>
                 <p>These are the results</p>
             </div>
@@ -47,8 +47,8 @@
                     <tbody>
                         <tr ng-repeat="match in round.match_set__v" ng-show="!match.done" ng-click="$parent.selectedMatch = $index" ng-class="{success: $parent.selectedMatch == $index}">
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ match.participant_set__v[0].player__v.first_name }}</td>
-                            <td>{{ match.participant_set__v[1].player__v.first_name }}</td>
+                            <td>{{ match.participant1__v.player__v.first_name }}</td>
+                            <td>{{ match.participant2__v.player__v.first_name }}</td>
                         </tr>
                     </tbody>
                 </table>

@@ -207,6 +207,12 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http
     participant_set:
       isArray: true
       resource: "Participant"
+    participant1:
+      isArray: false
+      resource: "Participant"
+    participant2:
+      isArray: false
+      resource: "Participant"
   )
   resourceCache.Round = createResource('rounds',
     event:

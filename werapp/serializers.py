@@ -1,4 +1,5 @@
 from rest_framework.fields import IntegerField, FloatField, BooleanField
+from rest_framework.relations import HyperlinkedRelatedField
 from rest_framework.serializers import HyperlinkedModelSerializer, Serializer
 from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest, EndOfEventMailingRequest
 
@@ -22,10 +23,12 @@ class RoundSerializer(HyperlinkedModelSerializer):
 
 class MatchSerializer(HyperlinkedModelSerializer):
     bye = BooleanField(read_only=True)
+    participant1 = HyperlinkedRelatedField(read_only=True, view_name="participant-detail")
+    participant2 = HyperlinkedRelatedField(read_only=True, view_name="participant-detail")
 
     class Meta:
         model = Match
-        fields = ("id", "url", "round", "participant_set", "wins", "losses", "draws", "bye")
+        fields = ("id", "url", "round", "participant_set", "wins", "losses", "draws", "bye", "participant1", "participant2")
         read_only_fields = ("participant_set", "round")
 
 class ParticipantScoreSerializer(Serializer):
