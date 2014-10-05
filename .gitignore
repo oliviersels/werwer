@@ -3,3 +3,6 @@
 
 # Compiled coffeescript
 */static/js/compiled/*.js
+
+# Django settings local.py
+werwer/local.py
