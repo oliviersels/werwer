@@ -12,8 +12,8 @@ class PlayerSerializer(HyperlinkedModelSerializer):
 class EventSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Event
-        fields = ("id", "url", "name", "date", "is_paid", "event_type", "pairing_method", "state", "nr_of_rounds",
-                  "round_set", "participant_set")
+        fields = ("id", "url", "name", "date", "price_support", "price_support_min_points", "event_type",
+                  "pairing_method", "state", "nr_of_rounds", "round_set", "participant_set")
 
 class RoundSerializer(HyperlinkedModelSerializer):
     class Meta:

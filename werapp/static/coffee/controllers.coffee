@@ -114,7 +114,9 @@ werControllers.controller 'NewEventController', ['$scope', '$filter', '$location
       $scope.event = new Event(
         event_type: 'casual_limited',
         pairing_method: 'swiss',
-        date: new Date()
+        date: new Date(),
+        price_support: 2.5,
+        price_support_min_points: 3
       )
 
     $scope.datepickerOpened = false

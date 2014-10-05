@@ -17,14 +17,15 @@ class Event(models.Model):
     date = models.DateField(default=timezone.now)
     event_type = models.CharField(max_length=250, choices=EventType.choices)
     pairing_method = models.CharField(max_length=250, choices=PairingMethod.choices)
-    is_paid = models.BooleanField(default=True)
+    price_support = models.FloatField(default=0)
+    price_support_min_points = models.IntegerField(default=0)
     state = models.CharField(max_length=250, choices=EventState.choices, default=EventState.PLANNING)
     nr_of_rounds = models.IntegerField(null=True, blank=True)
 
     def get_price_support_distribution(self):
         # Returns a map of price support for each player
         nr_of_players = self.participant_set.count()
-        price_support_amount = nr_of_players * 5  # TODO Should not be hardcoded!
+        price_support_amount = nr_of_players * self.price_support
 
         participant_price_support_points = dict()
         for participant in self.participant_set.all():
@@ -35,7 +36,7 @@ class Event(models.Model):
                 elif match.points_for_participant(participant) == 3:
                     price_support_multiplier += 0.5
 
-            participant_price_support_points[participant.id] = max(0, participant.points - 0) * price_support_multiplier
+            participant_price_support_points[participant.id] = max(0, participant.points - self.price_support_min_points) * price_support_multiplier
         total_participant_price_support_points = sum(participant_price_support_points.values())
 
         result_distribution = dict()

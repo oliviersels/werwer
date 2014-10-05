@@ -12,7 +12,7 @@
                     <a href="" class="dropdown-toggle">Phases<span ng-show="page.menuName == 'phases'"> ({% verbatim %}{{ event.eventState.getPhase(page.phaseMenuName).displayName }}{% endverbatim %})</span> </span> <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li ng-class="{active: phase.name == page.phaseMenuName, disabled: phase.disabled}" ng-repeat="phase in event.eventState.phases">
-                            <a ng-href="/event/{% verbatim %}{{ event.id }}/{{ phase.name }}{% endverbatim %}/">
+                            <a ng-href="/event/{% verbatim %}{{ event.id }}/{{ phase.url }}{% endverbatim %}/">
                                 {% verbatim %}{{ phase.displayName }} <span class="glyphicon glyphicon-ok" ng-show="phase.completed"></span>{% endverbatim %}
                             </a>
                         </li>

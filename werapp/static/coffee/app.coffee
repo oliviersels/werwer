@@ -37,6 +37,8 @@ werApp.config ['$routeProvider', '$locationProvider', ($routeProvider, $location
     .when '/event/:eventId/round/:roundId/',
       templateUrl: '/partials/event-round/',
       controller: 'EventRoundController'
+    .when '/event/:eventId/rounds/',
+      redirectTo: '/event/:eventId/round/1/'
     .when '/event/:eventId/standings/',
       templateUrl: '/partials/event-standings/',
       controller: 'EventStandingsController'

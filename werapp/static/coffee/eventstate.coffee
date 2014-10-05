@@ -2,11 +2,13 @@ werServices = angular.module 'werEventState', []
 
 werServices.factory 'eventStateFactory', ['$q', '$http', '$resource', '$filter', ($q, $http, $resource, $filter) ->
   class EventPhase
-    constructor : (@name, @completed, @active) ->
+    constructor : (@name, @completed, @active, @url) ->
       @displayName = @name
       if (@displayName != null)
         @displayName = @displayName.toLowerCase();
         @displayName = @displayName.substring(0,1).toUpperCase()+@displayName.substring(1);
+      if !@url?
+        @url = @name
 
   Object.defineProperty(EventPhase.prototype, 'disabled',
     enumerable: true
@@ -47,7 +49,18 @@ werServices.factory 'eventStateFactory', ['$q', '$http', '$resource', '$filter',
     get: () ->
       if not @_phases
         phaseNames = ['planning', 'draft', 'rounds', 'conclusion']
-        @_phases = ((new EventPhase(phase, phaseNames.indexOf(phase) < phaseNames.indexOf(@event.state), phase == @event.state) for phase in phaseNames))
+        @_phases = []
+        @_phases.push(new EventPhase('planning', phaseNames.indexOf('planning') < phaseNames.indexOf(@event.state), 'planning' == @event.state))
+        @_phases.push(new EventPhase('draft', phaseNames.indexOf('draft') < phaseNames.indexOf(@event.state), 'draft' == @event.state))
+
+        # Add rounds, this is a little special
+        if @event.round_set__ov.length == 0
+          @_phases.push(new EventPhase('rounds', phaseNames.indexOf('rounds') < phaseNames.indexOf(@event.state), false))
+        for item, index in @event.round_set__ov
+          @_phases.push(new EventPhase('round' + (index+1), index + 1 < @event.round_set__ov.length || phaseNames.indexOf('rounds') < phaseNames.indexOf(@event.state), index + 1 == @event.round_set__ov.length && !(phaseNames.indexOf('rounds') < phaseNames.indexOf(@event.state)), 'round/' + (index+1)))
+
+
+        @_phases.push(new EventPhase('conclusion', phaseNames.indexOf('conclusion') < phaseNames.indexOf(@event.state), 'conclusion' == @event.state))
       return @_phases
   )
 

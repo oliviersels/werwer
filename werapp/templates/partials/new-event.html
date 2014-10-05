@@ -32,10 +32,13 @@
                     <label for="inputPairingMethod">Pairing method</label>
                     <select id="inputPairingMethod" class="form-control" ng-model="event.pairing_method" ng-options="value as label for (value, label) in optionsPairingMethod"></select>
                 </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" ng-model="event.is_paid"> Paid event?
-                    </label>
+                <div class="form-group">
+                    <label for="inputPriceSupport">Price support</label>
+                    <input type="number" step="any" min="0" class="form-control" id="inputPriceSupport" placeholder="Enter the price support for this event" ng-model="event.price_support"/>
+                </div>
+                <div class="form-group">
+                    <label for="inputPriceSupportMinPoints">Minimum points for price support</label>
+                    <input type="number" min="0" class="form-control" id="inputPriceSupportMinPoints" placeholder="Enter the minimum points required for price support" ng-model="event.price_support_min_points"/>
                 </div>
                 <button type="submit" class="btn btn-primary">Add Event</button>
             </form>
