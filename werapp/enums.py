@@ -47,3 +47,12 @@ class RandomMatchesRequestState(Enum):
         (COMPLETED, 'Completed'),
         (ABORTED, 'Aborted'),
     )
+
+class ParticipantMatchPlayerNr(Enum):
+    PLAYER_1 = 0
+    PLAYER_2 = 1
+
+    choices = (
+        (PLAYER_1, 'Player 1'),
+        (PLAYER_2, 'Player 2'),
+    )

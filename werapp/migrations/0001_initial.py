@@ -82,8 +82,18 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('event', models.ForeignKey(to='werapp.Event')),
-                ('matches', models.ManyToManyField(to='werapp.Match')),
-                ('player', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='ParticipantMatch',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('player_nr', models.IntegerField()),
+                ('match', models.ForeignKey(to='werapp.Match')),
+                ('participant', models.ForeignKey(to='werapp.Participant')),
             ],
             options={
             },
@@ -113,6 +123,18 @@ class Migration(migrations.Migration):
             model_name='randommatchesrequest',
             name='round',
             field=models.ForeignKey(to='werapp.Round'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='participant',
+            name='matches',
+            field=models.ManyToManyField(to='werapp.Match', through='werapp.ParticipantMatch'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='participant',
+            name='player',
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(

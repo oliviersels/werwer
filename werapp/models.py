@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 from django.utils import timezone
-from werapp.enums import EventType, PairingMethod, EventState, RandomMatchesRequestState
+from werapp.enums import EventType, PairingMethod, EventState, RandomMatchesRequestState, ParticipantMatchPlayerNr
 
 
 class Player(AbstractUser):
@@ -56,16 +56,28 @@ class Match(models.Model):
     draws = models.PositiveIntegerField(default=0)
 
     @property
+    def participant1(self):
+        for participant_match in self.participantmatch_set.all():
+            if participant_match.player_nr == ParticipantMatchPlayerNr.PLAYER_1:
+                return participant_match.participant
+
+    @property
+    def participant2(self):
+        for participant_match in self.participantmatch_set.all():
+            if participant_match.player_nr == ParticipantMatchPlayerNr.PLAYER_2:
+                return participant_match.participant
+
+    @property
     def bye(self):
         return self.participant_set.count() == 1
 
     def points_for_participant(self, participant):
-        if self.participant_set.count() == 1:
+        if self.bye:
             return 3 # Player has a bye
         if self.wins == 0 and self.losses == 0 and self.draws == 0:
             # No results entry yet
             return 0
-        if participant == self.participant_set.all()[0]:
+        if participant == self.participant1:
             player_wins = self.wins
             player_losses = self.losses
         else:
@@ -82,7 +94,7 @@ class Match(models.Model):
 class Participant(models.Model):
     player = models.ForeignKey(Player)
     event = models.ForeignKey(Event)
-    matches = models.ManyToManyField(to=Match)
+    matches = models.ManyToManyField(to=Match, through="ParticipantMatch")
 
     class Meta:
         unique_together = ("player", "event")
@@ -117,6 +129,11 @@ class Participant(models.Model):
                 if participant.id == otherParticipant.id:
                     return True
         return False
+
+class ParticipantMatch(models.Model):
+    participant = models.ForeignKey(Participant)
+    match = models.ForeignKey(Match)
+    player_nr = models.IntegerField()
 
 class RandomMatchesRequest(models.Model):
     round = models.ForeignKey(Round)
