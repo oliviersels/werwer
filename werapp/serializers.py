@@ -1,6 +1,5 @@
 from rest_framework.fields import IntegerField, FloatField, BooleanField
 from rest_framework.serializers import HyperlinkedModelSerializer, Serializer
-from rest_framework.tests.test_serializer import HyperlinkedForeignKeySourceSerializer
 from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest, EndOfEventMailingRequest
 
 
