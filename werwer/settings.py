@@ -59,12 +59,16 @@ WSGI_APPLICATION = 'werwer.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 # Should be set in local.py
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('RDS_DB_NAME', ''),
+        'USER': os.environ.get('RDS_USERNAME', ''),
+        'PASSWORD': os.environ.get('RDS_PASSWORD', ''),
+        'HOST': os.environ.get('RDS_HOSTNAME', ''),
+        'PORT': os.environ.get('RDS_PORT', ''),
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/

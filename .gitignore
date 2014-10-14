@@ -6,3 +6,4 @@
 
 # Django settings local.py
 werwer/local.py
+.elasticbeanstalk/
