@@ -101,3 +101,11 @@ try:
     from local import *
 except ImportError:
     pass
+
+GLOBAL_CONFIG = os.environ.get('GLOBAL_CONFIG', 'dev')
+
+if GLOBAL_CONFIG == 'prod':
+    try:
+        from production import *
+    except ImportError:
+        pass
