@@ -8,3 +8,5 @@
 werwer/local.py
 .elasticbeanstalk/
 aws-credentials
+
+node_modules
