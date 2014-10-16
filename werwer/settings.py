@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'oauth2_provider',
 
     'werapp',
 )
@@ -96,6 +97,28 @@ BROKER_URL = 'amqp://guest:guest@localhost:5672//'
 
 # Email backend
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Template dirs
+TEMPLATE_DIRS = (
+    'templates',
+)
+
+# Rest framework config
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
+
+# Oauth client config
+OAUTH2_CLIENT_SETTINGS = {
+    'client_id': 'werwer-dev',
+    'oauth2_endpoint': 'http://localhost:8000/oauth2/authorize',
+}
 
 try:
     from local import *

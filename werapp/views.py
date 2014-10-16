@@ -1,4 +1,5 @@
 # Create your views here.
+from django.conf import settings
 from django.views.generic.base import TemplateView
 from rest_framework import status
 from rest_framework.filters import DjangoFilterBackend
@@ -60,6 +61,8 @@ class DynamicJavascript(TemplateView):
 
     def get_context_data(self, **kwargs):
         kwargs['enums'] = (EventType, PairingMethod, EventState, RandomMatchesRequestState)
+        kwargs['client_id'] = settings.OAUTH2_CLIENT_SETTINGS['client_id']
+        kwargs['oauth2_endpoint'] = settings.OAUTH2_CLIENT_SETTINGS['oauth2_endpoint']
         return kwargs
 
 class HomeView(TemplateView):
@@ -106,3 +109,6 @@ class EventStandingsView(TemplateView):
 
 class EventConclusionView(TemplateView):
     template_name = "partials/event-conclusion.html"
+
+class LoginPartialView(TemplateView):
+    template_name = "partials/login.html"
