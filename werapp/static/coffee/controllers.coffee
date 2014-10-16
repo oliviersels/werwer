@@ -457,3 +457,18 @@ werControllers.controller 'EventConclusionController' , ['$scope',
         )
         endOfEventMailingRequest.$save({})
 ]
+
+werControllers.controller 'LoginController', ['$scope',
+                                              '$location',
+                                              '$window',
+                                              'authService',
+  ($scope, $location, $window, authService) ->
+    $scope.test = 'test'
+
+    hash = $location.hash()
+    if hash == ''
+      $window.location.href = authService.getAuthUrl()
+    else
+      authService.parseOauthResult(hash)
+      $location.path('/')
+]

@@ -1,6 +1,45 @@
-werServices = angular.module 'werServices', ['ngResource']
+werServices = angular.module 'werServices', ['ngResource', 'djangoDynamics']
 
-werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', ($q, $http, $resource, $filter) ->
+werServices.factory 'authService', ['$q', 'djangoSettings', ($q, djangoSettings) ->
+  class AuthService
+    constructor: (@endpoint, @clientId) ->
+      # Get the token
+      if Storage? && sessionStorage.token?
+        @token = sessionStorage.token
+      else
+        @token = null
+
+    getToken: () ->
+      return @token
+
+    getAuthUrl: (state) ->
+      urlParams = {
+        response_type: "token"
+        client_id: @clientId
+      }
+      return @endpoint += '?' + $.param(urlParams)
+
+    parseOauthResult: (oauthResult) ->
+      parsed = @_parseUrlParams(oauthResult)
+      console.log parsed
+      @token = parsed.access_token
+      if Storage?
+        sessionStorage.token = @token
+
+    _parseUrlParams: (params) ->
+      pl = /\+/g
+      search = /([^&=]+)=?([^&]*)/g
+      urlParams = {}
+      decode = (s) -> decodeURIComponent(s.replace(pl, " "))
+      while (match = search.exec(params))
+        urlParams[decode(match[1])] = decode(match[2])
+      return urlParams
+
+  return new AuthService(djangoSettings.oauth2_endpoint, djangoSettings.client_id)
+]
+
+werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', 'authService', ($q, $http, $resource, $filter, authService) ->
+  $http.defaults.headers.common['Authorization'] = 'bearer ' +authService.getToken()
   resourceCache = {}
 
   class LazyPropertyResult

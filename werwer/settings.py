@@ -107,11 +107,17 @@ TEMPLATE_DIRS = (
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.ext.rest_framework.OAuth2Authentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     )
+}
+
+# Oauth client config
+OAUTH2_CLIENT_SETTINGS = {
+    'client_id': 'werwer-dev',
+    'oauth2_endpoint': 'http://localhost:8000/oauth2/authorize',
 }
 
 try:

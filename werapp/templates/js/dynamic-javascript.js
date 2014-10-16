@@ -13,4 +13,11 @@
       }
   });
 
+  dynamics.factory('djangoSettings', function() {
+      return {
+          'client_id': '{{ client_id }}',
+          'oauth2_endpoint': '{{ oauth2_endpoint }}'
+      }
+  });
+
 }).call(this);

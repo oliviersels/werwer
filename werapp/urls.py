@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from werapp.views import WerView, PlayerView, HomeView, EditPlayerView, EditPlayerConfirmView, AddPlayerView, \
     NewEventView, DynamicJavascript, EventsOverviewView, EventView, EventPlanningView, StartEventConfirmView, EventDraftView, \
-    ConfirmCancelModalView, EventRoundView, EventStandingsView, EventConclusionView
+    ConfirmCancelModalView, EventRoundView, EventStandingsView, EventConclusionView, LoginPartialView
 
 urlpatterns = (
     url(r'^$', WerView.as_view()),
@@ -18,6 +18,7 @@ urlpatterns = (
     url(r'^event/\d+/round/\d+/$', WerView.as_view(), name='event-round'),
     url(r'^event/\d+/standings/$', WerView.as_view(), name='event-standings'),
     url(r'^event/\d+/conclusion/$', WerView.as_view(), name='event-conclusion'),
+    url(r'^login/$', WerView.as_view(), name='wer-login'),
 
     url(r'^partials/home/$', HomeView.as_view(), name='partial-home'),
 
@@ -36,4 +37,5 @@ urlpatterns = (
     url(r'^partials/event-round/$', EventRoundView.as_view(), name='partial-event-round'),
     url(r'^partials/event-standings/$', EventStandingsView.as_view(), name='partial-event-standings'),
     url(r'^partials/event-conclusion/$', EventConclusionView.as_view(), name='partial-event-conclusion'),
+    url(r'^partials/login/$', LoginPartialView.as_view(), name='partial-login'),
 )
