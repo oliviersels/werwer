@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from werapp.enums import EventType, PairingMethod, EventState, RandomMatchesRequestState, ParticipantMatchPlayerNr
+from werapp.managers import PlayerManager
 
 
 class Player(AbstractBaseUser, PermissionsMixin):
@@ -20,7 +21,7 @@ class Player(AbstractBaseUser, PermissionsMixin):
     dcinumber = models.CharField(max_length=250, blank=True)
     is_judge = models.BooleanField(default=False)
 
-    objects = UserManager()
+    objects = PlayerManager()
 
     USERNAME_FIELD = 'email'
 

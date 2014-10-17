@@ -15,7 +15,9 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 
 # Register your models here.
 from werapp.forms import PlayerChangeForm, PlayerCreationForm
-from werapp.models import Player
+from werapp.models import Player, Event, Round, Match, Participant, ParticipantMatch, RandomMatchesRequest, \
+    EndOfEventMailingRequest
+
 
 class PlayerAdmin(admin.ModelAdmin):
     add_form_template = 'admin/auth/user/add_form.html'
@@ -163,3 +165,10 @@ class PlayerAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Player, PlayerAdmin)
+admin.site.register(Event)
+admin.site.register(Round)
+admin.site.register(Match)
+admin.site.register(Participant)
+admin.site.register(ParticipantMatch)
+admin.site.register(RandomMatchesRequest)
+admin.site.register(EndOfEventMailingRequest)
