@@ -7,7 +7,7 @@ from werapp.models import Player, Event, Round, Match, Participant, RandomMatche
 class PlayerSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Player
-        fields = ("id", "url", "first_name", "last_name", "username", "email", "dcinumber", "is_judge", "participant_set")
+        fields = ("id", "url", "first_name", "last_name", "email", "dcinumber", "is_judge", "participant_set")
 
 class EventSerializer(HyperlinkedModelSerializer):
     class Meta:
