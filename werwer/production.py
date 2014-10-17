@@ -4,6 +4,7 @@ STATIC_ROOT = 'static/'
 
 ALLOWED_HOSTS = (
     'aetherclub.be',
+    'www.aetherclub.be',
 )
 
 # Oauth client config
