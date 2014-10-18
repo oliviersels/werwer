@@ -25,20 +25,22 @@ werControllers.controller 'HomeController', ['$scope', 'werApi', ($scope, werApi
     $scope.previousMatches = Match.query()
 ]
 
-werControllers.controller 'PlayerController', ['$scope', '$location', 'werApi', ($scope, $location, werApi) ->
+werControllers.controller 'PlayerController', ['$scope', '$location', 'werApi', 'werwer_root', ($scope, $location, werApi, werwer_root) ->
   werApi.Player.then (Player) ->
     $scope.players = Player.query()
 
   $scope.editPlayer = (player) ->
-    $location.path('/edit-player/' + player.id + '/')
+    $location.path(werwer_root + 'edit-player/' + player.id + '/')
 ]
 
 werControllers.controller 'EditPlayerController', ['$scope',
                                                    '$location',
                                                    'werApi',
+                                                   'werwer_root',
+                                                   'partials_root',
                                                    '$routeParams',
                                                    '$modal',
-  ($scope, $location, werApi, $routeParams, $modal) ->
+  ($scope, $location, werApi, werwer_root, partials_root, $routeParams, $modal) ->
     werApi.Player.then (Player) ->
       Player.get({id: $routeParams.playerId}, (player, response) ->
         $scope.player = player
@@ -49,12 +51,12 @@ werControllers.controller 'EditPlayerController', ['$scope',
 
     $scope.submit = () ->
       $scope.player.$update({}, (data) ->
-        $location.path('/players/')
+        $location.path(werwer_root + 'players/')
       )
 
     $scope.confirmDelete = () ->
       modal = $modal.open(
-        templateUrl: "/partials/edit-player-confirm/",
+        templateUrl: partials_root + "edit-player-confirm/",
         controller: 'EditPlayerConfirmController',
         resolve:
           player: () ->
@@ -69,7 +71,7 @@ werControllers.controller 'EditPlayerController', ['$scope',
 
     $scope.delete = () ->
       $scope.player.$delete({}, (data) ->
-        $location.path('/players/')
+        $location.path(werwer_root + 'players/')
       )
 ]
 
@@ -86,29 +88,29 @@ werControllers.controller 'EditPlayerConfirmController', ['$scope',
       $modalInstance.dismiss('cancel')
 ]
 
-werControllers.controller 'AddPlayerController', ['$scope', 'werApi', '$location'
-  ($scope, werApi, $location) ->
+werControllers.controller 'AddPlayerController', ['$scope', 'werApi', 'werwer_root', '$location'
+  ($scope, werApi, werwer_root, $location) ->
     werApi.Player.then (Player) ->
       $scope.player = new Player()
 
     $scope.submit = () ->
       $scope.player.username = $scope.player.first_name + '.' + $scope.player.last_name
       $scope.player.$save({}, () ->
-        $location.path('/players/')
+        $location.path(werwer_root + 'players/')
       )
 ]
 
-werControllers.controller 'EventsOverviewController', ['$scope', '$location', 'werApi',
-  ($scope, $location, werApi) ->
+werControllers.controller 'EventsOverviewController', ['$scope', '$location', 'werApi', 'werwer_root'
+  ($scope, $location, werApi, werwer_root) ->
     werApi.Event.then (Event) ->
       $scope.events = Event.query()
 
     $scope.openEvent = (event) ->
-      $location.path('/event/' + event.id + '/')
+      $location.path(werwer_root + 'event/' + event.id + '/')
 ]
 
-werControllers.controller 'NewEventController', ['$scope', '$filter', '$location', 'werApi', 'djangoEnums',
-  ($scope, $filter, $location, werApi, djangoEnums) ->
+werControllers.controller 'NewEventController', ['$scope', '$filter', '$location', 'werApi', 'djangoEnums', 'werwer_root'
+  ($scope, $filter, $location, werApi, djangoEnums, werwer_root) ->
     werApi.Event.then (Event) ->
       # Create a new event with sensible defaults
       $scope.event = new Event(
@@ -132,7 +134,7 @@ werControllers.controller 'NewEventController', ['$scope', '$filter', '$location
     $scope.submit = () ->
       $scope.event.date = $filter('date')($scope.event.date, 'yyyy-MM-dd')
       $scope.event.$save({}, () ->
-        $location.path('/event/' + $scope.event.id + '/')
+        $location.path(werwer_root + 'event/' + $scope.event.id + '/')
       )
 ]
 
@@ -145,7 +147,6 @@ werControllers.controller 'EventController', ['$scope',
     werApi.Event.then (Event) ->
       Event.get({id: $routeParams.eventId}, (event, response) ->
         event.eventState = eventStateFactory.createEventState(event)
-        console.log event
         $scope.event = event
       , (response) ->
         $scope.event = null
@@ -158,13 +159,14 @@ werControllers.controller 'EventPlanningController', ['$scope',
                                                      '$routeParams',
                                                      '$modal'
                                                      'werApi',
+                                                     'werwer_root',
+                                                     'partials_root',
                                                      'eventStateFactory'
-  ($scope, $location, $routeParams, $modal, werApi, eventStateFactory) ->
+  ($scope, $location, $routeParams, $modal, werApi, werwer_root, partials_root, eventStateFactory) ->
     werApi.Event.then (Event) ->
       Event.get({id: $routeParams.eventId}, (event, response) ->
         event.eventState = eventStateFactory.createEventState(event)
         $scope.event = event
-        console.log event
       , (response) ->
         $scope.event = null
         $scope.error = response.status
@@ -188,7 +190,7 @@ werControllers.controller 'EventPlanningController', ['$scope',
           )
       else
         modal = $modal.open(
-          templateUrl: "/partials/confirm-cancel-modal/",
+          templateUrl: partials_root + "confirm-cancel-modal/",
           controller: 'ConfirmCancelModalController',
           resolve:
             title: () ->
@@ -209,7 +211,7 @@ werControllers.controller 'EventPlanningController', ['$scope',
 
     $scope.startEventConfirm = () ->
       modal = $modal.open(
-        templateUrl: "/partials/start-event-confirm/",
+        templateUrl: partials_root + "start-event-confirm/",
         controller: 'StartEventConfirmController',
         resolve:
           event: () ->
@@ -226,7 +228,7 @@ werControllers.controller 'EventPlanningController', ['$scope',
       $scope.event.state = 'draft'
       postableEvent = $scope.event.postable()
       postableEvent.$update({}, (data) ->
-        $location.path('/event/' + data.id + '/draft/')
+        $location.path(werwer_root + 'event/' + data.id + '/draft/')
       )
       return
 ]
@@ -253,8 +255,10 @@ werControllers.controller 'EventDraftController', ['$scope',
                                                   '$q',
                                                   '$modal'
                                                   'werApi',
-                                                  'eventStateFactory'
-  ($scope, $location, $routeParams, $q, $modal, werApi, eventStateFactory) ->
+                                                  'eventStateFactory',
+                                                  'werwer_root',
+                                                  'partials_root',
+  ($scope, $location, $routeParams, $q, $modal, werApi, eventStateFactory, werwer_root, partials_root) ->
     werApi.Event.then (Event) ->
       Event.get({id: $routeParams.eventId}, (event, response) ->
         event.eventState = eventStateFactory.createEventState(event)
@@ -273,7 +277,7 @@ werControllers.controller 'EventDraftController', ['$scope',
         )
       else
         modal = $modal.open(
-          templateUrl: "/partials/confirm-cancel-modal/",
+          templateUrl: partials_root + "confirm-cancel-modal/",
           controller: 'ConfirmCancelModalController',
           resolve:
             title: () ->
@@ -299,11 +303,11 @@ werControllers.controller 'EventDraftController', ['$scope',
                 event: $scope.event.url
               )
               newRound.$save({}, () ->
-                $location.path('/event/' + data.id + '/round/1/')
+                $location.path(werwer_root + 'event/' + data.id + '/round/1/')
               )
             )
           else
-            $location.path('/event/' + data.id + '/round/1/')
+            $location.path(werwer_root + 'event/' + data.id + '/round/1/')
       )
       return
 ]
@@ -331,7 +335,8 @@ werControllers.controller 'EventRoundController' , ['$scope',
                                                    'werApi',
                                                    'eventStateFactory',
                                                    'djangoEnums',
-  ($scope, $location, $routeParams, $filter, $timeout, werApi, eventStateFactory, djangoEnums) ->
+                                                   'werwer_root',
+  ($scope, $location, $routeParams, $filter, $timeout, werApi, eventStateFactory, djangoEnums, werwer_root) ->
     $scope.selectedMatch = null
     $scope.done = false
     $scope.lastRound = false
@@ -404,14 +409,14 @@ werControllers.controller 'EventRoundController' , ['$scope',
       $scope.event.round_set.then (rounds) ->
         roundNr = parseInt($scope.round.roundNr)
         if rounds.length > roundNr
-          $location.path('/event/' + $scope.event.id + '/round/' + (roundNr + 1) + '/')
+          $location.path(werwer_root + 'event/' + $scope.event.id + '/round/' + (roundNr + 1) + '/')
         else
           werApi.Round.then((Round) ->
             newRound = new Round(
               event: $scope.event.url
             )
             newRound.$save({}, () ->
-              $location.path('/event/' + $scope.event.id + '/round/' + (roundNr + 1) + '/')
+              $location.path(werwer_root + 'event/' + $scope.event.id + '/round/' + (roundNr + 1) + '/')
             )
           )
 
@@ -419,7 +424,7 @@ werControllers.controller 'EventRoundController' , ['$scope',
       $scope.event.state = 'conclusion'
       postableEvent = $scope.event.postable()
       postableEvent.$update({}, (data) ->
-        $location.path('/event/' + $scope.event.id + '/conclusion/')
+        $location.path(werwer_root + 'event/' + $scope.event.id + '/conclusion/')
       )
 ]
 
@@ -462,7 +467,8 @@ werControllers.controller 'LoginController', ['$scope',
                                               '$location',
                                               '$window',
                                               'authService',
-  ($scope, $location, $window, authService) ->
+                                              'werwer_root',
+  ($scope, $location, $window, authService, werwer_root) ->
     $scope.test = 'test'
 
     hash = $location.hash()
@@ -470,5 +476,5 @@ werControllers.controller 'LoginController', ['$scope',
       $window.location.href = authService.getAuthUrl()
     else
       authService.parseOauthResult(hash)
-      $location.path('/')
+      $location.path(werwer_root)
 ]
