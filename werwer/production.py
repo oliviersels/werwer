@@ -31,3 +31,5 @@ EMAIL_HOST_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
 DEFAULT_FROM_EMAIL = 'olivier.sels@gmail.com'
 
 HOST_NAME = 'aetherclub.be'
+
+SERVER_EMAIL = 'olivier.sels@gmail.com'
