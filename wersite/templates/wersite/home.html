@@ -18,6 +18,7 @@
 
     });
 </script>
+<script type="text/javascript" src="/static/analytics-events.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -38,18 +39,18 @@
                 that are (almost) impossible to do with the official <em>Wizards Event Reporter</em>.</p>
             <p>Unique features:
                 <ul>
-                    <li>Run events on all devices with an internet connection: laptop, tablet and yes, even smartphone. <a class="small" data-toggle="modal" data-target="#moreInfoModal" data-content="moreInfoContentAllDevices" href="#">More info</a></li>
-                    <li>No installation required. The app is cloud hosted and all updates happen automatically. <a class="small" data-toggle="modal" data-target="#moreInfoModal" data-content="moreInfoContentCloud" href="#">More info</a></li>
+                    <li>Run events on all devices with an internet connection: laptop, tablet and yes, even smartphone. <a class="small moreInfoEvent" data-toggle="modal" data-target="#moreInfoModal" data-content="moreInfoContentAllDevices" data-event-value="All Devices" href="#">More info</a></li>
+                    <li>No installation required. The app is cloud hosted and all updates happen automatically. <a class="small moreInfoEvent" data-toggle="modal" data-target="#moreInfoModal" data-content="moreInfoContentCloud" data-event-value="Cloud" href="#">More info</a></li>
                     <li>
                         Involve players before, during and after events:
                         <ul>
-                            <li><strong>Before:</strong> previous participants of your events are alerted when you schedule a new event. <a class="small" data-toggle="modal" data-target="#futureFeatureModal" href="#">More info</a></li>
-                            <li><strong>Before:</strong> players can register for your event and are automatically enrolled. <a class="small" data-toggle="modal" data-target="#futureFeatureModal" href="#">More info</a></li>
-                            <li><strong>Before:</strong> reminders are sent to enrolled participants the day before the event starts. <a class="small" data-toggle="modal" data-target="#futureFeatureModal" href="#">More info</a></li>
-                            <li><strong>During:</strong> seatings are automatically announced on participant smartphones. <a class="small" data-toggle="modal" data-target="#futureFeatureModal" href="#">More info</a></li>
-                            <li><strong>During:</strong> participants can enter their own results. If both players do this you don't even need to confirm them. Events run themselves. <a class="small" data-toggle="modal" data-target="#futureFeatureModal" href="#">More info</a></li>
-                            <li><strong>After:</strong> players can review past events and see how well they played. <a class="small" data-toggle="modal" data-target="#futureFeatureModal" href="#">More info</a></li>
-                            <li><strong>After:</strong> a mail is sent to participants with statistics about their performance in the event. <a class="small" data-toggle="modal" data-target="#moreInfoModal" data-content="moreInfoContentStatistics" href="#">More info</a></li>
+                            <li><strong>Before:</strong> previous participants of your events are alerted when you schedule a new event. <a class="small moreInfoEvent" data-toggle="modal" data-target="#futureFeatureModal" data-event-value="New Event Promo" href="#">More info</a></li>
+                            <li><strong>Before:</strong> players can register for your event and are automatically enrolled. <a class="small moreInfoEvent" data-toggle="modal" data-target="#futureFeatureModal" data-event-value="User Pre Registration" href="#">More info</a></li>
+                            <li><strong>Before:</strong> reminders are sent to enrolled participants the day before the event starts. <a class="small moreInfoEvent" data-toggle="modal" data-target="#futureFeatureModal" data-event-value="Event Reminders" href="#">More info</a></li>
+                            <li><strong>During:</strong> seatings are automatically announced on participant smartphones. <a class="small moreInfoEvent" data-toggle="modal" data-target="#futureFeatureModal" data-event-value="Seatings Anounced" href="#">More info</a></li>
+                            <li><strong>During:</strong> participants can enter their own results. If both players do this you don't even need to confirm them. Events run themselves. <a class="small moreInfoEvent" data-toggle="modal" data-target="#futureFeatureModal" data-event-value="Participant Result Entry" href="#">More info</a></li>
+                            <li><strong>After:</strong> players can review past events and see how well they played. <a class="small moreInfoEvent" data-toggle="modal" data-target="#futureFeatureModal" data-event-value="Participants Event Review" href="#">More info</a></li>
+                            <li><strong>After:</strong> a mail is sent to participants with statistics about their performance in the event. <a class="small moreInfoEvent" data-toggle="modal" data-target="#moreInfoModal" data-content="moreInfoContentStatistics" data-event-value="Mail Statistics" href="#">More info</a></li>
                         </ul>
                     </li>
                 </ul>
