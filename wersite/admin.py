@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from wersite.models import FeatureFeedback, WerwerSignup
+
+
+admin.site.register(FeatureFeedback)
+admin.site.register(WerwerSignup)
