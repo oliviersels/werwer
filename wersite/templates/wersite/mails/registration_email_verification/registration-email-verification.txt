@@ -1,0 +1,11 @@
+Hello {{ name }},
+
+Your registration for Werwer has been successfully received. To complete your registration you must verify your email
+address. You can do this by visiting the following link in your browser:
+
+{{ email_verification_url }}
+
+You will receive your login credentials after you have verified your email address.
+
+Have a nice day,
+Olivier Sels - Aetherclub

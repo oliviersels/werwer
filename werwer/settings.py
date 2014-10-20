@@ -121,6 +121,9 @@ OAUTH2_CLIENT_SETTINGS = {
     'oauth2_endpoint': 'http://localhost:8000/oauth2/authorize',
 }
 
+# Add a settings to get the current HOST_NAME (I don't use contrib.sites because it is overkill.
+# HOST_NAME = '' # You should set this in local.py and production.py
+
 try:
     from local import *
 except ImportError:
