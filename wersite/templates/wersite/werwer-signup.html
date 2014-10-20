@@ -33,6 +33,7 @@
                 </div>
                 <div>
                     <label for="recaptcha_response_field">Solve the captcha</label>
+                    {% if form.recaptcha_response_field.errors %}<div class="alert alert-danger">{{ form.recaptcha_response_field.errors }}</div>{% endif %}
                     {{ recaptcha_html|safe }}
                 </div>
                 <div class="checkbox">

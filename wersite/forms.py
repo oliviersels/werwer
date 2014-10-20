@@ -51,11 +51,15 @@ class WerwerSignupForm(forms.ModelForm):
 
     def clean(self):
         # Check recaptcha
-        recaptcha_challenge_field = self.cleaned_data['recaptcha_challenge_field']
-        recaptcha_response_field = self.cleaned_data['recaptcha_response_field']
-        private_key = settings.RECAPTCHA_PRIVATE_KEY
-        client_ip = get_client_ip(self.request)
+        if 'recaptcha_response_field' in self.cleaned_data:
+            recaptcha_challenge_field = self.cleaned_data['recaptcha_challenge_field']
+            recaptcha_response_field = self.cleaned_data['recaptcha_response_field']
+            private_key = settings.RECAPTCHA_PRIVATE_KEY
+            client_ip = get_client_ip(self.request)
 
-        captcha_result = captcha.submit(recaptcha_challenge_field, recaptcha_response_field, private_key, client_ip)
-        if not captcha_result.is_valid:
-            raise ValidationError("The captcha you entered was not correct")
+            captcha_result = captcha.submit(recaptcha_challenge_field, recaptcha_response_field, private_key, client_ip)
+            if not captcha_result.is_valid:
+                self._errors['recaptcha_response_field'] = self.error_class(["The captcha you entered was not correct"])
+                del self.cleaned_data['recaptcha_response_field']
+
+        return self.cleaned_data
