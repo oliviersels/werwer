@@ -12,19 +12,19 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Werwer</a>
+                <a class="navbar-brand" href="{% endverbatim %}{% url 'werwer-root' %}{% verbatim %}">Werwer</a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="dropdown" ng-class="{ active: isActive('/new-event/', '/add-player/')}">
+                    <li class="dropdown" ng-class="{ active: isActive('{% endverbatim %}{% url 'new-event' %}{% verbatim %}', '{% endverbatim %}{% url 'add-player' %}{% verbatim %}')}">
                         <a href="" class="dropdown-toggle">New <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li ng-class="{ active: isActive('/new-event/')}"><a href="/new-event/">Event</a></li>
-                            <li ng-class="{ active: isActive('/add-player/')}"><a href="/add-player/">Player</a></li>
+                            <li ng-class="{ active: isActive('{% endverbatim %}{% url 'new-event' %}{% verbatim %}')}"><a href="{% endverbatim %}{% url 'new-event' %}{% verbatim %}">Event</a></li>
+                            <li ng-class="{ active: isActive('{% endverbatim %}{% url 'add-player' %}{% verbatim %}')}"><a href="{% endverbatim %}{% url 'add-player' %}{% verbatim %}">Player</a></li>
                         </ul>
                     </li>
-                    <li ng-class="{ active: isActive('/events-overview/')}"><a href="/events-overview/">Events</a></li>
-                    <li ng-class="{ active: isActive('/players/')}"><a href="/players/">Players</a></li>
+                    <li ng-class="{ active: isActive('{% endverbatim %}{% url 'events-overview' %}{% verbatim %}')}"><a href="{% endverbatim %}{% url 'events-overview' %}{% verbatim %}">Events</a></li>
+                    <li ng-class="{ active: isActive('{% endverbatim %}{% url 'players' %}{% verbatim %}')}"><a href="{% endverbatim %}{% url 'players' %}{% verbatim %}">Players</a></li>
                     <li ng-class="{ active: isActive('/history/')}"><a href="/">History</a></li>
                 </ul>
             </div>

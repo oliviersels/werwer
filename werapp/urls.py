@@ -4,10 +4,10 @@ from werapp.views import WerView, PlayerView, HomeView, EditPlayerView, EditPlay
     ConfirmCancelModalView, EventRoundView, EventStandingsView, EventConclusionView, LoginPartialView
 
 urlpatterns = (
-    url(r'^$', WerView.as_view()),
+    url(r'^$', WerView.as_view(), name='werwer-root'),
     url(r'^dynamic-javascript\.js$', DynamicJavascript.as_view(), name='dynamic-javascript'),
 
-    url(r'^players/$', WerView.as_view(), name='player'),
+    url(r'^players/$', WerView.as_view(), name='players'),
     url(r'^edit-player/\d+/$', WerView.as_view(), name='edit-player'),
     url(r'^add-player/$', WerView.as_view(), name='add-player'),
     url(r'^new-event/$', WerView.as_view(), name='new-event'),
@@ -20,6 +20,7 @@ urlpatterns = (
     url(r'^event/\d+/conclusion/$', WerView.as_view(), name='event-conclusion'),
     url(r'^login/$', WerView.as_view(), name='wer-login'),
 
+    url(r'^partials/$', WerView.as_view(), name='werwer-partials-root'),
     url(r'^partials/home/$', HomeView.as_view(), name='partial-home'),
 
     url(r'^partials/players/$', PlayerView.as_view(), name='partial-player'),

@@ -1,14 +1,14 @@
 
-werApp = angular.module 'werApp', ['ngRoute', 'ngResource', 'werControllers']
+werApp = angular.module 'werApp', ['ngRoute', 'ngResource', 'werControllers', 'djangoDynamics']
 
 werApp.config ['$resourceProvider', ($resourceProvider) ->
   $resourceProvider.defaults.stripTrailingSlashes = false
 ]
 
-werApp.run ["$rootScope", "$location", "$http", "authService", ($rootScope, $location, $http, authService) ->
+werApp.run ["$rootScope", "$location", "$http", "authService", "werwer_root", ($rootScope, $location, $http, authService, werwer_root) ->
   $rootScope.$on("$routeChangeError", (event, current, previous, eventResult) ->
     if eventResult.authenticated == false
-      $location.path('/login/')
+      $location.path(werwer_root + 'login/')
   )
 ]
 
@@ -23,60 +23,60 @@ loginRequired = {
   ]
 }
 
-werApp.config ['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) ->
+werApp.config ['$routeProvider', '$locationProvider', 'werwer_root', 'partials_root', ($routeProvider, $locationProvider, werwer_root, partials_root) ->
   $routeProvider
-    .when '/',
-      templateUrl: '/partials/home/',
+    .when werwer_root,
+      templateUrl: partials_root + 'home/',
       controller: 'HomeController',
       resolve: loginRequired
-    .when '/players/',
-      templateUrl: '/partials/players/',
+    .when werwer_root + 'players/',
+      templateUrl: partials_root + 'players/',
       controller: 'PlayerController'
       resolve: loginRequired
-    .when '/edit-player/:playerId/',
-      templateUrl: '/partials/edit-player/',
+    .when werwer_root + 'edit-player/:playerId/',
+      templateUrl: partials_root + 'edit-player/',
       controller: 'EditPlayerController'
       resolve: loginRequired
-    .when '/add-player/',
-      templateUrl: '/partials/add-player/',
+    .when werwer_root + 'add-player/',
+      templateUrl: partials_root + 'add-player/',
       controller: 'AddPlayerController'
       resolve: loginRequired
-    .when '/events-overview/',
-      templateUrl: '/partials/events-overview/',
+    .when werwer_root + 'events-overview/',
+      templateUrl: partials_root + 'events-overview/',
       controller: 'EventsOverviewController'
       resolve: loginRequired
-    .when '/new-event/',
-      templateUrl: '/partials/new-event/',
+    .when werwer_root + 'new-event/',
+      templateUrl: partials_root + 'new-event/',
       controller: 'NewEventController'
       resolve: loginRequired
-    .when '/event/:eventId/',
-      templateUrl: '/partials/event/',
+    .when werwer_root + 'event/:eventId/',
+      templateUrl: partials_root + 'event/',
       controller: 'EventController'
       resolve: loginRequired
-    .when '/event/:eventId/planning/',
-      templateUrl: '/partials/event-planning/',
+    .when werwer_root + 'event/:eventId/planning/',
+      templateUrl: partials_root + 'event-planning/',
       controller: 'EventPlanningController'
       resolve: loginRequired
-    .when '/event/:eventId/draft/',
-      templateUrl: '/partials/event-draft/',
+    .when werwer_root + 'event/:eventId/draft/',
+      templateUrl: partials_root + 'event-draft/',
       controller: 'EventDraftController'
       resolve: loginRequired
-    .when '/event/:eventId/round/:roundId/',
-      templateUrl: '/partials/event-round/',
+    .when werwer_root + 'event/:eventId/round/:roundId/',
+      templateUrl: partials_root + 'event-round/',
       controller: 'EventRoundController'
       resolve: loginRequired
-    .when '/event/:eventId/standings/',
-      templateUrl: '/partials/event-standings/',
+    .when werwer_root + 'event/:eventId/standings/',
+      templateUrl: partials_root + 'event-standings/',
       controller: 'EventStandingsController'
       resolve: loginRequired
-    .when '/event/:eventId/conclusion/',
-      templateUrl: '/partials/event-conclusion/',
+    .when werwer_root + 'event/:eventId/conclusion/',
+      templateUrl: partials_root + 'event-conclusion/',
       controller: 'EventConclusionController'
       resolve: loginRequired
-    .when '/login/',
+    .when werwer_root + 'login/',
       controller: 'LoginController',
       template: ''
     .otherwise
-      redirectTo: '/'
+      redirectTo: werwer_root
   $locationProvider.html5Mode(true)
 ]

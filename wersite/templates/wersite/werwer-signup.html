@@ -1,0 +1,50 @@
+{% extends 'wersite/base.html' %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>WerWer signup</h1>
+            <p>To sign up for WerWer fill in the following form. You will have to confirm your email address to complete
+                your registration. When registration is complete you will receive your login credentials.</p>
+            <form class="form" action="{% url 'wersite-signup' %}" method="post">
+                {% csrf_token %}
+                {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+                <div class="form-group{%if form.name.errors %} has-error{%endif%}">
+                    <label for="id_name">Name</label>
+                    {% if form.name.errors %}<div class="alert alert-danger">{{ form.name.errors }}</div>{% endif %}
+                    {{ form.name }}
+                </div>
+                <div class="form-group{%if form.email.errors %} has-error{%endif%}">
+                    <label for="id_email">Email</label>
+                    {% if form.email.errors %}<div class="alert alert-danger">{{ form.email.errors }}</div>{% endif %}
+                    {{ form.email }}
+                </div>
+                <div class="form-group{%if form.organization.errors %} has-error{%endif%}">
+                    <label for="id_organization">Organization</label>
+                    {% if form.organization.errors %}<div class="alert alert-danger">{{ form.organization.errors }}</div>{% endif %}
+                    {{ form.organization }}
+                </div>
+                <div class="form-group{%if form.use_case.errors %} has-error{%endif%}">
+                        <label for="id_use_case">How will you use Werwer?</label>
+                        {% if form.use_case.errors %}<div class="alert alert-danger">{{ form.use_case.errors }}</div>{% endif %}
+                        {{ form.use_case }}
+                </div>
+                <div>
+                    <label for="recaptcha_response_field">Solve the captcha</label>
+                    {{ recaptcha_html|safe }}
+                </div>
+                <div class="checkbox">
+                    {% if form.has_accepted_terms_and_conditions.errors %}<div class="alert alert-danger">{{ form.has_accepted_terms_and_conditions.errors }}</div>{% endif %}
+                    <label>
+                        {{ form.has_accepted_terms_and_conditions }} I agree to the <a href="#">terms and conditions</a>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign up for WerWer</button>
+            </form>
+            <p><a href="{% url 'wersite-root' %}">&larr; Home page</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

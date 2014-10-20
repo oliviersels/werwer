@@ -6,3 +6,4 @@ boto==2.33
 psycopg2==2.5.4
 oauthlib==0.6.3
 django-oauth-toolkit==0.7.2
+recaptcha-client==1.0.6

@@ -1,0 +1,16 @@
+{% extends 'wersite/base.html' %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Registration received</h1>
+            <p>Thank you for willing to try out WerWer. You should receive an email from us shortly. Please follow the
+            instructions in that email to verify your email address. After you have verified your email addres your
+            registration is complete.</p>
+            <p><a href="{% url 'wersite-root' %}">&larr; Home page</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

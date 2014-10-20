@@ -7,18 +7,18 @@
     <div class="row" ng-show="event">
         <div class="col-md-12">
             <ul class="nav nav-tabs" role="tablist">
-                <li ng-class="{active: page.menuName == 'overview'}"><a ng-href="/event/{% verbatim %}{{ event.id }}{% endverbatim %}/">Overview</a></li>
+                <li ng-class="{active: page.menuName == 'overview'}"><a ng-href="{% url 'werwer-root' %}event/{% verbatim %}{{ event.id }}{% endverbatim %}/">Overview</a></li>
                 <li class="dropdown" ng-class="{active: page.menuName == 'phases'}">
                     <a href="" class="dropdown-toggle">Phases<span ng-show="page.menuName == 'phases'"> ({% verbatim %}{{ event.eventState.getPhase(page.phaseMenuName).displayName }}{% endverbatim %})</span> </span> <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li ng-class="{active: phase.name == page.phaseMenuName, disabled: phase.disabled}" ng-repeat="phase in event.eventState.phases">
-                            <a ng-href="/event/{% verbatim %}{{ event.id }}/{{ phase.url }}{% endverbatim %}/">
+                            <a ng-href="{% url 'werwer-root' %}event/{% verbatim %}{{ event.id }}/{{ phase.url }}{% endverbatim %}/">
                                 {% verbatim %}{{ phase.displayName }} <span class="glyphicon glyphicon-ok" ng-show="phase.completed"></span>{% endverbatim %}
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li ng-class="{active: page.menuName == 'standings'}"><a ng-href="/event/{% verbatim %}{{ event.id }}{% endverbatim %}/standings/">Standings</a></li>
+                <li ng-class="{active: page.menuName == 'standings'}"><a ng-href="{% url 'werwer-root' %}event/{% verbatim %}{{ event.id }}{% endverbatim %}/standings/">Standings</a></li>
             </ul>
         </div>
     </div>

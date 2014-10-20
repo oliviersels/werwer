@@ -13,10 +13,12 @@
       }
   });
 
+  dynamics.constant('werwer_root', '{% url 'werwer-root' %}')
+  dynamics.constant('partials_root', '{% url 'werwer-partials-root' %}')
   dynamics.factory('djangoSettings', function() {
       return {
           'client_id': '{{ client_id }}',
-          'oauth2_endpoint': '{{ oauth2_endpoint }}'
+          'oauth2_endpoint': '{{ oauth2_endpoint }}',
       }
   });
 

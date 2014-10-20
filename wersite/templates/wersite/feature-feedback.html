@@ -1,0 +1,14 @@
+{% extends 'wersite/base.html' %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Feature feedback received</h1>
+            <p>Thank you very much for providing feedback about our features.</p>
+            <p><a href="{% url 'wersite-root' %}">&larr; Home page</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

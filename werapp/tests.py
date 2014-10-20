@@ -11,14 +11,14 @@ class CreateRandomMatchesTaskTest(TestCase):
 
     def setUp(self):
         # Create dummy players and initial event setup
-        self.player_dauntless = Player.objects.create_user('dauntless', 'dauntless@lostfleet.com', 'password')
-        self.player_fearless = Player.objects.create_user('fearless', 'fearless@lostfleet.com', 'password')
-        self.player_courageous = Player.objects.create_user('courageous', 'courageous@lostfleet.com', 'password')
-        self.player_valiant = Player.objects.create_user('valiant', 'valiant@lostfleet.com', 'password')
-        self.player_relentless = Player.objects.create_user('relentless', 'relentless@lostfleet.com', 'password')
-        self.player_victorious = Player.objects.create_user('victorious', 'victorious@lostfleet.com', 'password')
-        self.player_dreadnaught = Player.objects.create_user('dreadnaught', 'dreadnaught@lostfleet.com', 'password')
-        self.player_invincible = Player.objects.create_user('invincible', 'invincible@lostfleet.com', 'password')
+        self.player_dauntless = Player.objects.create_user('dauntless@lostfleet.com', 'password')
+        self.player_fearless = Player.objects.create_user('fearless@lostfleet.com', 'password')
+        self.player_courageous = Player.objects.create_user('courageous@lostfleet.com', 'password')
+        self.player_valiant = Player.objects.create_user('valiant@lostfleet.com', 'password')
+        self.player_relentless = Player.objects.create_user('relentless@lostfleet.com', 'password')
+        self.player_victorious = Player.objects.create_user('victorious@lostfleet.com', 'password')
+        self.player_dreadnaught = Player.objects.create_user('dreadnaught@lostfleet.com', 'password')
+        self.player_invincible = Player.objects.create_user('invincible@lostfleet.com', 'password')
 
         # Initial event
         self.event = Event.objects.create(name='Test', date=now(), event_type=EventType.CASUAL_LIMITED,
@@ -56,7 +56,7 @@ class CreateRandomMatchesTaskTest(TestCase):
 
     def test_initial_random_matches_with_bye(self):
         # Add another player so we have 9
-        player_guardian = Player.objects.create_user('guardian', 'guardian@lostfleet.com', 'password')
+        player_guardian = Player.objects.create_user('guardian@lostfleet.com', 'password')
         participant_guardian = Participant.objects.create(player=player_guardian, event=self.event)
 
         # Create the first round
@@ -121,7 +121,7 @@ class CreateRandomMatchesTaskTest(TestCase):
     def test_random_matches_with_simple_results_bye(self):
         # Test random matches with some simple results (all wins or losses)
         # Add another player so we have 9
-        player_guardian = Player.objects.create_user('guardian', 'guardian@lostfleet.com', 'password')
+        player_guardian = Player.objects.create_user('guardian@lostfleet.com', 'password')
         participant_guardian = Participant.objects.create(player=player_guardian, event=self.event)
 
         # Create the first round
@@ -194,14 +194,14 @@ class CreateRandomMatchesTaskTest(TestCase):
 class ModelsTest(TestCase):
     def setUp(self):
         # Create dummy players and initial event setup
-        self.player_dauntless = Player.objects.create_user('dauntless', 'dauntless@lostfleet.com', 'password')
-        self.player_fearless = Player.objects.create_user('fearless', 'fearless@lostfleet.com', 'password')
-        self.player_courageous = Player.objects.create_user('courageous', 'courageous@lostfleet.com', 'password')
-        self.player_valiant = Player.objects.create_user('valiant', 'valiant@lostfleet.com', 'password')
-        self.player_relentless = Player.objects.create_user('relentless', 'relentless@lostfleet.com', 'password')
-        self.player_victorious = Player.objects.create_user('victorious', 'victorious@lostfleet.com', 'password')
-        self.player_dreadnaught = Player.objects.create_user('dreadnaught', 'dreadnaught@lostfleet.com', 'password')
-        self.player_invincible = Player.objects.create_user('invincible', 'invincible@lostfleet.com', 'password')
+        self.player_dauntless = Player.objects.create_user('dauntless@lostfleet.com', 'password')
+        self.player_fearless = Player.objects.create_user('fearless@lostfleet.com', 'password')
+        self.player_courageous = Player.objects.create_user('courageous@lostfleet.com', 'password')
+        self.player_valiant = Player.objects.create_user('valiant@lostfleet.com', 'password')
+        self.player_relentless = Player.objects.create_user('relentless@lostfleet.com', 'password')
+        self.player_victorious = Player.objects.create_user('victorious@lostfleet.com', 'password')
+        self.player_dreadnaught = Player.objects.create_user('dreadnaught@lostfleet.com', 'password')
+        self.player_invincible = Player.objects.create_user('invincible@lostfleet.com', 'password')
 
         # Initial event
         self.event = Event.objects.create(name='Test', date=now(), event_type=EventType.CASUAL_LIMITED,
@@ -219,7 +219,7 @@ class ModelsTest(TestCase):
 
     def test_has_received_bye(self):
         # Add another player so we have 9
-        player_guardian = Player.objects.create_user('guardian', 'guardian@lostfleet.com', 'password')
+        player_guardian = Player.objects.create_user('guardian@lostfleet.com', 'password')
         participant_guardian = Participant.objects.create(player=player_guardian, event=self.event)
 
         # Create the first round
@@ -270,7 +270,7 @@ class ModelsTest(TestCase):
 
     def test_has_played_against(self):
         # Add another player so we have 9
-        player_guardian = Player.objects.create_user('guardian', 'guardian@lostfleet.com', 'password')
+        player_guardian = Player.objects.create_user('guardian@lostfleet.com', 'password')
         participant_guardian = Participant.objects.create(player=player_guardian, event=self.event)
 
         # Create the first round

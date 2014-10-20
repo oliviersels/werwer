@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'oauth2_provider',
 
     'werapp',
+    'wersite',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -119,6 +120,13 @@ OAUTH2_CLIENT_SETTINGS = {
     'client_id': 'werwer-dev',
     'oauth2_endpoint': 'http://localhost:8000/oauth2/authorize',
 }
+
+# Add a settings to get the current HOST_NAME (I don't use contrib.sites because it is overkill.
+# HOST_NAME = '' # You should set this in local.py and production.py
+
+# RECAPTCHA settings
+RECAPTCHA_PUBLIC_KEY = '6Lc-UvwSAAAAACP7r68zWfuQeMXR83km8GZRIDrJ'
+RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY', '')
 
 try:
     from local import *
