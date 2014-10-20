@@ -1,0 +1,175 @@
+{% extends 'wersite/base.html' %}
+{% load i18n staticfiles %}
+
+{% block head_extra %}
+<script>
+    $( document ).ready(function() {
+        $('#moreInfoModal').on('show.bs.modal', function (e) {
+            var showContent = e.relatedTarget.dataset.content;
+            $('#' + showContent).show();
+        });
+
+        $('#moreInfoModal').on('hidden.bs.modal', function (e) {
+            $('#moreInfoModal div div .modal-body').children().hide();
+        });
+        {% if form.errors %}
+        $('#futureFeatureModal').modal('show');
+        {% endif %}
+
+    });
+</script>
+<style>
+    .errorlist {
+        list-style: outside none none;
+        padding-left: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Aether club</h1>
+            <p>Welcome to the aether club website. We are a boardgaming and <em>Magic: The Gathering</em> playing group in
+                Belgium. We organize weekly playing sessions and several times a year a larger event. You can
+                find more information about us and our events at our facebook group:
+                <a href="https://www.facebook.com/groups/aether.club/">on Facebook</a>.</p>
+            <p>This website also hosts the werwer application, an alternative scheduling tool for <em>Magic: The Gathering</em> events.</p>
+            <h2>Werwer</h2>
+            <p>Werwer is an alternative scheduling tool for <em>Magic: The Gathering</em> events and aims to replace or
+                enhance the official <em>Wizards Event Reporter</em>.</p>
+            <p>Werwer is very specifically targeted to small, unsanctioned events and we use it at our local
+                club to organise and run events. The technical nature of Werwer makes it possible to do things
+                that are (almost) impossible to do with the official <em>Wizards Event Reporter</em>.</p>
+            <p>Unique features:
+                <ul>
+                    <li>Run events on all devices with an internet connection: laptop, tablet and yes, even smartphone. <a class="small" data-toggle="modal" data-target="#moreInfoModal" data-content="moreInfoContentAllDevices" href="#">More info</a></li>
+                    <li>No installation required. The app is cloud hosted and all updates happen automatically. <a class="small" data-toggle="modal" data-target="#moreInfoModal" data-content="moreInfoContentCloud" href="#">More info</a></li>
+                    <li>
+                        Involve players before, during and after events:
+                        <ul>
+                            <li><strong>Before:</strong> previous participants of your events are alerted when you schedule a new event. <a class="small" data-toggle="modal" data-target="#futureFeatureModal" href="#">More info</a></li>
+                            <li><strong>Before:</strong> players can register for your event and are automatically enrolled. <a class="small" data-toggle="modal" data-target="#futureFeatureModal" href="#">More info</a></li>
+                            <li><strong>Before:</strong> reminders are sent to enrolled participants the day before the event starts. <a class="small" data-toggle="modal" data-target="#futureFeatureModal" href="#">More info</a></li>
+                            <li><strong>During:</strong> seatings are automatically announced on participant smartphones. <a class="small" data-toggle="modal" data-target="#futureFeatureModal" href="#">More info</a></li>
+                            <li><strong>During:</strong> participants can enter their own results. If both players do this you don't even need to confirm them. Events run themselves. <a class="small" data-toggle="modal" data-target="#futureFeatureModal" href="#">More info</a></li>
+                            <li><strong>After:</strong> players can review past events and see how well they played. <a class="small" data-toggle="modal" data-target="#futureFeatureModal" href="#">More info</a></li>
+                            <li><strong>After:</strong> a mail is sent to participants with statistics about their performance in the event. <a class="small" data-toggle="modal" data-target="#moreInfoModal" data-content="moreInfoContentStatistics" href="#">More info</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </p>
+            <p>If you think: <em>That sounds cool, I want to try that!</em> Don't worry, you can. Free of charge.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button class="center-block btn btn-lg btn-primary">Try Werwer</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="futureFeatureModal" tabindex="-1" role="dialog" aria-labelledby="futureFeatureModalTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form role="form" action="{% url 'wersite-root' %}" method="post">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="futureFeatureModalTitle">Thank you for your interest in Werwer!</h4>
+                </div>
+                <div class="modal-body">
+                    <p>The feature you requested is however not yet included in Werwer. I am but a sole developer
+                        and my time is limited. But you can help me by filling in this form so I know which features
+                        are most wanted. Thanks again for your help!</p>
+                    {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+                    <div class="form-group{%if form.most_wanted.errors %} has-error{%endif%}">
+                        <label>Which feature do you want most?</label>
+                        {% if form.most_wanted.errors %}<div class="alert alert-danger">{{ form.most_wanted.errors }}</div>{% endif %}
+                        {% for radio in form.most_wanted %}
+                        <div class="radio">
+                            {{ radio }}
+                        </div>
+                        {% endfor %}
+                        <div class="radio disabled">
+                            <label>
+                                <input type="radio" name="most_wanted" id="most_wanted7" value="option7" disabled>
+                                Mail participants with statistics about their performance in the event (already implemented)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group{%if form.name.errors %} has-error{%endif%}">
+                        <label for="id_name">Name (optional)</label>
+                        {% if form.name.errors %}<div class="alert alert-danger">{{ form.name.errors }}</div>{% endif %}
+                        {{ form.name }}
+                    </div>
+                    <div class="form-group{%if form.email.errors %} has-error{%endif%}">
+                        <label for="id_email">Enter your email address if you want to be notified about this feature (optional)</label>
+                        {% if form.email.errors %}<div class="alert alert-danger">{{ form.email.errors }}</div>{% endif %}
+                        {{ form.email }}
+                    </div>
+                    <div class="checkbox">
+                        {{ form.allow_werwer_email.errors }}
+                        <label>
+                            {{ form.allow_werwer_email }} Notify me about important Werwer news
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary btn-submit">Send feedback</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    <!-- Modal -->
+<div class="modal fade" id="moreInfoModal" tabindex="-1" role="dialog" aria-labelledby="moreInfoModalTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form role="form" action="/" method="post">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="moreInfoModalTitle">More info</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="moreInfoContentAllDevices" class="collapse">
+                        <p>Werwer is an interactive, responsive web app. This means that it runs on any device
+                            with internet access and a fairly modern browser. This includes laptops, tablets and
+                            smartphones with any operating system. Werwer is basically just a website. A very
+                            sophisticated website.</p>
+                        <p>If you are interested in the technical details:
+                            <ul>
+                                <li>Angularjs + JQuery</li>
+                                <li>Twitter bootstrap</li>
+                                <li>Python + Django</li>
+                                <li>Django REST Framework</li>
+                                <li>Amazon Web Services</li>
+                            </ul>
+                        </p>
+                    </div>
+                    <div id="moreInfoContentCloud" class="collapse">
+                        <p>Because Werwer is a web app hosted in the cloud you don't have to do anything to
+                            install it. The only thing you need to do is create an account and start using it.
+                            You don't need to download or install anything. And that means of course that you
+                            won't have to update it. Werwer does all of that automatically.</p>
+                    </div>
+                    <div id="moreInfoContentStatistics" class="collapse">
+                        <p>One feature which our users find very useful is the possibility to receive
+                            a summary about how they played in an event. When the event is done, you can
+                            quickly send them an email with the matches they played, the opponents they played
+                            against and the results of those matches. It also includes things like standings
+                            and the price support they earned. Make them remember your events!</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

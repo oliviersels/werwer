@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'oauth2_provider',
 
     'werapp',
+    'wersite',
 )
 
 MIDDLEWARE_CLASSES = (

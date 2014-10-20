@@ -17,4 +17,5 @@ urlpatterns = patterns('',
     url(r'^api/', include('werapp.urls_api')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^werwer/', include('werapp.urls')),
+    url(r'^', include('wersite.urls')),
 )
