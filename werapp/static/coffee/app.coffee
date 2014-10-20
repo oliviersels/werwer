@@ -5,10 +5,10 @@ werApp.config ['$resourceProvider', ($resourceProvider) ->
   $resourceProvider.defaults.stripTrailingSlashes = false
 ]
 
-werApp.run ["$rootScope", "$location", "$http", "authService", ($rootScope, $location, $http, authService) ->
+werApp.run ["$rootScope", "$location", "$http", "authService", "werwer_root", ($rootScope, $location, $http, authService, werwer_root) ->
   $rootScope.$on("$routeChangeError", (event, current, previous, eventResult) ->
     if eventResult.authenticated == false
-      $location.path('/login/')
+      $location.path(werwer_root + 'login/')
   )
 ]
 
