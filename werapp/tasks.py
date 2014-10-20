@@ -116,4 +116,4 @@ def end_of_event_mailing(end_of_event_mailing_request_id):
 
         context = Context(context_dict)
         message = template.render(context)
-        participant.player.email_user("Aether event overzicht", message, "olivier_sels@gmail.com")
+        participant.player.email_user("Aether event overzicht", message, "olivier.sels@gmail.com")
