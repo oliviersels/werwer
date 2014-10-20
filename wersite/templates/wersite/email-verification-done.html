@@ -1,0 +1,15 @@
+{% extends 'wersite/base.html' %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Email verification completed</h1>
+            <p>Your email <strong>{{ email }}</strong> has been verified. You will receive your login credentials when we have
+            processed your registration request.</p>
+            <p><a href="{% url 'wersite-root' %}">&larr; Home page</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

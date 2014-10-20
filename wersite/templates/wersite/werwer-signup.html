@@ -10,6 +10,7 @@
                 your registration. When registration is complete you will receive your login credentials.</p>
             <form class="form" action="{% url 'wersite-signup' %}" method="post">
                 {% csrf_token %}
+                {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
                 <div class="form-group{%if form.name.errors %} has-error{%endif%}">
                     <label for="id_name">Name</label>
                     {% if form.name.errors %}<div class="alert alert-danger">{{ form.name.errors }}</div>{% endif %}
@@ -29,6 +30,10 @@
                         <label for="id_use_case">How will you use Werwer?</label>
                         {% if form.use_case.errors %}<div class="alert alert-danger">{{ form.use_case.errors }}</div>{% endif %}
                         {{ form.use_case }}
+                </div>
+                <div>
+                    <label for="recaptcha_response_field">Solve the captcha</label>
+                    {{ recaptcha_html|safe }}
                 </div>
                 <div class="checkbox">
                     {% if form.has_accepted_terms_and_conditions.errors %}<div class="alert alert-danger">{{ form.has_accepted_terms_and_conditions.errors }}</div>{% endif %}
