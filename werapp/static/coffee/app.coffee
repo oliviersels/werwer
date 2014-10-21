@@ -5,11 +5,16 @@ werApp.config ['$resourceProvider', ($resourceProvider) ->
   $resourceProvider.defaults.stripTrailingSlashes = false
 ]
 
-werApp.run ["$rootScope", "$location", "$http", "authService", "werwer_root", ($rootScope, $location, $http, authService, werwer_root) ->
-  $rootScope.$on("$routeChangeError", (event, current, previous, eventResult) ->
-    if eventResult.authenticated == false
-      $location.path(werwer_root + 'login/')
-  )
+werApp.run ["$rootScope", "$location", "$http", "$window", "authService", "werwer_root",
+  ($rootScope, $location, $http, $window, authService, werwer_root) ->
+    $rootScope.$on("$routeChangeError", (event, current, previous, eventResult) ->
+      if eventResult.authenticated == false
+        $location.path(werwer_root + 'login/')
+    )
+
+    $rootScope.$on('$routeChangeSuccess', (event, current, previous) ->
+      $window.ga('send', 'pageview', {page: $location.path()})
+    )
 ]
 
 loginRequired = {
