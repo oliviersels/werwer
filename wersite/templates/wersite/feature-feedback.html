@@ -5,9 +5,9 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h1>Feature feedback received</h1>
-            <p>Thank you very much for providing feedback about our features.</p>
-            <p><a href="{% url 'wersite-root' %}">&larr; Home page</a></p>
+            <h1>{% trans "Feature feedback received" %}</h1>
+            <p>{% blocktrans %}Thank you very much for providing feedback about our features.{% endblocktrans %}</p>
+            <p><a href="{% url 'wersite-root' %}">&larr; {% trans "Home page" %}</a></p>
         </div>
     </div>
 </div>

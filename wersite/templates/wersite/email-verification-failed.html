@@ -5,9 +5,9 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h1>Email verification failed</h1>
-            <p>Something went wrong trying to validate your email address. Plaeas try again or contact support.</p>
-            <p><a href="{% url 'wersite-root' %}">&larr; Home page</a></p>
+            <h1>{% trans "Email verification failed" %}</h1>
+            <p>{% blocktrans %}Something went wrong trying to validate your email address. Plaeas try again or contact support.{% endblocktrans %}</p>
+            <p><a href="{% url 'wersite-root' %}">&larr; {% trans "Home page" %}</a></p>
         </div>
     </div>
 </div>

@@ -5,10 +5,10 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h1>Email verification completed</h1>
-            <p>Your email <strong>{{ email }}</strong> has been verified. You will receive your login credentials when we have
-            processed your registration request.</p>
-            <p><a href="{% url 'wersite-root' %}">&larr; Home page</a></p>
+            <h1>{% trans "Email verification completed" %}</h1>
+            <p>{% blocktrans %}Your email <strong>{{ email }}</strong> has been verified. You will receive your login credentials when we have
+            processed your registration request.{% endblocktrans %}</p>
+            <p><a href="{% url 'wersite-root' %}">&larr; {% trans "Home page" %}</a></p>
         </div>
     </div>
 </div>
