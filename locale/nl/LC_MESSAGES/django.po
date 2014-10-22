@@ -1,0 +1,586 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Aether website\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-10-22 22:13+0200\n"
+"PO-Revision-Date: 2014-10-22 22:18+0100\n"
+"Last-Translator: Olivier Sels <olivier.sels@gmail.com>\n"
+"Language-Team: Aether\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.4\n"
+
+#: werapp/admin.py:27
+msgid "Personal info"
+msgstr "Persoonlijke informatie"
+
+#: werapp/admin.py:28
+msgid "Permissions"
+msgstr "Permissies"
+
+#: werapp/admin.py:30
+msgid "Important dates"
+msgstr "Belangrijke data"
+
+#: werapp/admin.py:117
+msgid "Password changed successfully."
+msgstr "Wachtwoord succesvol gewijzigd."
+
+#: werapp/admin.py:128
+#, python-format
+msgid "Change password: %s"
+msgstr "Wijzig wachtwoord: %s"
+
+#: werapp/forms.py:8 werapp/forms.py:39
+#: wersite/templates/wersite/werwer-signup.html:20
+msgid "Email"
+msgstr "E-mail"
+
+#: werapp/forms.py:9 werapp/forms.py:40
+msgid "Password"
+msgstr "Wachtwoorden"
+
+#: werapp/forms.py:10
+msgid ""
+"Raw passwords are not stored, so there is no way to see this user's "
+"password, but you can change the password using <a href=\"password/\">this "
+"form</a>."
+msgstr ""
+"De originele wachtwoorden worden niet bijgehouden. Het is dus niet mogelijk "
+"om het wachtwoord van een gebruiker op te vragen. Je kan het wachtwoord wel "
+"wijzigen via <a href=\"password/\">dit formulier</a>."
+
+#: werapp/forms.py:36
+msgid "A player with that email already exists."
+msgstr "Een speler met die e-mail bestaat al."
+
+#: werapp/forms.py:37
+msgid "The two password fields didn't match."
+msgstr "De twee wachtwoorden komen niet overeen."
+
+#: werapp/forms.py:42
+msgid "Password confirmation"
+msgstr "Wachtwoord bevestiging"
+
+#: werapp/forms.py:44
+msgid "Enter the same password as above, for verification."
+msgstr "Voer hetzelfde wachtwoord twee keer in, ter bevestiging."
+
+#: werapp/models.py:11
+msgid "first name"
+msgstr "voornaam"
+
+#: werapp/models.py:12
+msgid "last name"
+msgstr "achternaam"
+
+#: werapp/models.py:13
+msgid "email address"
+msgstr "e-mailadres"
+
+#: werapp/models.py:14
+msgid "staff status"
+msgstr "medewerker status"
+
+#: werapp/models.py:15
+msgid "Designates whether the user can log into this admin site."
+msgstr "Geeft aan of een gebruiker kan aanmelden op de admin site."
+
+#: werapp/models.py:17
+msgid "active"
+msgstr "actief"
+
+#: werapp/models.py:18
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr ""
+"Geeft aan of de gebruiker actief is. Vink dit uit ipv het account te "
+"verwijderen."
+
+#: werapp/models.py:20
+msgid "date joined"
+msgstr "datum toetreding"
+
+#: werapp/models.py:29
+msgid "user"
+msgstr "gebuiker"
+
+#: werapp/models.py:30
+msgid "users"
+msgstr "gebruikers"
+
+#: wersite/enums.py:12
+msgid ""
+"Previous participants of events are alerted when a new event is scheduled"
+msgstr ""
+"Deelnemers aan vorige evenementen worden op de hoogte gebracht als een nieuw "
+"evenement is aangemaakt"
+
+#: wersite/enums.py:13
+msgid "Players can register for events and are automatically enrolled"
+msgstr ""
+"Spelers kunnen registreren voor evenementen en zijn dan automatisch "
+"ingeschreven"
+
+#: wersite/enums.py:14
+msgid ""
+"Reminders are sent to enrolled participants the day before the event starts"
+msgstr "Deelnemers worden een dag op voorhand herinnert aan een evenement"
+
+#: wersite/enums.py:15
+msgid "Seatings are automatically announced on participant smartphones"
+msgstr "Seatings worden automatisch getoond op de smartphones van deelnemers"
+
+#: wersite/enums.py:16
+msgid "Participants can enter their own results"
+msgstr "Deelnemers kunnen zelf hun score ingeven"
+
+#: wersite/enums.py:17
+msgid "Players can review past events and see how well they played"
+msgstr ""
+"Spelers kunnen achteraf kijken hoe ze het hebben gedaan in een evenement"
+
+#: wersite/forms.py:16
+msgid "Enter your name (optional)"
+msgstr "Geef je naam in (optioneel)"
+
+#: wersite/forms.py:17
+msgid "Enter your email (optional)"
+msgstr "Geef je e-mail in (optioneel)"
+
+#: wersite/forms.py:24
+msgid ""
+"You must enter your email address if you want to be informed of important "
+"Werwer news"
+msgstr ""
+"Je moet je e-mailadres ingeven als je op de hoogte wilt blijven van "
+"belangrijk WerWer nieuws"
+
+#: wersite/forms.py:36
+msgid "Enter your name"
+msgstr "Geef je naam in"
+
+#: wersite/forms.py:37
+msgid "Enter your email"
+msgstr "Geef je e-mail in"
+
+#: wersite/forms.py:38
+msgid "Enter your organization name (optional)"
+msgstr "Geef de naam van je organisatie in (optioneel)"
+
+#: wersite/forms.py:39
+msgid "Tell us a bit about how you will use Werwer"
+msgstr "Vertel ons een beetje over hoe je WerWer wilt gebruiken"
+
+#: wersite/forms.py:50
+msgid "You must accept the terms and conditions"
+msgstr "Je moet de gebruiksvoorwaarden accepteren"
+
+#: wersite/forms.py:63
+msgid "The captcha you entered was not correct"
+msgstr "De ingegeven captcha  was niet correct"
+
+#: wersite/templates/wersite/email-verification-already-done.html:8
+msgid "Email verification already completed"
+msgstr "E-mail verificatie al uitgevoerd"
+
+#: wersite/templates/wersite/email-verification-already-done.html:9
+#, python-format
+msgid "Your email <strong>%(email)s</strong> has already been verified."
+msgstr "Je e-mail <strong>%(email)s</strong> is al geverifieerd."
+
+#: wersite/templates/wersite/email-verification-already-done.html:10
+#: wersite/templates/wersite/email-verification-done.html:11
+#: wersite/templates/wersite/email-verification-failed.html:10
+#: wersite/templates/wersite/feature-feedback.html:10
+#: wersite/templates/wersite/werwer-signup-success.html:12
+#: wersite/templates/wersite/werwer-signup.html:47
+msgid "Home page"
+msgstr "Homepagina"
+
+#: wersite/templates/wersite/email-verification-done.html:8
+msgid "Email verification completed"
+msgstr "E-mail geverifieerd"
+
+#: wersite/templates/wersite/email-verification-done.html:9
+#, python-format
+msgid ""
+"Your email <strong>%(email)s</strong> has been verified. You will receive "
+"your login credentials when we have\n"
+"            processed your registration request."
+msgstr ""
+"Je e-mail <strong>%(email)s</strong> is geverifieerd. Je zal je "
+"inloggegevens krijgen zodra we je registratie verwerkt hebben."
+
+#: wersite/templates/wersite/email-verification-failed.html:8
+msgid "Email verification failed"
+msgstr "E-mail verificatie gefaald"
+
+#: wersite/templates/wersite/email-verification-failed.html:9
+msgid ""
+"Something went wrong trying to validate your email address. Plaeas try again "
+"or contact support."
+msgstr ""
+"Er is iets fout gelopen bij het verifiëren van je e-mailadres. Probeer "
+"alstublieft opnieuw of neem contact op met ons."
+
+#: wersite/templates/wersite/feature-feedback.html:8
+msgid "Feature feedback received"
+msgstr "Feature feedback ontvangen"
+
+#: wersite/templates/wersite/feature-feedback.html:9
+msgid "Thank you very much for providing feedback about our features."
+msgstr "Hartelijk bedankt voor het geven van je mening over onze features."
+
+#: wersite/templates/wersite/home.html:28
+msgid "Aether club"
+msgstr "Aether club"
+
+#: wersite/templates/wersite/home.html:29
+msgid ""
+"Welcome to the aether club website. We are a boardgaming and <em>Magic: The "
+"Gathering</em> playing group in\n"
+"                Belgium. We organize weekly playing sessions and several "
+"times a year a larger event. You can\n"
+"                find more information about us and our events at our "
+"facebook group:\n"
+"                <a href=\"https://www.facebook.com/groups/aether.club/\">on "
+"Facebook</a>."
+msgstr ""
+"Welkom op de aether club website. Wij zijn een groep boardgamers en "
+"<em>Magic: The Gathering</em> spelers in België. We spelen 1 keer per week "
+"en organiseren een aantal keren per jaar een groter evenement. Meer "
+"informatie over ons en onze evenementen is te vinden op onze <a href="
+"\"https://www.facebook.com/groups/aether.club/\">facebook groep</a>. "
+
+#: wersite/templates/wersite/home.html:33
+msgid ""
+"This website also hosts the werwer application, an alternative scheduling "
+"tool for <em>Magic: The Gathering</em> events."
+msgstr ""
+"Deze website host ook de WerWer applicatie, een alternatieve tool om "
+"evenementen voor <em>Magic: The Gathering</em> te runnen."
+
+#: wersite/templates/wersite/home.html:34
+msgid "WerWer"
+msgstr "WerWer"
+
+#: wersite/templates/wersite/home.html:35
+msgid ""
+"Werwer is an alternative scheduling tool for <em>Magic: The Gathering</em> "
+"events and aims to replace or\n"
+"                enhance the official <em>Wizards Event Reporter</em>."
+msgstr ""
+"WerWer is een alternatieve applicatie om <em>Magic: The Gathering</em> "
+"evenementen te runnen. Het vervangt en/of verbetert de officiële <em>Wizards "
+"Event Reporter</em>."
+
+#: wersite/templates/wersite/home.html:37
+msgid ""
+"Werwer is very specifically targeted to small, unsanctioned events and we "
+"use it at our local\n"
+"                club to organise and run events. The technical nature of "
+"Werwer makes it possible to do things\n"
+"                that are (almost) impossible to do with the official "
+"<em>Wizards Event Reporter</em>."
+msgstr ""
+"WerWer is vooral bedoelt voor kleine, niet gesanctionde evenementen. Zelf "
+"gebruiken we het op de club om al onze evenementen te organiseren. Technisch "
+"gezien maakt WerWer het mogelijk om dingen te doen die (bijna) onmogelijk "
+"zijn met de officiële <em>Wizards Event Reporter</em>."
+
+#: wersite/templates/wersite/home.html:40
+msgid "Unique features"
+msgstr "Unieke mogelijkheden"
+
+#: wersite/templates/wersite/home.html:42
+msgid ""
+"Run events on all devices with an internet connection: laptop, tablet and "
+"yes, even smartphone."
+msgstr ""
+"Evenementen runnen op alle toestellen met een internetverbinding: laptop, "
+"tablet en ja, zelfs een smartphone."
+
+#: wersite/templates/wersite/home.html:42
+#: wersite/templates/wersite/home.html:43
+#: wersite/templates/wersite/home.html:47
+#: wersite/templates/wersite/home.html:48
+#: wersite/templates/wersite/home.html:49
+#: wersite/templates/wersite/home.html:50
+#: wersite/templates/wersite/home.html:51
+#: wersite/templates/wersite/home.html:52
+#: wersite/templates/wersite/home.html:53
+#: wersite/templates/wersite/home.html:131
+msgid "More info"
+msgstr "Meer informatie"
+
+#: wersite/templates/wersite/home.html:43
+msgid ""
+"No installation required. The app is cloud hosted and all updates happen "
+"automatically."
+msgstr ""
+"Geen installatie noodzakelijk. De app wordt gehost in de cloud en wordt "
+"automatisch geüpdate."
+
+#: wersite/templates/wersite/home.html:45
+msgid "Involve players before, during and after events:"
+msgstr "Betrek spelers voor, tijdens en na je evenementen:"
+
+#: wersite/templates/wersite/home.html:47
+#: wersite/templates/wersite/home.html:48
+#: wersite/templates/wersite/home.html:49
+msgid "Before"
+msgstr "Voor"
+
+#: wersite/templates/wersite/home.html:47
+msgid ""
+"previous participants of your events are alerted when you schedule a new "
+"event."
+msgstr ""
+"eerdere deelnemers aan jouw evenementen worden op de hoogte gebracht als je "
+"een nieuw evenement aanmaakt."
+
+#: wersite/templates/wersite/home.html:48
+msgid "players can register for your event and are automatically enrolled."
+msgstr ""
+"spelers kunnen op voorhand registreren voor jouw evenementen en zijn "
+"automatisch ingeschreven."
+
+#: wersite/templates/wersite/home.html:49
+msgid ""
+"reminders are sent to enrolled participants the day before the event starts."
+msgstr ""
+"de dag voor het evenement worden herinneringen verstuurt aan de "
+"insgeschreven deelnemers."
+
+#: wersite/templates/wersite/home.html:50
+#: wersite/templates/wersite/home.html:51
+msgid "During"
+msgstr "Tijdens"
+
+#: wersite/templates/wersite/home.html:50
+msgid "seatings are automatically announced on participant smartphones."
+msgstr "seatings worden automatisch getoond op de smartphones van deelnemers."
+
+#: wersite/templates/wersite/home.html:51
+msgid ""
+"participants can enter their own results. If both players do this you don't "
+"even need to confirm them. Events run themselves."
+msgstr ""
+"deelnemers kunnen zelf hun  resultaten ingeven. Als beide spelers dit doen "
+"hoef je ze zelfs niet meer te bevestigen. Evenementen runnen wordt "
+"kinderspel."
+
+#: wersite/templates/wersite/home.html:52
+#: wersite/templates/wersite/home.html:53
+msgid "After"
+msgstr "Na"
+
+#: wersite/templates/wersite/home.html:52
+msgid "players can review past events and see how well they played."
+msgstr ""
+"spelers kunnen hun vorige evenementen herbekijken en zien hoe goed ze "
+"gespeeld hebben."
+
+#: wersite/templates/wersite/home.html:53
+msgid ""
+"a mail is sent to participants with statistics about their performance in "
+"the event."
+msgstr ""
+"iedere deelnemer ontvangt een e-mail met hun resultaten in het afgelopen "
+"evenement"
+
+#: wersite/templates/wersite/home.html:58
+msgid ""
+"If you think: <em>That sounds cool, I want to try that!</em> Don't worry, "
+"you can. Free of charge."
+msgstr ""
+"Als je nu denkt: <em>Dat klinkt cool, wil ik ook wel eens proberen!</em> "
+"Geen zorgen, dat is mogelijk. Volledig gratis."
+
+#: wersite/templates/wersite/home.html:63
+msgid "Try Werwer"
+msgstr "WerWer proberen"
+
+#: wersite/templates/wersite/home.html:75
+#: wersite/templates/wersite/home.html:116
+#: wersite/templates/wersite/home.html:130
+#: wersite/templates/wersite/home.html:164
+msgid "Close"
+msgstr "Sluiten"
+
+#: wersite/templates/wersite/home.html:76
+msgid "Thank you for your interest in Werwer!"
+msgstr "Bedankt voor je interesse in WerWer!"
+
+#: wersite/templates/wersite/home.html:79
+msgid ""
+"The feature you requested is however not yet included in Werwer. I am but a "
+"sole developer\n"
+"                        and my time is limited. But you can help me by "
+"filling in this form so I know which features\n"
+"                        are most wanted. Thanks again for your help!"
+msgstr ""
+"Deze mogelijkheid is helaas nog niet beschikbaar in WerWer. Ik ben de enige "
+"ontwikkelaar en mijn tijd is ook maar beperkt. Gelukkig kan je mij helpen "
+"door dit formulier in te vullen. Zo weet ik wat de meest gevraagde feature "
+"is en kan ik me daar volledig op toeleggen. Nogmaals bedankt voor je hulp!"
+
+#: wersite/templates/wersite/home.html:84
+msgid "Which feature do you want most?"
+msgstr "Welke feature wil je het meest?"
+
+#: wersite/templates/wersite/home.html:94
+msgid ""
+"Mail participants with statistics about their performance in the event "
+"(already implemented)"
+msgstr ""
+"Stuur een e-mail naar deelnemers met hun resultaten in het evenement (reeds "
+"geïmplementeerd)"
+
+#: wersite/templates/wersite/home.html:99
+#: wersite/templates/wersite/werwer-signup.html:15
+msgid "Name"
+msgstr "Naam"
+
+#: wersite/templates/wersite/home.html:99
+#: wersite/templates/wersite/home.html:104
+msgid "optional"
+msgstr "optioneel"
+
+#: wersite/templates/wersite/home.html:104
+msgid "Enter your email address if you want to be notified about this feature"
+msgstr ""
+"Geef je e-mailadres in als je op de hoogte wilt blijven van deze feature"
+
+#: wersite/templates/wersite/home.html:111
+msgid "Notify me about important Werwer news"
+msgstr "Houdt me op de hoogte van belangrijk nieuw over WerWer"
+
+#: wersite/templates/wersite/home.html:117
+msgid "Send feedback"
+msgstr "Antwoord verzenden"
+
+#: wersite/templates/wersite/home.html:135
+msgid ""
+"Werwer is an interactive, responsive web app. This means that it runs on any "
+"device\n"
+"                            with internet access and a fairly modern "
+"browser. This includes laptops, tablets and\n"
+"                            smartphones with any operating system. Werwer is "
+"basically just a website. A very\n"
+"                            sophisticated website."
+msgstr ""
+"WerWer is een interactieve, responsieve web app. Dit betekent dat hij op "
+"ieder toestel met toegang tot internet draait. Het enige wat je nodig hebt "
+"is een moderne browser. Je kan WerWer dus op laptops, tablets en smartphones "
+"draaien met eender welk besturingssysteem. WerWer is eigenlijk gewoon een "
+"website. Een heel vernuftige website."
+
+#: wersite/templates/wersite/home.html:139
+msgid "If you are interested in the technical details"
+msgstr "Als je interesse hebt voor de technische details"
+
+#: wersite/templates/wersite/home.html:150
+msgid ""
+"Because Werwer is a web app hosted in the cloud you don't have to do "
+"anything to\n"
+"                            install it. The only thing you need to do is "
+"create an account and start using it.\n"
+"                            You don't need to download or install anything. "
+"And that means of course that you\n"
+"                            won't have to update it. Werwer does all of that "
+"automatically."
+msgstr ""
+"Omdat WerWer een web app is die online gehost wordt hoef je helemaal niets "
+"te installeren. Het enige wat je moet doen is een account aanmaken en je kan "
+"beginnen. Je moet niets downloaden of instellen. En dat betekent ook dat je "
+"niet hoeft te updaten. WerWer doet dat allemaal automatisch."
+
+#: wersite/templates/wersite/home.html:156
+msgid ""
+"One feature which our users find very useful is the possibility to receive\n"
+"                            a summary about how they played in an event. "
+"When the event is done, you can\n"
+"                            quickly send them an email with the matches they "
+"played, the opponents they played\n"
+"                            against and the results of those matches. It "
+"also includes things like standings\n"
+"                            and the price support they earned. Make them "
+"remember your events!"
+msgstr ""
+"Een feature die onze spelers heel handig vinden is de mogelijkheid om een "
+"samenvatting te krijgen over hoe ze het hebben gedaan tijdens een evenement. "
+"Wanneer het evenement gedaan is kan je ze snel een e-mail sturen met hun "
+"gespeelde matchen, hun tegenstanders en de resultaten van die matchen. Er "
+"staat ook in hoe ze zijn geëindigd en hoeveel ze van de prijzen hebben "
+"gekregen. Zorg ervoor dat ze je evenement blijven herinneren!"
+
+#: wersite/templates/wersite/werwer-signup-success.html:8
+msgid "Registration received"
+msgstr "Registratie ontvangen"
+
+#: wersite/templates/wersite/werwer-signup-success.html:9
+msgid ""
+"Thank you for willing to try out WerWer. You should receive an email from us "
+"shortly. Please follow the\n"
+"            instructions in that email to verify your email address. After "
+"you have verified your email addres your\n"
+"            registration is complete."
+msgstr ""
+"Bedankt dat je WerWer wilt uitproberen. Je zal zo dadelijk een e-mail "
+"ontvangen van ons. Volg alstublieft de instructies in deze e-mail om je e-"
+"mailadres te verifiëren. Je registratie is rond zodra je e-mailadres "
+"geverifieerd is."
+
+#: wersite/templates/wersite/werwer-signup.html:8
+msgid "WerWer signup"
+msgstr "WerWer registratie"
+
+#: wersite/templates/wersite/werwer-signup.html:9
+msgid ""
+"To sign up for WerWer fill in the following form. You will have to confirm "
+"your email address to complete\n"
+"                your registration. When registration is complete you will "
+"receive your login credentials."
+msgstr ""
+"Om je te registeren voor WerWer moet je het volgende formulier invullen. Je "
+"zal je e-mailadres moeten bevestigen om je registratie af te ronden. Wanneer "
+"je registratie rond is zal je de inloggegevens krijgen."
+
+#: wersite/templates/wersite/werwer-signup.html:25
+msgid "Organization"
+msgstr "Organisatie"
+
+#: wersite/templates/wersite/werwer-signup.html:30
+msgid "How will you use Werwer?"
+msgstr "Hoe wil je WerWer gebruiken?"
+
+#: wersite/templates/wersite/werwer-signup.html:35
+msgid "Solve the captcha"
+msgstr "Los de captcha op"
+
+#: wersite/templates/wersite/werwer-signup.html:42
+msgid "I agree to the <a href=\"#\">terms and conditions</a>"
+msgstr "Ik ga akkoord met de <a href=\"#\">gebruiksvoorwaarden</a>"
+
+#: wersite/templates/wersite/werwer-signup.html:45
+msgid "Sign up for WerWer"
+msgstr "Registreren voor WerWer"
+
+#: werwer/settings.py:92
+msgid "Dutch"
+msgstr "Nederlands"
+
+#: werwer/settings.py:93
+msgid "English"
+msgstr "Engels"

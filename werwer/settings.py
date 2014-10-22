@@ -46,6 +46,7 @@ INSTALLED_APPS = (
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -85,6 +86,16 @@ USE_L10N = True
 
 USE_TZ = True
 
+from django.utils.translation import ugettext_lazy as _
+
+LANGUAGES = (
+    ('nl', _('Dutch')),
+    ('en', _('English')),
+)
+
+LOCALE_PATHS = (
+    'locale',
+)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/

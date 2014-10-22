@@ -10,3 +10,6 @@ werwer/local.py
 aws-credentials
 
 node_modules
+
+# Compiled po files
+*.mo
