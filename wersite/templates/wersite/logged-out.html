@@ -1,0 +1,14 @@
+{% extends 'wersite/base.html' %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Logged out</h1>
+            <p>You successfully logged out.</p>
+            <p><a href="{% url 'wersite-root' %}">&larr; {% trans "Home page" %}</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

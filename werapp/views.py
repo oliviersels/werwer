@@ -1,4 +1,5 @@
 # Create your views here.
+from braces.views import LoginRequiredMixin
 from django.conf import settings
 from django.views.generic.base import TemplateView
 from rest_framework import status
@@ -53,7 +54,7 @@ class EndOfEventMailingRequestViewSet(ModelViewSet):
             # Create the random matches task
             end_of_event_mailing.delay(obj.id)
 
-class WerView(TemplateView):
+class WerView(LoginRequiredMixin, TemplateView):
     template_name = "wer.html"
 
 class DynamicJavascript(TemplateView):

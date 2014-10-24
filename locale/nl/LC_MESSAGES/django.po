@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aether website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-24 07:17+0200\n"
-"PO-Revision-Date: 2014-10-24 07:17+0100\n"
+"POT-Creation-Date: 2014-10-24 15:03+0000\n"
+"PO-Revision-Date: 2014-10-24 17:03+0100\n"
 "Last-Translator: Olivier Sels <olivier.sels@gmail.com>\n"
 "Language-Team: Aether\n"
 "Language: nl\n"
@@ -40,13 +40,15 @@ msgid "Change password: %s"
 msgstr "Wijzig wachtwoord: %s"
 
 #: werapp/forms.py:8 werapp/forms.py:39
+#: wersite/templates/wersite/login.html:13
 #: wersite/templates/wersite/werwer-signup.html:20
 msgid "Email"
 msgstr "E-mail"
 
-#: werapp/forms.py:9 werapp/forms.py:40
+#: werapp/forms.py:9 werapp/forms.py:40 wersite/forms.py:71
+#: wersite/templates/wersite/login.html:18
 msgid "Password"
-msgstr "Wachtwoorden"
+msgstr "Wachtwoord"
 
 #: werapp/forms.py:10
 msgid ""
@@ -149,15 +151,15 @@ msgid "Players can review past events and see how well they played"
 msgstr ""
 "Spelers kunnen achteraf kijken hoe ze het hebben gedaan in een evenement"
 
-#: wersite/forms.py:16
+#: wersite/forms.py:17
 msgid "Enter your name (optional)"
 msgstr "Geef je naam in (optioneel)"
 
-#: wersite/forms.py:17
+#: wersite/forms.py:18
 msgid "Enter your email (optional)"
 msgstr "Geef je e-mail in (optioneel)"
 
-#: wersite/forms.py:24
+#: wersite/forms.py:25
 msgid ""
 "You must enter your email address if you want to be informed of important "
 "Werwer news"
@@ -165,29 +167,51 @@ msgstr ""
 "Je moet je e-mailadres ingeven als je op de hoogte wilt blijven van "
 "belangrijk WerWer nieuws"
 
-#: wersite/forms.py:36
+#: wersite/forms.py:37
 msgid "Enter your name"
 msgstr "Geef je naam in"
 
-#: wersite/forms.py:37
+#: wersite/forms.py:38
 msgid "Enter your email"
 msgstr "Geef je e-mail in"
 
-#: wersite/forms.py:38
+#: wersite/forms.py:39
 msgid "Enter your organization name (optional)"
 msgstr "Geef de naam van je organisatie in (optioneel)"
 
-#: wersite/forms.py:39
+#: wersite/forms.py:40
 msgid "Tell us a bit about how you will use Werwer"
 msgstr "Vertel ons een beetje over hoe je WerWer wilt gebruiken"
 
-#: wersite/forms.py:50
+#: wersite/forms.py:51
 msgid "You must accept the terms and conditions"
 msgstr "Je moet de gebruiksvoorwaarden accepteren"
 
-#: wersite/forms.py:63
+#: wersite/forms.py:64
 msgid "The captcha you entered was not correct"
 msgstr "De ingegeven captcha  was niet correct"
+
+#: wersite/forms.py:70
+msgid "Enter your email address"
+msgstr "Geef je e-mailadres in"
+
+#: wersite/forms.py:71
+msgid "Enter your password"
+msgstr "Geef je wachtwoord in"
+
+#: wersite/templates/wersite/base.html:62
+#| msgid "Home page"
+msgid "Home"
+msgstr "Home"
+
+#: wersite/templates/wersite/base.html:63
+msgid "Sign up"
+msgstr "Registreren"
+
+#: wersite/templates/wersite/base.html:64
+#| msgid "WerWer"
+msgid "WerWer app"
+msgstr "WerWer app"
 
 #: wersite/templates/wersite/email-verification-already-done.html:8
 msgid "Email verification already completed"
@@ -202,6 +226,7 @@ msgstr "Je e-mail <strong>%(email)s</strong> is al geverifieerd."
 #: wersite/templates/wersite/email-verification-done.html:11
 #: wersite/templates/wersite/email-verification-failed.html:10
 #: wersite/templates/wersite/feature-feedback.html:10
+#: wersite/templates/wersite/logged-out.html:10
 #: wersite/templates/wersite/werwer-signup-success.html:12
 #: wersite/templates/wersite/werwer-signup.html:47
 msgid "Home page"
@@ -246,15 +271,6 @@ msgid "Aether club"
 msgstr "Aether club"
 
 #: wersite/templates/wersite/home.html:29
-#| msgid ""
-#| "Welcome to the aether club website. We are a boardgaming and <em>Magic: "
-#| "The Gathering</em> playing group in\n"
-#| "                Belgium. We organize weekly playing sessions and several "
-#| "times a year a larger event. You can\n"
-#| "                find more information about us and our events at our "
-#| "facebook group:\n"
-#| "                <a href=\"https://www.facebook.com/groups/aether.club/"
-#| "\">on Facebook</a>."
 msgid ""
 "Welcome to the aether club website. We are a boardgaming and <em>Magic: The "
 "Gathering</em> playing group in\n"
@@ -533,6 +549,11 @@ msgstr ""
 "staat ook in hoe ze zijn geëindigd en hoeveel ze van de prijzen hebben "
 "gekregen. Zorg ervoor dat ze je evenement blijven herinneren!"
 
+#: wersite/templates/wersite/login.html:8
+#: wersite/templates/wersite/login.html:22
+msgid "Login"
+msgstr "Inloggen"
+
 #: wersite/templates/wersite/werwer-signup-success.html:8
 msgid "Registration received"
 msgstr "Registratie ontvangen"
@@ -585,10 +606,10 @@ msgstr "Ik ga akkoord met de <a href=\"#\">gebruiksvoorwaarden</a>"
 msgid "Sign up for WerWer"
 msgstr "Registreren voor WerWer"
 
-#: werwer/settings.py:92
+#: werwer/settings.py:93
 msgid "Dutch"
 msgstr "Nederlands"
 
-#: werwer/settings.py:93
+#: werwer/settings.py:94
 msgid "English"
 msgstr "Engels"

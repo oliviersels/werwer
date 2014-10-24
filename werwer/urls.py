@@ -2,6 +2,8 @@ from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
 from django.contrib.auth.views import login, logout
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic import RedirectView
 
 admin.autodiscover()
 
@@ -10,8 +12,8 @@ urlpatterns = patterns('',
     # url(r'^$', 'werwer.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^accounts/login/$', login),
-    url(r'^accounts/logout/$', logout),
+    url(r'^accounts/login/$', RedirectView.as_view(url=reverse_lazy('wersite-login'), query_string=True, permanent=True)),
+    url(r'^accounts/logout/$', RedirectView.as_view(url=reverse_lazy('wersite-logout'), query_string=True, permanent=True)),
     url(r'^oauth2/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/', include('werapp.urls_api')),

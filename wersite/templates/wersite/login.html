@@ -1,0 +1,27 @@
+{% extends 'wersite/base.html' %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h1>{% trans "Login" %}</h1>
+            <form role="form" action="" method="post">
+                {% csrf_token %}
+                {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+                <div class="form-group{%if form.username.errors %} has-error{%endif%}">
+                    <label for="id_username">{% trans "Email" %}</label>
+                    {% if form.username.errors %}<div class="alert alert-danger">{{ form.username.errors }}</div>{% endif %}
+                    {{ form.username }}
+                </div>
+                <div class="form-group{%if form.password.errors %} has-error{%endif%}">
+                    <label for="id_password">{% trans "Password" %}</label>
+                    {% if form.password.errors %}<div class="alert alert-danger">{{ form.password.errors }}</div>{% endif %}
+                    {{ form.password }}
+                </div>
+                <button type="submit" class="btn btn-primary btn-submit">{% trans "Login" %}</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
