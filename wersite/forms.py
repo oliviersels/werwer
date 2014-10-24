@@ -1,5 +1,6 @@
 from django import forms
 from django.conf import settings
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from recaptcha.client import captcha
@@ -64,3 +65,7 @@ class WerwerSignupForm(forms.ModelForm):
                 del self.cleaned_data['recaptcha_response_field']
 
         return self.cleaned_data
+
+class PlayerAuthenticationForm(AuthenticationForm):
+    username = forms.CharField(max_length=254, widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': _('Enter your email address')}))
+    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': _('Enter your password')}))

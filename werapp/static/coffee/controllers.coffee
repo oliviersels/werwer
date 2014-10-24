@@ -469,8 +469,6 @@ werControllers.controller 'LoginController', ['$scope',
                                               'authService',
                                               'werwer_root',
   ($scope, $location, $window, authService, werwer_root) ->
-    $scope.test = 'test'
-
     hash = $location.hash()
     if hash == ''
       $window.location.href = authService.getAuthUrl()
