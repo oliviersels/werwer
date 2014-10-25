@@ -29,6 +29,14 @@ class EventViewSet(ModelViewSet):
     model = Event
     serializer_class = EventSerializer
 
+    def pre_save(self, obj):
+        try:
+            if obj.organizer:
+                return
+        except Player.DoesNotExist:
+            pass
+        obj.organizer = self.request.user
+
 class RoundViewSet(ModelViewSet):
     model = Round
     serializer_class = RoundSerializer
