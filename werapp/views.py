@@ -4,11 +4,14 @@ from django.conf import settings
 from django.views.generic.base import TemplateView, RedirectView
 from rest_framework import status
 from rest_framework.filters import DjangoFilterBackend
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse_lazy, reverse
 from rest_framework.viewsets import ModelViewSet
 from werapp.enums import EventType, PairingMethod, EventState, RandomMatchesRequestState
+from werapp.filters import RoundFilterBackend
 from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest, EndOfEventMailingRequest
+from werapp.permissions import IsOrganizerOrReadOnly, IsEventOrganizerOrReadOnly
 
 from werapp.serializers import PlayerSerializer, EventSerializer, RoundSerializer, MatchSerializer, \
     ParticipantSerializer, RandomMatchesRequestSerializer, EndOfEventMailingRequestSerializer
@@ -24,10 +27,12 @@ class PlayerViewSet(ModelViewSet):
     serializer_class = PlayerSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('first_name', 'last_name', 'dcinumber')
+    permission_classes = (IsAuthenticated,)
 
 class EventViewSet(ModelViewSet):
     model = Event
     serializer_class = EventSerializer
+    permission_classes = (IsAuthenticated, IsOrganizerOrReadOnly,)
 
     def pre_save(self, obj):
         try:
@@ -40,6 +45,8 @@ class EventViewSet(ModelViewSet):
 class RoundViewSet(ModelViewSet):
     model = Round
     serializer_class = RoundSerializer
+    permission_classes = (IsAuthenticated, IsEventOrganizerOrReadOnly)
+    filter_backends = (RoundFilterBackend,)
 
 class MatchViewSet(ModelViewSet):
     model = Match

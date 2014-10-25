@@ -87,11 +87,22 @@ class Event(models.Model):
 class Round(models.Model):
     event = models.ForeignKey(Event)
 
+    @property
+    def organizer(self):
+        return self.event.organizer
+
+    def is_participant(self, player):
+        return self.event.participant_set.filter(player=player).exists()
+
 class Match(models.Model):
     round = models.ForeignKey(Round)
     wins = models.PositiveIntegerField(default=0)
     losses = models.PositiveIntegerField(default=0)
     draws = models.PositiveIntegerField(default=0)
+
+    @property
+    def organizer(self):
+        return self.round.event.organizer
 
     @property
     def participant1(self):
