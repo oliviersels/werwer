@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 from wersite.enums import FeaturesChoices
-from wersite.utils import generate_token_func
+from wersite.utils import GenerateToken
 
 
 class FeatureFeedback(models.Model):
@@ -18,5 +18,5 @@ class WerwerSignup(models.Model):
     organization = models.CharField(max_length=255, blank=True)
     use_case = models.TextField()
     has_accepted_terms_and_conditions = models.BooleanField(default=False)
-    email_verification_token = models.CharField(max_length=40, default=generate_token_func(40))
+    email_verification_token = models.CharField(max_length=40, default=GenerateToken(40))
     email_verified = models.BooleanField(default=False)

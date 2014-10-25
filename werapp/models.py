@@ -20,6 +20,8 @@ class Player(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
     dcinumber = models.CharField(max_length=250, blank=True)
     is_judge = models.BooleanField(default=False)
+    is_organizer = models.BooleanField(_('is organizer'), default=False,
+       help_text=_('Designates whether this user can create and organize events'))
 
     objects = PlayerManager()
 
@@ -47,6 +49,7 @@ class Player(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
 class Event(models.Model):
+    organizer = models.ForeignKey(Player)
     name = models.CharField(max_length=250)
     date = models.DateField(default=timezone.now)
     event_type = models.CharField(max_length=250, choices=EventType.choices)
@@ -84,11 +87,22 @@ class Event(models.Model):
 class Round(models.Model):
     event = models.ForeignKey(Event)
 
+    @property
+    def organizer(self):
+        return self.event.organizer
+
+    def is_participant(self, player):
+        return self.event.participant_set.filter(player=player).exists()
+
 class Match(models.Model):
     round = models.ForeignKey(Round)
     wins = models.PositiveIntegerField(default=0)
     losses = models.PositiveIntegerField(default=0)
     draws = models.PositiveIntegerField(default=0)
+
+    @property
+    def organizer(self):
+        return self.round.event.organizer
 
     @property
     def participant1(self):
@@ -135,6 +149,10 @@ class Participant(models.Model):
         unique_together = ("player", "event")
 
     @property
+    def organizer(self):
+        return self.event.organizer
+
+    @property
     def price_support(self):
         # How much this player has earned in price support
         return self.event.get_price_support_distribution()[self.id]
@@ -174,5 +192,13 @@ class RandomMatchesRequest(models.Model):
     round = models.ForeignKey(Round)
     state = models.CharField(max_length=250, choices=RandomMatchesRequestState.choices, default=RandomMatchesRequestState.NEW)
 
+    @property
+    def organizer(self):
+        return self.round.event.organizer
+
 class EndOfEventMailingRequest(models.Model):
     event = models.ForeignKey(Event)
+
+    @property
+    def organizer(self):
+        return self.event.organizer

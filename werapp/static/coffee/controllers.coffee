@@ -103,7 +103,9 @@ werControllers.controller 'AddPlayerController', ['$scope', 'werApi', 'werwer_ro
 werControllers.controller 'EventsOverviewController', ['$scope', '$location', 'werApi', 'werwer_root'
   ($scope, $location, werApi, werwer_root) ->
     werApi.Event.then (Event) ->
-      $scope.events = Event.query()
+      Event.query({}, (events) ->
+        $scope.events = events
+      )
 
     $scope.openEvent = (event) ->
       $location.path(werwer_root + 'event/' + event.id + '/')

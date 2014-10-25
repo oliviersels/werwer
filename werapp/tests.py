@@ -10,6 +10,7 @@ from werapp.tasks import create_random_matches
 class CreateRandomMatchesTaskTest(TestCase):
 
     def setUp(self):
+        self.organizer = Player.objects.create_user('jack@lostfleet.com', 'password', is_organizer=True)
         # Create dummy players and initial event setup
         self.player_dauntless = Player.objects.create_user('dauntless@lostfleet.com', 'password')
         self.player_fearless = Player.objects.create_user('fearless@lostfleet.com', 'password')
@@ -22,7 +23,8 @@ class CreateRandomMatchesTaskTest(TestCase):
 
         # Initial event
         self.event = Event.objects.create(name='Test', date=now(), event_type=EventType.CASUAL_LIMITED,
-                                             pairing_method=PairingMethod.SWISS, nr_of_rounds=3)
+                                             pairing_method=PairingMethod.SWISS, nr_of_rounds=3,
+                                             organizer=self.organizer)
 
         # Add players as participants
         self.participant_dauntless = Participant.objects.create(player=self.player_dauntless, event=self.event)
@@ -193,6 +195,7 @@ class CreateRandomMatchesTaskTest(TestCase):
 
 class ModelsTest(TestCase):
     def setUp(self):
+        self.organizer = Player.objects.create_user('jack@lostfleet.com', 'password', is_organizer=True)
         # Create dummy players and initial event setup
         self.player_dauntless = Player.objects.create_user('dauntless@lostfleet.com', 'password')
         self.player_fearless = Player.objects.create_user('fearless@lostfleet.com', 'password')
@@ -205,7 +208,8 @@ class ModelsTest(TestCase):
 
         # Initial event
         self.event = Event.objects.create(name='Test', date=now(), event_type=EventType.CASUAL_LIMITED,
-                                             pairing_method=PairingMethod.SWISS, nr_of_rounds=3)
+                                             pairing_method=PairingMethod.SWISS, nr_of_rounds=3,
+                                             organizer=self.organizer)
 
         # Add players as participants
         self.participant_dauntless = Participant.objects.create(player=self.player_dauntless, event=self.event)

@@ -7,13 +7,23 @@ from werapp.models import Player, Event, Round, Match, Participant, RandomMatche
 class PlayerSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Player
-        fields = ("id", "url", "first_name", "last_name", "email", "dcinumber", "is_judge", "participant_set")
+        fields = ("id", "url", "first_name", "last_name", "email", "dcinumber", "is_judge", "participant_set", "event_set")
+        read_only_fields = ("event_set", "participant_set")
+        write_only_fields = ("email",)
 
 class EventSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Event
-        fields = ("id", "url", "name", "date", "price_support", "price_support_min_points", "event_type",
+        fields = ("id", "url", "organizer", "name", "date", "price_support", "price_support_min_points", "event_type",
                   "pairing_method", "state", "nr_of_rounds", "round_set", "participant_set")
+        read_only_fields = ("organizer",)
+
+class PublicEventSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = Event
+        fields = ("url", "organizer", "name", "date", "price_support", "price_support_min_points", "event_type",
+                  "pairing_method", "state", "nr_of_rounds")
+        view_name = 'public-event-detail'
 
 class RoundSerializer(HyperlinkedModelSerializer):
     class Meta:

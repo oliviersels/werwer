@@ -1,17 +1,25 @@
 # Create your views here.
 from braces.views import LoginRequiredMixin
 from django.conf import settings
-from django.views.generic.base import TemplateView
-from rest_framework import status
+from django.views.generic.base import TemplateView, RedirectView
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.filters import DjangoFilterBackend
-from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
-from werapp.enums import EventType, PairingMethod, EventState, RandomMatchesRequestState
-from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest, EndOfEventMailingRequest
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.reverse import reverse
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
+from werapp.enums import EventType, PairingMethod, EventState, RandomMatchesRequestState
+from werapp.filters import OrganizerFilterBackend, EventOrganizerFilterBackend, RoundEventOrganizerFilterBackend
+from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest, EndOfEventMailingRequest
+from werapp.permissions import IsOrganizer, IsEventOrganizer
 from werapp.serializers import PlayerSerializer, EventSerializer, RoundSerializer, MatchSerializer, \
-    ParticipantSerializer, RandomMatchesRequestSerializer, EndOfEventMailingRequestSerializer
+    ParticipantSerializer, RandomMatchesRequestSerializer, EndOfEventMailingRequestSerializer, PublicEventSerializer
 from werapp.tasks import create_random_matches, end_of_event_mailing
+
+
+class PlayerMeRedirect(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse('player-detail', kwargs={'pk': self.request.user.pk})
 
 
 class PlayerViewSet(ModelViewSet):
@@ -19,40 +27,81 @@ class PlayerViewSet(ModelViewSet):
     serializer_class = PlayerSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('first_name', 'last_name', 'dcinumber')
+    permission_classes = (IsAuthenticated,)
+
 
 class EventViewSet(ModelViewSet):
-    model = Event
+    queryset = Event.objects.all()
     serializer_class = EventSerializer
+    permission_classes = (IsAuthenticated, IsOrganizer, IsEventOrganizer,)
+    filter_backends = (OrganizerFilterBackend,)
 
-class RoundViewSet(ModelViewSet):
-    model = Round
+    def pre_save(self, obj):
+        try:
+            if obj.organizer:
+                return
+        except Player.DoesNotExist:
+            pass
+        obj.organizer = self.request.user
+
+
+class PublicEventViewSet(ReadOnlyModelViewSet):
+    queryset = Event.objects.all()
+    serializer_class = PublicEventSerializer
+    permission_classes = (AllowAny,)
+
+
+class OnlyOrganizerPreSaveMixin(object):
+    def pre_save(self, obj):
+        if obj.organizer != self.request.user:
+            raise PermissionDenied()
+        return super(OnlyOrganizerPreSaveMixin, self).pre_save(obj)
+
+
+class RoundViewSet(OnlyOrganizerPreSaveMixin, ModelViewSet):
+    queryset = Round.objects.all()
     serializer_class = RoundSerializer
+    permission_classes = (IsAuthenticated, IsOrganizer, IsEventOrganizer)
+    filter_backends = (EventOrganizerFilterBackend,)
 
-class MatchViewSet(ModelViewSet):
-    model = Match
+
+class MatchViewSet(OnlyOrganizerPreSaveMixin, ModelViewSet):
+    queryset = Match.objects.all()
     serializer_class = MatchSerializer
+    permission_classes = (IsAuthenticated, IsOrganizer, IsEventOrganizer)
+    filter_backends = (RoundEventOrganizerFilterBackend,)
 
-class ParticipantViewSet(ModelViewSet):
-    model = Participant
+
+class ParticipantViewSet(OnlyOrganizerPreSaveMixin, ModelViewSet):
+    queryset = Participant.objects.all()
     serializer_class = ParticipantSerializer
+    permission_classes = (IsAuthenticated, IsOrganizer, IsEventOrganizer)
+    filter_backends = (EventOrganizerFilterBackend,)
 
-class RandomMatchesRequestViewSet(ModelViewSet):
+
+class RandomMatchesRequestViewSet(OnlyOrganizerPreSaveMixin, ModelViewSet):
     model = RandomMatchesRequest
     serializer_class = RandomMatchesRequestSerializer
+    permission_classes = (IsAuthenticated, IsOrganizer, IsEventOrganizer)
+    filter_backends = (RoundEventOrganizerFilterBackend,)
 
     def post_save(self, obj, created=False):
         if created:
             # Create the random matches task
             create_random_matches.delay(obj.id)
 
-class EndOfEventMailingRequestViewSet(ModelViewSet):
+
+class EndOfEventMailingRequestViewSet(OnlyOrganizerPreSaveMixin, ModelViewSet):
     model = EndOfEventMailingRequest
     serializer_class = EndOfEventMailingRequestSerializer
+    permission_classes = (IsAuthenticated, IsOrganizer, IsEventOrganizer)
+    filter_backends = (EventOrganizerFilterBackend,)
 
     def post_save(self, obj, created=False):
         if created:
             # Create the random matches task
             end_of_event_mailing.delay(obj.id)
+
 
 class WerView(LoginRequiredMixin, TemplateView):
     template_name = "wer.html"
