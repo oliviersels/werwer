@@ -20,6 +20,8 @@ class Player(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
     dcinumber = models.CharField(max_length=250, blank=True)
     is_judge = models.BooleanField(default=False)
+    is_organizer = models.BooleanField(_('is organizer'), default=False,
+       help_text=_('Designates whether this user can create and organize events'))
 
     objects = PlayerManager()
 
@@ -47,6 +49,7 @@ class Player(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
 class Event(models.Model):
+    organizer = models.ForeignKey(Player)
     name = models.CharField(max_length=250)
     date = models.DateField(default=timezone.now)
     event_type = models.CharField(max_length=250, choices=EventType.choices)
