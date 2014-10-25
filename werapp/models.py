@@ -149,6 +149,10 @@ class Participant(models.Model):
         unique_together = ("player", "event")
 
     @property
+    def organizer(self):
+        return self.event.organizer
+
+    @property
     def price_support(self):
         # How much this player has earned in price support
         return self.event.get_price_support_distribution()[self.id]
@@ -188,5 +192,13 @@ class RandomMatchesRequest(models.Model):
     round = models.ForeignKey(Round)
     state = models.CharField(max_length=250, choices=RandomMatchesRequestState.choices, default=RandomMatchesRequestState.NEW)
 
+    @property
+    def organizer(self):
+        return self.round.event.organizer
+
 class EndOfEventMailingRequest(models.Model):
     event = models.ForeignKey(Event)
+
+    @property
+    def organizer(self):
+        return self.event.organizer

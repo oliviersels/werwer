@@ -1,11 +1,12 @@
 from django.conf.urls import url
 from rest_framework import routers
 from werapp.views import PlayerViewSet, EventViewSet, MatchViewSet, RoundViewSet, ParticipantViewSet, \
-    RandomMatchesRequestViewSet, EndOfEventMailingRequestViewSet, PlayerMeRedirect
+    RandomMatchesRequestViewSet, EndOfEventMailingRequestViewSet, PlayerMeRedirect, PublicEventViewSet
 
 router = routers.DefaultRouter()
 router.register("players", PlayerViewSet)
 router.register("events", EventViewSet)
+router.register("public-events", PublicEventViewSet, base_name="public-event")
 router.register("matches", MatchViewSet)
 router.register("rounds", RoundViewSet)
 router.register("participants", ParticipantViewSet)

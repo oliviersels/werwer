@@ -2,8 +2,16 @@ from django.db.models import Q
 from rest_framework.filters import BaseFilterBackend
 from werapp.models import Event, Participant
 
-
-class RoundFilterBackend(BaseFilterBackend):
+class OrganizerFilterBackend(BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
-        events = [participant.event for participant in Participant.objects.filter(player=request.user)]
-        return queryset.filter(Q(event__in=events) | Q(event__organizer=request.user))
+        return queryset.filter(organizer=request.user)
+
+
+class EventOrganizerFilterBackend(BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        return queryset.filter(event__organizer=request.user)
+
+
+class RoundEventOrganizerFilterBackend(BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        return queryset.filter(round__event__organizer=request.user)
