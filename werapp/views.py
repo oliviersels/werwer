@@ -1,10 +1,11 @@
 # Create your views here.
 from braces.views import LoginRequiredMixin
 from django.conf import settings
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, RedirectView
 from rest_framework import status
 from rest_framework.filters import DjangoFilterBackend
 from rest_framework.response import Response
+from rest_framework.reverse import reverse_lazy, reverse
 from rest_framework.viewsets import ModelViewSet
 from werapp.enums import EventType, PairingMethod, EventState, RandomMatchesRequestState
 from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest, EndOfEventMailingRequest
@@ -13,6 +14,10 @@ from werapp.serializers import PlayerSerializer, EventSerializer, RoundSerialize
     ParticipantSerializer, RandomMatchesRequestSerializer, EndOfEventMailingRequestSerializer
 from werapp.tasks import create_random_matches, end_of_event_mailing
 
+
+class PlayerMeRedirect(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse('player-detail', kwargs={'pk': self.request.user.pk})
 
 class PlayerViewSet(ModelViewSet):
     model = Player

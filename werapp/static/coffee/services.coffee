@@ -223,6 +223,9 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', 'authServi
     participant_set:
       isArray: true
       resource: "Participant"
+    event_set:
+      isArray: true
+      resource: "Event"
   )
   resourceCache.Event = createResource('events',
     participant_set:
