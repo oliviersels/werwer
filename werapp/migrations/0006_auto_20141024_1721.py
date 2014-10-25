@@ -7,11 +7,12 @@ def fill_organizer(apps, schema_editor):
     Player = apps.get_model("werapp", "Player")
     Event = apps.get_model("werapp", "Event")
 
-    me = Player.objects.get(email='olivier.sels@gmail.com')
-
-    for event in Event.objects.all():
-        event.organizer = me
-        event.save()
+    try:
+        me = Player.objects.get(email='olivier.sels@gmail.com')
+    except Player.DoesNotExist:
+        pass
+    else:
+        Event.objects.update(organizer=me)
 
 def null_organizer(apps, schema_editor):
     Event = apps.get_model("werapp", "Event")
