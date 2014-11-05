@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aether website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-24 15:03+0000\n"
-"PO-Revision-Date: 2014-10-24 17:03+0100\n"
+"POT-Creation-Date: 2014-11-05 20:43+0000\n"
+"PO-Revision-Date: 2014-11-05 21:44+0100\n"
 "Last-Translator: Olivier Sels <olivier.sels@gmail.com>\n"
 "Language-Team: Aether\n"
 "Language: nl\n"
@@ -112,11 +112,20 @@ msgstr ""
 msgid "date joined"
 msgstr "datum toetreding"
 
-#: werapp/models.py:29
+#: werapp/models.py:23
+msgid "is organizer"
+msgstr "is organisator"
+
+#: werapp/models.py:24
+#| msgid "Designates whether the user can log into this admin site."
+msgid "Designates whether this user can create and organize events"
+msgstr "Geeft aan of deze gebruiker events kan aanmaken en organizeren"
+
+#: werapp/models.py:31
 msgid "user"
 msgstr "gebuiker"
 
-#: werapp/models.py:30
+#: werapp/models.py:32
 msgid "users"
 msgstr "gebruikers"
 
@@ -199,17 +208,15 @@ msgstr "Geef je e-mailadres in"
 msgid "Enter your password"
 msgstr "Geef je wachtwoord in"
 
-#: wersite/templates/wersite/base.html:62
-#| msgid "Home page"
+#: wersite/templates/wersite/base.html:87
 msgid "Home"
 msgstr "Home"
 
-#: wersite/templates/wersite/base.html:63
+#: wersite/templates/wersite/base.html:88
 msgid "Sign up"
 msgstr "Registreren"
 
-#: wersite/templates/wersite/base.html:64
-#| msgid "WerWer"
+#: wersite/templates/wersite/base.html:89
 msgid "WerWer app"
 msgstr "WerWer app"
 
