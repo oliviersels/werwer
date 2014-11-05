@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.conf.urls.i18n import i18n_patterns
 
 from django.contrib import admin
 from django.contrib.auth.views import login, logout
@@ -12,6 +13,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'werwer.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
+    url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^accounts/login/$', RedirectView.as_view(url=reverse_lazy('wersite-login'), query_string=True, permanent=True)),
     url(r'^accounts/logout/$', RedirectView.as_view(url=reverse_lazy('wersite-logout'), query_string=True, permanent=True)),
     url(r'^oauth2/', include('oauth2_provider.urls', namespace='oauth2_provider')),
@@ -19,5 +21,8 @@ urlpatterns = patterns('',
     url(r'^api/', include('werapp.urls_api')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^werwer/', include('werapp.urls')),
+)
+
+urlpatterns += i18n_patterns('',
     url(r'^', include('wersite.urls')),
 )

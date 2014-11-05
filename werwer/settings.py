@@ -139,6 +139,10 @@ OAUTH2_CLIENT_SETTINGS = {
 RECAPTCHA_PUBLIC_KEY = '6Lc-UvwSAAAAACP7r68zWfuQeMXR83km8GZRIDrJ'
 RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY', '')
 
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
+
+TEMPLATE_CONTEXT_PROCESSORS = TCP + ("django.core.context_processors.request",)
+
 try:
     from local import *
 except ImportError:
