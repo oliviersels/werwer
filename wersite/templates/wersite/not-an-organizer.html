@@ -1,0 +1,21 @@
+{% extends 'wersite/base.html' %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{% trans "You are not an organizer" %}</h1>
+            {% url 'wersite-signup' as wersite_signup_url  %}
+            <p>{% blocktrans %}You tried to access the Werwer scheduling app. This is only meant for organizers of
+            magic events, not for regular players.{% endblocktrans %}
+            {% blocktrans with wersite_logout_url=wersite_logout_url %}If you are an organizer then you are probably logged in with your user account. You should
+            <a href="{{ wersite_logout_url }}">log in with your organizer account</a>.{% endblocktrans %}
+            {% blocktrans with wersite_signup_url=wersite_signup_url %}If you are interested in becoming an organizer you
+            should <a href="{{ wersite_signup_url }}">sign up</a> so you can start scheduling events with Werwer!
+            {% endblocktrans %}</p>
+            <p><a href="{% url 'wersite-root' %}">&larr; {% trans "Home page" %}</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

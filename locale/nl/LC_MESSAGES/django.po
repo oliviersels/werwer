@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aether website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-05 20:43+0000\n"
-"PO-Revision-Date: 2014-11-05 21:44+0100\n"
+"POT-Creation-Date: 2014-11-06 20:12+0000\n"
+"PO-Revision-Date: 2014-11-06 21:16+0100\n"
 "Last-Translator: Olivier Sels <olivier.sels@gmail.com>\n"
 "Language-Team: Aether\n"
 "Language: nl\n"
@@ -117,7 +117,6 @@ msgid "is organizer"
 msgstr "is organisator"
 
 #: werapp/models.py:24
-#| msgid "Designates whether the user can log into this admin site."
 msgid "Designates whether this user can create and organize events"
 msgstr "Geeft aan of deze gebruiker events kan aanmaken en organizeren"
 
@@ -234,6 +233,7 @@ msgstr "Je e-mail <strong>%(email)s</strong> is al geverifieerd."
 #: wersite/templates/wersite/email-verification-failed.html:10
 #: wersite/templates/wersite/feature-feedback.html:10
 #: wersite/templates/wersite/logged-out.html:10
+#: wersite/templates/wersite/not-an-organizer.html:17
 #: wersite/templates/wersite/werwer-signup-success.html:12
 #: wersite/templates/wersite/werwer-signup.html:47
 msgid "Home page"
@@ -560,6 +560,43 @@ msgstr ""
 #: wersite/templates/wersite/login.html:22
 msgid "Login"
 msgstr "Inloggen"
+
+#: wersite/templates/wersite/not-an-organizer.html:8
+msgid "You are not an organizer"
+msgstr "Je bent geen organisator"
+
+#: wersite/templates/wersite/not-an-organizer.html:10
+msgid ""
+"You tried to access the Werwer scheduling app. This is only meant for "
+"organizers of\n"
+"            magic events, not for regular players."
+msgstr ""
+"Je probeerde de WerWer evenementenplanner app te starten. Deze is echter "
+"enkel bedoeld voor organisatoren, niet voor gewone spelers."
+
+#: wersite/templates/wersite/not-an-organizer.html:12
+#, python-format
+msgid ""
+"If you are an organizer then you are probably logged in with your user "
+"account. You should\n"
+"            <a href=\"%(wersite_logout_url)s\">log in with your organizer "
+"account</a>."
+msgstr ""
+"Als je een organisator bent dan ben je waarschijnlijk ingelogd met je "
+"spelers account. Je moet <a href=\"%(wersite_logout_url)s\">inloggen met je "
+"organisator account</a>."
+
+#: wersite/templates/wersite/not-an-organizer.html:14
+#, python-format
+msgid ""
+"If you are interested in becoming an organizer you\n"
+"            should <a href=\"%(wersite_signup_url)s\">sign up</a> so you can "
+"start scheduling events with Werwer!\n"
+"            "
+msgstr ""
+"Als je interesse hebt om organisator te worden dan moet je <a href="
+"\"%(wersite_signup_url)s\">registreren</a> zodat je evenementen kan plannen "
+"met WerWer!"
 
 #: wersite/templates/wersite/werwer-signup-success.html:8
 msgid "Registration received"

@@ -1,7 +1,9 @@
 # Create your views here.
 from django.conf import settings
+from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404
+from django.utils.http import urlencode
 from django.views.generic import TemplateView, RedirectView
 from django.views.generic.base import TemplateResponseMixin, ContextMixin
 from django.views.generic.edit import BaseCreateView
@@ -84,3 +86,15 @@ class EmailVerificationAlreadyDoneView(EmailVerificationDoneMixin, TemplateView)
 
 class EmailVerificationDoneView(EmailVerificationDoneMixin, TemplateView):
     template_name = "wersite/email-verification-done.html"
+
+class NotAnOrganizer(TemplateView):
+    template_name = "wersite/not-an-organizer.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super(NotAnOrganizer, self).get_context_data(**kwargs)
+
+        context_data['wersite_logout_url'] = reverse('wersite-login')
+        redirect_to = self.request.GET.get(REDIRECT_FIELD_NAME, '')
+        if redirect_to:
+            context_data['wersite_logout_url'] += '?' + urlencode({REDIRECT_FIELD_NAME: redirect_to})
+        return context_data
