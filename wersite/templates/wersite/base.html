@@ -85,8 +85,12 @@
                 <div class="collapse navbar-collapse" id="navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li><a href="{% url 'wersite-root' %}">{% trans "Home" %}</a></li>
-                        <li><a href="{% url 'wersite-signup' %}">{% trans "Sign up" %}</a></li>
                         <li><a href="{% url 'werwer-root' %}">{% trans "WerWer app" %}</a></li>
+                        {% if request.user.is_authenticated %}
+                        <li><a href="{% url 'wersite-logout' %}">{% trans "Log out" %}</a></li>
+                        {% else %}
+                        <li><a href="{% url 'wersite-login' %}">{% trans "Log in" %}</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
