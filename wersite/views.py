@@ -1,4 +1,5 @@
 # Create your views here.
+from braces.views import LoginRequiredMixin
 from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.urlresolvers import reverse_lazy, reverse
@@ -8,6 +9,7 @@ from django.views.generic import TemplateView, RedirectView
 from django.views.generic.base import TemplateResponseMixin, ContextMixin
 from django.views.generic.edit import BaseCreateView
 from recaptcha.client import captcha
+from werapp.enums import EventState
 from wersite.forms import FeatureFeedbackForm, WerwerSignupForm
 from wersite.models import WerwerSignup
 from wersite.tasks import registration_verify_email
@@ -97,4 +99,27 @@ class NotAnOrganizer(TemplateView):
         redirect_to = self.request.GET.get(REDIRECT_FIELD_NAME, '')
         if redirect_to:
             context_data['wersite_logout_url'] += '?' + urlencode({REDIRECT_FIELD_NAME: redirect_to})
+        return context_data
+
+class PlayerProfile(LoginRequiredMixin, TemplateView):
+    template_name = "wersite/player/profile.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super(PlayerProfile, self).get_context_data(**kwargs)
+        context_data['player'] = self.request.user
+        context_data['participations'] = self.request.user.participant_set.all()
+        return context_data
+
+class PlayerEvents(LoginRequiredMixin, TemplateView):
+    template_name = "wersite/player/events.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super(PlayerEvents, self).get_context_data(**kwargs)
+        context_data['participations'] = [{
+            'event_name': participation.event.name,
+            'event_date': participation.event.date,
+            'event_state': EventState.get_choice_for_name(participation.event.state),
+            'event_points': participation.points,
+        } for participation in self.request.user.participant_set.all()]
+
         return context_data

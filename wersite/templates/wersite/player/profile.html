@@ -1,0 +1,25 @@
+{% extends 'wersite/base.html' %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="container">
+    <ul class="nav nav-pills" role="tablist">
+        <li role="presentation" class="active"><a href="#">Events</a></li>
+        <li role="presentation"><a href="#">Profile</a></li>
+        <li role="presentation"><a href="#">Play</a></li>
+    </ul>
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{% blocktrans with player_name=player.first_name %}Hi {{ player_name }}!{% endblocktrans %}</h1>
+            {% for participation in participations %}
+                {% if forloop.first %}
+                    <p>You have participated in the following events:</p>
+                {% endif %}
+                <p>{{ participation.event.name }} - {{ participation.points }}</p>
+            {% empty %}
+                <p>Looks like you haven't played in any event yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

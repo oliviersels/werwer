@@ -1,8 +1,18 @@
 
 class Enum(object):
+    choices = ()
+
     @property
     def name(self):
         return self.__class__.__name__
+
+    @classmethod
+    def get_choice_for_name(cls, name):
+        for choice in cls.choices:
+            if choice[0] == name:
+                return choice[1]
+        raise ValueError("No choice found for name %s. Choices were %s" %
+                         (name, ', '.join([c[0] for c in cls.choices])))
 
 class EventType(Enum):
     CASUAL_LIMITED = 'casual_limited'
