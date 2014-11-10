@@ -48,6 +48,12 @@ class Player(AbstractBaseUser, PermissionsMixin):
         """
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+    def __unicode__(self):
+        if self.pk:
+            return "Player [%s] %s" % (self.pk, self.email)
+        else:
+            return "Player %s" % self.email
+
 class Event(models.Model):
     organizer = models.ForeignKey(Player)
     name = models.CharField(max_length=250)
@@ -84,6 +90,14 @@ class Event(models.Model):
                 result_distribution[participant.id] = participant_price_support_points[participant.id] / total_participant_price_support_points * price_support_amount
         return result_distribution
 
+    def __unicode__(self):
+        description = "%s (%s)" % (self.name, self.date)
+        if self.pk:
+            description = ("Event [%s] " % self.pk) + description
+        else:
+            description = "Event " + description
+        return description
+
 class Round(models.Model):
     event = models.ForeignKey(Event)
 
@@ -93,6 +107,12 @@ class Round(models.Model):
 
     def is_participant(self, player):
         return self.event.participant_set.filter(player=player).exists()
+
+    def __unicode__(self):
+        if self.pk:
+            return "Round [%s] -%s-" % (self.pk, self.event.name)
+        else:
+            return "Round -%s-" % self.event.name
 
 class Match(models.Model):
     round = models.ForeignKey(Round)
@@ -140,6 +160,19 @@ class Match(models.Model):
         else:
             return 1
 
+    def __unicode__(self):
+        description = "Match -%s- " % self.round.event.name
+        if self.pk:
+            description += "[%s] " % self.pk
+        if self.bye:
+            description += "%s (Bye)" % self.participant1.player.email
+        elif self.participant_set.count() == 2:
+            description += "%s vs %s" % (self.participant1.player.email, self.participant2.player.email)
+        else:
+            description += "(no players)"
+        return description
+
+
 class Participant(models.Model):
     player = models.ForeignKey(Player)
     event = models.ForeignKey(Event)
@@ -183,10 +216,22 @@ class Participant(models.Model):
                     return True
         return False
 
+    def __unicode__(self):
+        description = "Participant "
+        if self.pk:
+            description += "[%s] " % self.pk
+        return description + "%s - %s" % (self.player.email, self.event.name)
+
 class ParticipantMatch(models.Model):
     participant = models.ForeignKey(Participant)
     match = models.ForeignKey(Match)
     player_nr = models.IntegerField()
+
+    def __unicode__(self):
+        description = "ParticipantMatch "
+        if self.pk:
+            description += "[%s] " % self.pk
+        return description + "%s - %s - Match [%s]" % (self.player_nr, self.participant.player.email, self.match.pk)
 
 class RandomMatchesRequest(models.Model):
     round = models.ForeignKey(Round)
