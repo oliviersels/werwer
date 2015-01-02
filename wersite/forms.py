@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from recaptcha.client import captcha
+from werapp.models import Player
 from wersite.models import FeatureFeedback, WerwerSignup
 from wersite.utils import get_client_ip
 
@@ -69,3 +70,14 @@ class WerwerSignupForm(forms.ModelForm):
 class PlayerAuthenticationForm(AuthenticationForm):
     username = forms.CharField(max_length=254, widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': _('Enter your email address')}))
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': _('Enter your password')}))
+
+
+class PlayerProfileForm(forms.ModelForm):
+    class Meta:
+        model = Player
+        fields = ("first_name", "last_name", "dcinumber")
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Enter your first name')}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Enter your last name')}),
+            'dcinumber': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Enter your DCI number')}),
+        }

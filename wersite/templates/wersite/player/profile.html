@@ -1,25 +1,32 @@
-{% extends 'wersite/base.html' %}
+{% extends 'wersite/player/base-player.html' %}
 {% load i18n staticfiles %}
 
-{% block content %}
-<div class="container">
-    <ul class="nav nav-pills" role="tablist">
-        <li role="presentation" class="active"><a href="#">Events</a></li>
-        <li role="presentation"><a href="#">Profile</a></li>
-        <li role="presentation"><a href="#">Play</a></li>
-    </ul>
-    <div class="row">
-        <div class="col-md-12">
-            <h1>{% blocktrans with player_name=player.first_name %}Hi {{ player_name }}!{% endblocktrans %}</h1>
-            {% for participation in participations %}
-                {% if forloop.first %}
-                    <p>You have participated in the following events:</p>
-                {% endif %}
-                <p>{{ participation.event.name }} - {{ participation.points }}</p>
-            {% empty %}
-                <p>Looks like you haven't played in any event yet.</p>
-            {% endfor %}
+{% block profile_active %}active{% endblock %}
+
+{% block content_player %}
+    <h1 class="h1">{% trans "Profile info" %}</h1>
+    <form role="form" name="PlayerProfileForm" action="{% url 'wersite-profile' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group{%if form.first_name.errors %} has-error{%endif%}">
+            <label for="id_first_name">{% trans "First name" %}</label>
+            {% if form.first_name.errors %}<div class="alert alert-danger">{{ form.first_name.errors }}</div>{% endif %}
+            {{ form.first_name }}
         </div>
-    </div>
-</div>
+        <div class="form-group{%if form.last_name.errors %} has-error{%endif%}">
+            <label for="id_last_name">{% trans "Last name" %}</label>
+            {% if form.last_name.errors %}<div class="alert alert-danger">{{ form.last_name.errors }}</div>{% endif %}
+            {{ form.last_name }}
+        </div>
+        <div class="form-group">
+            <label for="id_email">{% trans "Email" %}</label> {#<span class="small"><a href="#" id="emailChangeLink">Change</a></span>#}
+            <input class="form-control" disabled="disabled" id="id_email" maxlength="75" name="email" type="email" value="{{ player.email }}" />
+        </div>
+        <div class="form-group{%if form.dcinumber.errors %} has-error{%endif%}">
+            <label for="id_dcinumber">{% trans "DCI number" %}</label>
+            {% if form.dcinumber.errors %}<div class="alert alert-danger">{{ form.dcinumber.errors }}</div>{% endif %}
+            {{ form.dcinumber }}
+        </div>
+        <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+        {#<a type="button" class="btn btn-default" href="#">Change password</a>#}
+    </form>
 {% endblock %}

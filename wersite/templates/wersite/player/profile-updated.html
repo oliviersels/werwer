@@ -1,0 +1,10 @@
+{% extends 'wersite/player/base-player.html' %}
+{% load i18n staticfiles %}
+
+{% block profile_active %}active{% endblock %}
+
+{% block content_player %}
+    <h1>{% trans "Profile information updated" %}</h1>
+    <p>{% blocktrans %}Your profile information has been updated.{% endblocktrans %}</p>
+    <p><a href="{% url 'wersite-profile' %}">&larr; {% trans "Profile" %}</a></p>
+{% endblock %}

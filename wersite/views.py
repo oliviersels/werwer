@@ -5,12 +5,13 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404
 from django.utils.http import urlencode
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import TemplateView, RedirectView, DetailView
 from django.views.generic.base import TemplateResponseMixin, ContextMixin
-from django.views.generic.edit import BaseCreateView
+from django.views.generic.edit import BaseCreateView, UpdateView
 from recaptcha.client import captcha
 from werapp.enums import EventState
-from wersite.forms import FeatureFeedbackForm, WerwerSignupForm
+from werapp.models import Player
+from wersite.forms import FeatureFeedbackForm, WerwerSignupForm, PlayerProfileForm
 from wersite.models import WerwerSignup
 from wersite.tasks import registration_verify_email
 
@@ -89,11 +90,11 @@ class EmailVerificationAlreadyDoneView(EmailVerificationDoneMixin, TemplateView)
 class EmailVerificationDoneView(EmailVerificationDoneMixin, TemplateView):
     template_name = "wersite/email-verification-done.html"
 
-class NotAnOrganizer(TemplateView):
+class NotAnOrganizerView(TemplateView):
     template_name = "wersite/not-an-organizer.html"
 
     def get_context_data(self, **kwargs):
-        context_data = super(NotAnOrganizer, self).get_context_data(**kwargs)
+        context_data = super(NotAnOrganizerView, self).get_context_data(**kwargs)
 
         context_data['wersite_logout_url'] = reverse('wersite-login')
         redirect_to = self.request.GET.get(REDIRECT_FIELD_NAME, '')
@@ -101,25 +102,68 @@ class NotAnOrganizer(TemplateView):
             context_data['wersite_logout_url'] += '?' + urlencode({REDIRECT_FIELD_NAME: redirect_to})
         return context_data
 
-class PlayerProfile(LoginRequiredMixin, TemplateView):
-    template_name = "wersite/player/profile.html"
 
-    def get_context_data(self, **kwargs):
-        context_data = super(PlayerProfile, self).get_context_data(**kwargs)
-        context_data['player'] = self.request.user
-        context_data['participations'] = self.request.user.participant_set.all()
-        return context_data
-
-class PlayerEvents(LoginRequiredMixin, TemplateView):
+class PlayerEventsView(LoginRequiredMixin, DetailView):
     template_name = "wersite/player/events.html"
 
+    def get_object(self, queryset=None):
+        if self.kwargs.get(self.pk_url_kwarg, None) is None:
+            self.kwargs[self.pk_url_kwarg] = self.request.user.pk
+        return super(PlayerEventsView, self).get_object(queryset)
+
+    def get_queryset(self):
+        return Player.objects.filter(id=self.request.user.id)
+
     def get_context_data(self, **kwargs):
-        context_data = super(PlayerEvents, self).get_context_data(**kwargs)
+        context_data = super(PlayerEventsView, self).get_context_data(**kwargs)
         context_data['participations'] = [{
             'event_name': participation.event.name,
             'event_date': participation.event.date,
             'event_state': EventState.get_choice_for_name(participation.event.state),
-            'event_points': participation.points,
-        } for participation in self.request.user.participant_set.all()]
+            'points': participation.points,
+            'price_support': participation.price_support,
+        } for participation in self.request.user.participant_set.all().order_by("-event__date")]
 
         return context_data
+
+
+class PlayerPlayView(LoginRequiredMixin, DetailView):
+    template_name = "wersite/player/play.html"
+
+    def get_object(self, queryset=None):
+        if self.kwargs.get(self.pk_url_kwarg, None) is None:
+            self.kwargs[self.pk_url_kwarg] = self.request.user.pk
+        return super(PlayerPlayView, self).get_object(queryset)
+
+    def get_queryset(self):
+        return Player.objects.filter(id=self.request.user.id)
+
+
+class PlayerCreditsView(LoginRequiredMixin, DetailView):
+    template_name = "wersite/player/credits.html"
+
+    def get_object(self, queryset=None):
+        if self.kwargs.get(self.pk_url_kwarg, None) is None:
+            self.kwargs[self.pk_url_kwarg] = self.request.user.pk
+        return super(PlayerCreditsView, self).get_object(queryset)
+
+    def get_queryset(self):
+        return Player.objects.filter(id=self.request.user.id)
+
+
+class PlayerProfileView(LoginRequiredMixin, UpdateView):
+    template_name = "wersite/player/profile.html"
+    form_class = PlayerProfileForm
+    success_url = reverse_lazy('wersite-profile-updated')
+
+    def get_object(self, queryset=None):
+        if self.kwargs.get(self.pk_url_kwarg, None) is None:
+            self.kwargs[self.pk_url_kwarg] = self.request.user.pk
+        return super(PlayerProfileView, self).get_object(queryset)
+
+    def get_queryset(self):
+        return Player.objects.filter(id=self.request.user.id)
+
+class PlayerProfileUpdatedView(LoginRequiredMixin, TemplateView):
+    template_name = "wersite/player/profile-updated.html"
+
