@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aether website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-06 20:12+0000\n"
-"PO-Revision-Date: 2014-11-06 21:16+0100\n"
+"POT-Creation-Date: 2015-01-03 15:49+0000\n"
+"PO-Revision-Date: 2015-01-03 16:53+0100\n"
 "Last-Translator: Olivier Sels <olivier.sels@gmail.com>\n"
 "Language-Team: Aether\n"
 "Language: nl\n"
@@ -41,11 +41,12 @@ msgstr "Wijzig wachtwoord: %s"
 
 #: werapp/forms.py:8 werapp/forms.py:39
 #: wersite/templates/wersite/login.html:13
+#: wersite/templates/wersite/player/profile.html:21
 #: wersite/templates/wersite/werwer-signup.html:20
 msgid "Email"
 msgstr "E-mail"
 
-#: werapp/forms.py:9 werapp/forms.py:40 wersite/forms.py:71
+#: werapp/forms.py:9 werapp/forms.py:40 wersite/forms.py:72
 #: wersite/templates/wersite/login.html:18
 msgid "Password"
 msgstr "Wachtwoord"
@@ -159,15 +160,15 @@ msgid "Players can review past events and see how well they played"
 msgstr ""
 "Spelers kunnen achteraf kijken hoe ze het hebben gedaan in een evenement"
 
-#: wersite/forms.py:17
+#: wersite/forms.py:18
 msgid "Enter your name (optional)"
 msgstr "Geef je naam in (optioneel)"
 
-#: wersite/forms.py:18
+#: wersite/forms.py:19
 msgid "Enter your email (optional)"
 msgstr "Geef je e-mail in (optioneel)"
 
-#: wersite/forms.py:25
+#: wersite/forms.py:26
 msgid ""
 "You must enter your email address if you want to be informed of important "
 "Werwer news"
@@ -175,49 +176,68 @@ msgstr ""
 "Je moet je e-mailadres ingeven als je op de hoogte wilt blijven van "
 "belangrijk WerWer nieuws"
 
-#: wersite/forms.py:37
+#: wersite/forms.py:38
 msgid "Enter your name"
 msgstr "Geef je naam in"
 
-#: wersite/forms.py:38
+#: wersite/forms.py:39
 msgid "Enter your email"
 msgstr "Geef je e-mail in"
 
-#: wersite/forms.py:39
+#: wersite/forms.py:40
 msgid "Enter your organization name (optional)"
 msgstr "Geef de naam van je organisatie in (optioneel)"
 
-#: wersite/forms.py:40
+#: wersite/forms.py:41
 msgid "Tell us a bit about how you will use Werwer"
 msgstr "Vertel ons een beetje over hoe je WerWer wilt gebruiken"
 
-#: wersite/forms.py:51
+#: wersite/forms.py:52
 msgid "You must accept the terms and conditions"
 msgstr "Je moet de gebruiksvoorwaarden accepteren"
 
-#: wersite/forms.py:64
+#: wersite/forms.py:65
 msgid "The captcha you entered was not correct"
 msgstr "De ingegeven captcha  was niet correct"
 
-#: wersite/forms.py:70
+#: wersite/forms.py:71
 msgid "Enter your email address"
 msgstr "Geef je e-mailadres in"
 
-#: wersite/forms.py:71
+#: wersite/forms.py:72
 msgid "Enter your password"
 msgstr "Geef je wachtwoord in"
+
+#: wersite/forms.py:80
+#| msgid "Enter your name"
+msgid "Enter your first name"
+msgstr "Geef je voornaam in"
+
+#: wersite/forms.py:81
+#| msgid "Enter your name"
+msgid "Enter your last name"
+msgstr "Geef je acternaam in"
+
+#: wersite/forms.py:82
+#| msgid "Enter your name"
+msgid "Enter your DCI number"
+msgstr "Geef je DCI nummer in"
 
 #: wersite/templates/wersite/base.html:87
 msgid "Home"
 msgstr "Home"
 
-#: wersite/templates/wersite/base.html:88
-msgid "Sign up"
-msgstr "Registreren"
-
 #: wersite/templates/wersite/base.html:89
 msgid "WerWer app"
 msgstr "WerWer app"
+
+#: wersite/templates/wersite/base.html:92
+msgid "My profile"
+msgstr "Mijn profiel"
+
+#: wersite/templates/wersite/base.html:94
+msgid "Log in"
+msgstr "Inloggen"
 
 #: wersite/templates/wersite/email-verification-already-done.html:8
 msgid "Email verification already completed"
@@ -479,6 +499,7 @@ msgstr ""
 "geïmplementeerd)"
 
 #: wersite/templates/wersite/home.html:99
+#: wersite/templates/wersite/player/events.html:13
 #: wersite/templates/wersite/werwer-signup.html:15
 msgid "Name"
 msgstr "Naam"
@@ -556,6 +577,14 @@ msgstr ""
 "staat ook in hoe ze zijn geëindigd en hoeveel ze van de prijzen hebben "
 "gekregen. Zorg ervoor dat ze je evenement blijven herinneren!"
 
+#: wersite/templates/wersite/logged-out.html:8
+msgid "Logged out"
+msgstr "Afgemeld"
+
+#: wersite/templates/wersite/logged-out.html:9
+msgid "You successfully logged out"
+msgstr "Je bent afgemeld"
+
 #: wersite/templates/wersite/login.html:8
 #: wersite/templates/wersite/login.html:22
 msgid "Login"
@@ -597,6 +626,75 @@ msgstr ""
 "Als je interesse hebt om organisator te worden dan moet je <a href="
 "\"%(wersite_signup_url)s\">registreren</a> zodat je evenementen kan plannen "
 "met WerWer!"
+
+#: wersite/templates/wersite/player/base-player.html:10
+msgid "Events"
+msgstr "Evenementen"
+
+#: wersite/templates/wersite/player/base-player.html:19
+#: wersite/templates/wersite/player/profile-updated.html:9
+msgid "Profile"
+msgstr "Profiel"
+
+#: wersite/templates/wersite/player/base-player.html:22
+msgid "Log out"
+msgstr "Afmelden"
+
+#: wersite/templates/wersite/player/events.html:7
+msgid "Events you played in"
+msgstr "Gespeelde evenementen"
+
+#: wersite/templates/wersite/player/events.html:14
+msgid "Date"
+msgstr "Datum"
+
+#: wersite/templates/wersite/player/events.html:15
+msgid "Status"
+msgstr "Status"
+
+#: wersite/templates/wersite/player/events.html:16
+msgid "Points"
+msgstr "Punten"
+
+#: wersite/templates/wersite/player/events.html:17
+#| msgid "Registration received"
+msgid "Credits received"
+msgstr "Credits ontvangen"
+
+#: wersite/templates/wersite/player/events.html:34
+msgid "Looks like you haven't played in any event yet."
+msgstr "Het lijkt erop dat je nog geen evenementen hebt gespeeld."
+
+#: wersite/templates/wersite/player/profile-updated.html:7
+msgid "Profile information updated"
+msgstr "Persoonlijke informatie geüpdatet"
+
+#: wersite/templates/wersite/player/profile-updated.html:8
+msgid "Your profile information has been updated."
+msgstr "Je persoonlijke informatie is geüpdatet."
+
+#: wersite/templates/wersite/player/profile.html:7
+#| msgid "Personal info"
+msgid "Profile info"
+msgstr "Persoonlijke informatie"
+
+#: wersite/templates/wersite/player/profile.html:11
+#| msgid "first name"
+msgid "First name"
+msgstr "Voornaam"
+
+#: wersite/templates/wersite/player/profile.html:16
+#| msgid "last name"
+msgid "Last name"
+msgstr "Achternaam"
+
+#: wersite/templates/wersite/player/profile.html:25
+msgid "DCI number"
+msgstr "DCI nummer"
+
+#: wersite/templates/wersite/player/profile.html:29
+msgid "Save"
+msgstr "Opslaan"
 
 #: wersite/templates/wersite/werwer-signup-success.html:8
 msgid "Registration received"
@@ -650,10 +748,13 @@ msgstr "Ik ga akkoord met de <a href=\"#\">gebruiksvoorwaarden</a>"
 msgid "Sign up for WerWer"
 msgstr "Registreren voor WerWer"
 
-#: werwer/settings.py:93
+#: werwer/settings.py:94
 msgid "Dutch"
 msgstr "Nederlands"
 
-#: werwer/settings.py:94
+#: werwer/settings.py:95
 msgid "English"
 msgstr "Engels"
+
+#~ msgid "Sign up"
+#~ msgstr "Registreren"

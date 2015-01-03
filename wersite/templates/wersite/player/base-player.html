@@ -1,0 +1,34 @@
+{% extends "wersite/base.html" %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <nav class="navbar">
+            <ul class="nav nav-pills" role="tablist">
+                <li role="presentation" class="{% block events_active %}{% endblock %}">
+                    <a href="{% url 'wersite-events' %}">{% trans "Events" %}</a>
+                </li>
+{#                <li role="presentation" class="{% block play_active %}{% endblock %}">#}
+{#                    <a href="{% url 'wersite-play' %}">Play</a>#}
+{#                </li>#}
+{#                <li role="presentation" class="{% block credits_active %}{% endblock %}">#}
+{#                    <a href="{% url 'wersite-credits' %}">Credits</a>#}
+{#                </li>#}
+                <li role="presentation" class="{% block profile_active %}{% endblock %}">
+                    <a href="{% url 'wersite-profile' %}">{% trans "Profile" %}</a>
+                </li>
+                <li>
+                    <a href="{% url 'wersite-logout' %}">{% trans "Log out" %}</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {% block content_player %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

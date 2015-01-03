@@ -1,25 +1,36 @@
-{% extends 'wersite/base.html' %}
+{% extends 'wersite/player/base-player.html' %}
 {% load i18n staticfiles %}
 
-{% block content %}
-<div class="container">
-    <ul class="nav nav-pills" role="tablist">
-        <li role="presentation" class="active"><a href="#">Events</a></li>
-        <li role="presentation"><a href="#">Profile</a></li>
-        <li role="presentation"><a href="#">Play</a></li>
-    </ul>
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Events you played in</h1>
-            {% for participation in participations %}
-                {% if forloop.first %}
-                    <p>You have participated in the following events:</p>
-                {% endif %}
-                <p>{{ participation.event_name }} - {{ participation.event_date }} - {{ participation.event_state }} - {{ participation.event_points }}</p>
-            {% empty %}
-                <p>Looks like you haven't played in any event yet.</p>
-            {% endfor %}
-        </div>
-    </div>
-</div>
+{% block events_active %}active{% endblock %}
+
+{% block content_player %}
+    <h1>{% trans "Events you played in" %}</h1>
+    {% for participation in participations %}
+        {% if forloop.first %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Points" %}</th>
+                    <th>{% trans "Credits received" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+        {% endif %}
+        <tr>
+            <td>{{ participation.event_name }}</td>
+            <td>{{ participation.event_date }}</td>
+            <td>{{ participation.event_state }}</td>
+            <td>{{ participation.points }}</td>
+            <td>{{ participation.price_support }}</td>
+        </tr>
+        {% if forloop.last %}
+            </tbody>
+        </table>
+        {% endif %}
+    {% empty %}
+        <p>{% blocktrans %}Looks like you haven't played in any event yet.{% endblocktrans %}</p>
+    {% endfor %}
 {% endblock %}
