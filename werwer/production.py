@@ -16,11 +16,7 @@ OAUTH2_CLIENT_SETTINGS = {
 }
 
 # Celery
-BROKER_URL = 'sqs://'
-BROKER_TRANSPORT_OPTIONS = {
-    'region': 'eu-west-1',
-    'polling_interval': 10,
-}
+BROKER_URL = 'amqp://guest:guest@localhost:5672//'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
