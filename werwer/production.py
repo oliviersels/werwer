@@ -32,3 +32,9 @@ DEFAULT_FROM_EMAIL = 'olivier.sels@gmail.com'
 HOST_NAME = 'aetherclub.be'
 
 SERVER_EMAIL = 'olivier.sels@gmail.com'
+
+
+# Sentry settings
+RAVEN_CONFIG = {
+    'dsn': 'http://018b8249b7744d65bf1957c45a38f562:43854855bca8425d87463f81072e77a9@sentry.aetherclub.be/2',
+}
