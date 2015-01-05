@@ -9,3 +9,4 @@ oauthlib==0.6.3
 django-oauth-toolkit==0.7.2
 recaptcha-client==1.0.6
 raven==5.1.1
+django-extensions==1.4.9

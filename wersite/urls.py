@@ -18,8 +18,8 @@ urlpatterns = (
 
     url(r'^player/(?P<pk>\d+)/events/$', PlayerEventsView.as_view(), name='wersite-events'),
     url(r'^player/events/$', PlayerEventsView.as_view(), name='wersite-events'),
-    # url(r'^player/(?P<pk>\d+)/play/$', PlayerPlayView.as_view(), name='wersite-play'),
-    # url(r'^player/play/$', PlayerPlayView.as_view(), name='wersite-play'),
+    url(r'^player/(?P<pk>\d+)/play/$', PlayerPlayView.as_view(), name='wersite-play'),
+    url(r'^player/play/$', PlayerPlayView.as_view(), name='wersite-play'),
     # url(r'^player/(?P<pk>\d+)/credits/$', PlayerCreditsView.as_view(), name='wersite-credits'),
     # url(r'^player/credits/$', PlayerCreditsView.as_view(), name='wersite-credits'),
     url(r'^player/(?P<pk>\d+)/profile/$', PlayerProfileView.as_view(), name='wersite-profile'),

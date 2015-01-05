@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'oauth2_provider',
     'raven.contrib.django.raven_compat',
+    'django_extensions',
 
     'werapp',
     'wersite',

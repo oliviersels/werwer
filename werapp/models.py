@@ -65,6 +65,13 @@ class Event(models.Model):
     state = models.CharField(max_length=250, choices=EventState.choices, default=EventState.PLANNING)
     nr_of_rounds = models.IntegerField(null=True, blank=True)
 
+    @property
+    def current_round(self):
+        rounds = self.round_set.all().order_by('-id')
+        if len(rounds) > 0:
+            return rounds[0]
+        return None
+
     def get_price_support_distribution(self):
         # Returns a map of price support for each player
         nr_of_players = self.participant_set.count()
@@ -104,6 +111,10 @@ class Round(models.Model):
     @property
     def organizer(self):
         return self.event.organizer
+
+    @property
+    def round_nr(self):
+        return list(self.event.round_set.all().order_by('-id').values_list('id', flat=True)).index(self.id) + 1
 
     def is_participant(self, player):
         return self.event.participant_set.filter(player=player).exists()

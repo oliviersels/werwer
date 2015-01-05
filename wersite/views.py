@@ -4,13 +4,14 @@ from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from django.utils.http import urlencode
 from django.views.generic import TemplateView, RedirectView, DetailView
 from django.views.generic.base import TemplateResponseMixin, ContextMixin
 from django.views.generic.edit import BaseCreateView, UpdateView
 from recaptcha.client import captcha
 from werapp.enums import EventState
-from werapp.models import Player
+from werapp.models import Player, Event, Match
 from wersite.forms import FeatureFeedbackForm, WerwerSignupForm, PlayerProfileForm
 from wersite.models import WerwerSignup
 from wersite.tasks import registration_verify_email
@@ -137,6 +138,36 @@ class PlayerPlayView(LoginRequiredMixin, DetailView):
 
     def get_queryset(self):
         return Player.objects.filter(id=self.request.user.id)
+
+    def get_context_data(self, **kwargs):
+        context_data = super(PlayerPlayView, self).get_context_data(**kwargs)
+        current_event = self._get_current_event(self.object)
+
+        current_round = None
+        current_match = None
+        opponent = None
+        if current_event.state == EventState.ROUNDS:
+            current_round = current_event.current_round
+            try:
+                current_match = current_round.match_set.filter(participant__player=self.object).get()
+                if current_match.participant1.player == self.object:
+                    opponent = current_match.participant2.player
+                else:
+                    opponent = current_match.participant1.player
+            except Match.DoesNotExist:
+                current_match = None
+
+        context_data['current_event'] = current_event
+        context_data['current_round'] = current_round
+        context_data['current_match'] = current_match
+        context_data['opponent'] = opponent
+        return context_data
+
+    def _get_current_event(self, player):
+        current_events = Event.objects.filter(participant__player=self.object, date=timezone.now()).exclude(state=EventState.CONCLUSION)
+        if len(current_events) > 0:
+            return current_events[0]
+        return None
 
 
 class PlayerCreditsView(LoginRequiredMixin, DetailView):

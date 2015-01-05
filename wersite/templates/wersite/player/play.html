@@ -4,6 +4,18 @@
 {% block play_active %}active{% endblock %}
 
 {% block content_player %}
-    <h1>Current game you're playing</h1>
-    <p>Not yet implemented</p>
+    {% if current_event %}
+    <h1>Currently playing: {{ current_event.name }}</h1>
+        {% if current_round %}
+        <h2>Round {{ current_round.round_nr }}</h2>
+            {% if current_match %}
+                <p>Opponent: {{ opponent.first_name }} {{ opponent.last_name }}</p>
+            {% else %}
+                <p>No pairings yet.</p>
+            {% endif %}
+        {% endif %}
+    {% elif future_event %}
+    {% else %}
+    <p>You are not participating in any events.</p>
+    {% endif %}
 {% endblock %}
