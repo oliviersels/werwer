@@ -146,7 +146,7 @@ class PlayerPlayView(LoginRequiredMixin, DetailView):
         current_round = None
         current_match = None
         opponent = None
-        if current_event.state == EventState.ROUNDS:
+        if current_event and current_event.state == EventState.ROUNDS:
             current_round = current_event.current_round
             try:
                 current_match = current_round.match_set.filter(participant__player=self.object).get()
