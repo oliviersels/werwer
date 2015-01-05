@@ -14,7 +14,11 @@
                 <p>No pairings yet.</p>
             {% endif %}
         {% endif %}
-    {% elif future_event %}
+    {% elif future_events %}
+        <h2>Upcoming events</h2>
+        {% for event in future_events %}
+            <p>{{ event.name }} at {{ event.date }}</p>
+        {% endfor %}
     {% else %}
     <p>You are not participating in any events.</p>
     {% endif %}

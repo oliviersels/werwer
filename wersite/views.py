@@ -157,6 +157,13 @@ class PlayerPlayView(LoginRequiredMixin, DetailView):
             except Match.DoesNotExist:
                 current_match = None
 
+        future_events = Event.objects.exclude(participant__player=self.object).filter(
+            organizer__in=Event.objects.filter(participant__player=self.object).distinct().values_list('organizer', flat=True),
+            date__gte=timezone.now()
+        ).order_by('date')
+
+
+        context_data['future_events'] = future_events
         context_data['current_event'] = current_event
         context_data['current_round'] = current_round
         context_data['current_match'] = current_match
