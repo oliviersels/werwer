@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.reverse import reverse
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
-from werapp.enums import EventType, PairingMethod, EventState, RandomMatchesRequestState
+from werapp.enums import EventType, PairingMethod, EventState, RequestState
 from werapp.filters import OrganizerFilterBackend, EventOrganizerFilterBackend, RoundEventOrganizerFilterBackend
 from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest, EndOfEventMailingRequest
 from werapp.permissions import IsOrganizer, IsEventOrganizer, OrganizerRequiredMixin
@@ -110,7 +110,7 @@ class DynamicJavascript(TemplateView):
     template_name = "js/dynamic-javascript.js"
 
     def get_context_data(self, **kwargs):
-        kwargs['enums'] = (EventType, PairingMethod, EventState, RandomMatchesRequestState)
+        kwargs['enums'] = (EventType, PairingMethod, EventState, RequestState)
         kwargs['client_id'] = settings.OAUTH2_CLIENT_SETTINGS['client_id']
         kwargs['oauth2_endpoint'] = settings.OAUTH2_CLIENT_SETTINGS['oauth2_endpoint']
         return kwargs

@@ -5,7 +5,7 @@ import random
 from celery import shared_task
 from django.template import Context
 from django.template.loader import get_template
-from werapp.enums import RandomMatchesRequestState, PairingMethod, ParticipantMatchPlayerNr
+from werapp.enums import RequestState, PairingMethod, ParticipantMatchPlayerNr
 from werapp.models import RandomMatchesRequest, Match, EndOfEventMailingRequest, ParticipantMatch
 
 
@@ -27,7 +27,7 @@ def match_making(participants):
 @shared_task
 def create_random_matches(random_matches_request_id):
     random_matches_request = RandomMatchesRequest.objects.get(id=random_matches_request_id)
-    random_matches_request.state = RandomMatchesRequestState.PROCESSING
+    random_matches_request.state = RequestState.PROCESSING
     random_matches_request.save()
 
     # Creating random matches
@@ -71,7 +71,7 @@ def create_random_matches(random_matches_request_id):
         if result[1] is not None:
             ParticipantMatch.objects.create(participant=result[1], match=match, player_nr=ParticipantMatchPlayerNr.PLAYER_2)
 
-    random_matches_request.state = RandomMatchesRequestState.COMPLETED
+    random_matches_request.state = RequestState.COMPLETED
     random_matches_request.save()
 
 @shared_task

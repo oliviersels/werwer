@@ -3,7 +3,7 @@ from django.core.mail import send_mail
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from werapp.enums import EventType, PairingMethod, EventState, RandomMatchesRequestState, ParticipantMatchPlayerNr
+from werapp.enums import EventType, PairingMethod, EventState, RequestState, ParticipantMatchPlayerNr
 from werapp.managers import PlayerManager
 
 
@@ -246,7 +246,7 @@ class ParticipantMatch(models.Model):
 
 class RandomMatchesRequest(models.Model):
     round = models.ForeignKey(Round)
-    state = models.CharField(max_length=250, choices=RandomMatchesRequestState.choices, default=RandomMatchesRequestState.NEW)
+    state = models.CharField(max_length=250, choices=RequestState.choices, default=RequestState.NEW)
 
     @property
     def organizer(self):
