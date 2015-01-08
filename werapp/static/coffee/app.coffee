@@ -70,6 +70,10 @@ werApp.config ['$routeProvider', '$locationProvider', 'werwer_root', 'partials_r
       templateUrl: partials_root + 'event-round/',
       controller: 'EventRoundController'
       resolve: loginRequired
+    .when werwer_root + 'event/:eventId/round/:roundId/manual-matches/',
+      templateUrl: partials_root + 'event-round-manual-matches/',
+      controller: 'EventRoundManualMatchesController'
+      resolve: loginRequired
     .when werwer_root + 'event/:eventId/standings/',
       templateUrl: partials_root + 'event-standings/',
       controller: 'EventStandingsController'

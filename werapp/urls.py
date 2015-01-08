@@ -1,7 +1,8 @@
 from django.conf.urls import url
 from werapp.views import WerView, PlayerView, HomeView, EditPlayerView, EditPlayerConfirmView, AddPlayerView, \
     NewEventView, DynamicJavascript, EventsOverviewView, EventView, EventPlanningView, StartEventConfirmView, EventDraftView, \
-    ConfirmCancelModalView, EventRoundView, EventStandingsView, EventConclusionView, LoginPartialView
+    ConfirmCancelModalView, EventRoundView, EventStandingsView, EventConclusionView, LoginPartialView, \
+    EventRoundManualMatchesView
 
 urlpatterns = (
     url(r'^$', WerView.as_view(), name='werwer-root'),
@@ -16,6 +17,7 @@ urlpatterns = (
     url(r'^event/\d+/planning/$', WerView.as_view(), name='event-planning'),
     url(r'^event/\d+/draft/$', WerView.as_view(), name='event-draft'),
     url(r'^event/\d+/round/\d+/$', WerView.as_view(), name='event-round'),
+    url(r'^event/\d+/round/\d+/manual-matches/$', WerView.as_view(), name='event-round-manual-matches'),
     url(r'^event/\d+/standings/$', WerView.as_view(), name='event-standings'),
     url(r'^event/\d+/conclusion/$', WerView.as_view(), name='event-conclusion'),
     url(r'^login/$', WerView.as_view(), name='wer-login'),
@@ -36,6 +38,7 @@ urlpatterns = (
     url(r'^partials/event-draft/$', EventDraftView.as_view(), name='partial-event-draft'),
     url(r'^partials/confirm-cancel-modal/$', ConfirmCancelModalView.as_view(), name='partial-confirm-cancel-modal'),
     url(r'^partials/event-round/$', EventRoundView.as_view(), name='partial-event-round'),
+    url(r'^partials/event-round-manual-matches/$', EventRoundManualMatchesView.as_view(), name='partial-event-round-manual-matches'),
     url(r'^partials/event-standings/$', EventStandingsView.as_view(), name='partial-event-standings'),
     url(r'^partials/event-conclusion/$', EventConclusionView.as_view(), name='partial-event-conclusion'),
     url(r'^partials/login/$', LoginPartialView.as_view(), name='partial-login'),

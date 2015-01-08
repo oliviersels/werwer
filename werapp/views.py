@@ -10,11 +10,13 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from werapp.enums import EventType, PairingMethod, EventState, RequestState
 from werapp.filters import OrganizerFilterBackend, EventOrganizerFilterBackend, RoundEventOrganizerFilterBackend
-from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest, EndOfEventMailingRequest
+from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest, EndOfEventMailingRequest, \
+    ManualMatchesRequest
 from werapp.permissions import IsOrganizer, IsEventOrganizer, OrganizerRequiredMixin
 from werapp.serializers import PlayerSerializer, EventSerializer, RoundSerializer, MatchSerializer, \
-    ParticipantSerializer, RandomMatchesRequestSerializer, EndOfEventMailingRequestSerializer, PublicEventSerializer
-from werapp.tasks import create_random_matches, end_of_event_mailing
+    ParticipantSerializer, RandomMatchesRequestSerializer, EndOfEventMailingRequestSerializer, PublicEventSerializer, \
+    ManualMatchesRequestSerializer
+from werapp.tasks import create_random_matches, end_of_event_mailing, create_manual_matches
 
 
 class PlayerMeRedirect(RedirectView):
@@ -24,6 +26,7 @@ class PlayerMeRedirect(RedirectView):
 
 class PlayerViewSet(ModelViewSet):
     model = Player
+    queryset = Player.objects.all()
     serializer_class = PlayerSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('first_name', 'last_name', 'dcinumber')
@@ -81,6 +84,7 @@ class ParticipantViewSet(OnlyOrganizerPreSaveMixin, ModelViewSet):
 
 class RandomMatchesRequestViewSet(OnlyOrganizerPreSaveMixin, ModelViewSet):
     model = RandomMatchesRequest
+    queryset = RandomMatchesRequest.objects.all()
     serializer_class = RandomMatchesRequestSerializer
     permission_classes = (IsAuthenticated, IsOrganizer, IsEventOrganizer)
     filter_backends = (RoundEventOrganizerFilterBackend,)
@@ -90,9 +94,21 @@ class RandomMatchesRequestViewSet(OnlyOrganizerPreSaveMixin, ModelViewSet):
             # Create the random matches task
             create_random_matches.delay(obj.id)
 
+class ManualMatchesRequestViewSet(OnlyOrganizerPreSaveMixin, ModelViewSet):
+    model = ManualMatchesRequest
+    queryset = ManualMatchesRequest.objects.all()
+    serializer_class = ManualMatchesRequestSerializer
+    permission_classes = (IsAuthenticated, IsOrganizer, IsEventOrganizer)
+    filter_backends = (RoundEventOrganizerFilterBackend,)
+
+    def post_save(self, obj, created=False):
+        if created:
+            # Create the random matches task
+            create_manual_matches.delay(obj.id)
 
 class EndOfEventMailingRequestViewSet(OnlyOrganizerPreSaveMixin, ModelViewSet):
     model = EndOfEventMailingRequest
+    queryset = EndOfEventMailingRequest.objects.all()
     serializer_class = EndOfEventMailingRequestSerializer
     permission_classes = (IsAuthenticated, IsOrganizer, IsEventOrganizer)
     filter_backends = (EventOrganizerFilterBackend,)
@@ -153,6 +169,9 @@ class ConfirmCancelModalView(TemplateView):
 
 class EventRoundView(TemplateView):
     template_name = "partials/event-round.html"
+
+class EventRoundManualMatchesView(TemplateView):
+    template_name = "partials/event-round-manual-matches.html"
 
 class EventStandingsView(TemplateView):
     template_name = "partials/event-standings.html"

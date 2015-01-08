@@ -252,6 +252,15 @@ class RandomMatchesRequest(models.Model):
     def organizer(self):
         return self.round.event.organizer
 
+class ManualMatchesRequest(models.Model):
+    round = models.ForeignKey(Round)
+    state = models.CharField(max_length=250, choices=RequestState.choices, default=RequestState.NEW)
+    participants = models.CommaSeparatedIntegerField(max_length=250,help_text='The ids of ordered participants separated by , ex: "1,4,2,3" means 1 vs 4 and 2 vs 3')
+
+    @property
+    def organizer(self):
+        return self.round.event.organizer
+
 class EndOfEventMailingRequest(models.Model):
     event = models.ForeignKey(Event)
 

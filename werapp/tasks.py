@@ -6,7 +6,8 @@ from celery import shared_task
 from django.template import Context
 from django.template.loader import get_template
 from werapp.enums import RequestState, PairingMethod, ParticipantMatchPlayerNr
-from werapp.models import RandomMatchesRequest, Match, EndOfEventMailingRequest, ParticipantMatch
+from werapp.models import RandomMatchesRequest, Match, EndOfEventMailingRequest, ParticipantMatch, ManualMatchesRequest, \
+    Participant
 
 
 def match_making(participants):
@@ -73,6 +74,26 @@ def create_random_matches(random_matches_request_id):
 
     random_matches_request.state = RequestState.COMPLETED
     random_matches_request.save()
+
+@shared_task
+def create_manual_matches(manual_matches_request_id):
+    manual_matches_request = ManualMatchesRequest.objects.get(id=manual_matches_request_id)
+    manual_matches_request.state = RequestState.PROCESSING
+    manual_matches_request.save()
+
+    # Remove all previous matches
+    manual_matches_request.round.match_set.all().delete()
+
+    participant_ids = manual_matches_request.participants.split(',')
+
+    for index in range(0, len(participant_ids), 2):
+        match = Match.objects.create(round=manual_matches_request.round)
+        ParticipantMatch.objects.create(participant=Participant.objects.get(id=participant_ids[index]), match=match, player_nr=ParticipantMatchPlayerNr.PLAYER_1)
+        if index + 1 < len(participant_ids):
+            ParticipantMatch.objects.create(participant=Participant.objects.get(id=participant_ids[index + 1]), match=match, player_nr=ParticipantMatchPlayerNr.PLAYER_2)
+
+    manual_matches_request.state = RequestState.COMPLETED
+    manual_matches_request.save()
 
 @shared_task
 def end_of_event_mailing(end_of_event_mailing_request_id):

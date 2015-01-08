@@ -271,6 +271,12 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', 'authServi
       resource: "Round"
   )
 
+  resourceCache.ManualMatchesRequest = createResource('manual-matches-request',
+    round:
+      isArray: false
+      resource: "Round"
+  )
+
   resourceCache.EndOfEventMailingRequest = createResource('end-of-event-mailing-request',
     event:
       isArray: false

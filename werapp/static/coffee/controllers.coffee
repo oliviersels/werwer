@@ -432,6 +432,68 @@ werControllers.controller 'EventRoundController' , ['$scope',
       )
 ]
 
+werControllers.controller 'EventRoundManualMatchesController' , ['$scope',
+                                                                 '$location',
+                                                                 '$routeParams',
+                                                                 '$filter',
+                                                                 '$timeout',
+                                                                 'werApi',
+                                                                 'eventStateFactory',
+                                                                 'djangoEnums',
+                                                                 'werwer_root',
+  ($scope, $location, $routeParams, $filter, $timeout, werApi, eventStateFactory, djangoEnums, werwer_root) ->
+    $scope.done = false
+    $scope.matched = []
+    participantsOrdered = []
+
+    werApi.Event.then (Event) ->
+      Event.get({id: $routeParams.eventId}, (event, response) ->
+        event.eventState = eventStateFactory.createEventState(event)
+        $scope.event = event
+        event.participant_set.then((participants) ->
+          $scope.participants = participants
+        )
+        event.round_set.then((rounds) ->
+          $scope.round = rounds[parseInt($routeParams.roundId) - 1]
+          $scope.round.roundNr = $routeParams.roundId
+        )
+      , (response) ->
+        $scope.error = response.status
+      )
+
+    $scope.addParticipant = (participant) ->
+      if participantsOrdered.length % 2 == 0
+        $scope.matched.push(
+          participant1: participant,
+          participant2: null
+        )
+      else
+        $scope.matched[$scope.matched.length - 1].participant2 = participant
+      participantsOrdered.push(participant)
+      index = $scope.participants.indexOf(participant)
+      $scope.participants.splice(index, 1)
+
+    $scope.saveMatches = () ->
+      participantsSerialized = participantsOrdered.map((currentValue, index, arr) ->
+        currentValue.id
+      ).join(',')
+      werApi.ManualMatchesRequest.then (ManualMatchesRequest) ->
+        manualMatchesRequest = new ManualMatchesRequest(
+          round: $scope.round.url,
+          participants: participantsSerialized
+        )
+        manualMatchesRequest.$save({}, () ->
+          checkResults = () ->
+            ManualMatchesRequest.get({id: manualMatchesRequest.id}, (result) ->
+              if result.state == 'completed'
+                $location.path(werwer_root + 'event/' + $scope.event.id + '/round/' + $scope.round.roundNr)
+              else
+                $timeout(checkResults, 1000)
+            )
+          checkResults()
+        )
+]
+
 werControllers.controller 'EventStandingsController' , ['$scope',
                                                         '$location',
                                                         '$routeParams',
