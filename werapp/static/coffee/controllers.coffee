@@ -188,7 +188,6 @@ werControllers.controller 'EventPlanningController', ['$scope',
           participant.$save({}, () ->
             resourceParticipant = Participant.createResource(participant.toJSON())
             $scope.event.participant_set__v.push(resourceParticipant)
-            player.participant_set__v.push(resourceParticipant)
           )
       else
         modal = $modal.open(
@@ -209,7 +208,10 @@ werControllers.controller 'EventPlanningController', ['$scope',
     $scope.filterAdded = (player) ->
       if !$scope.event
         return true
-      return !(participant1.url in (participant2.url for participant2 in $scope.event.participant_set__v) for participant1 in player.participant_set__v).some((x) -> x)
+      for participant in $scope.event.participant_set__v
+        if participant? and participant.player__v? and player.url == participant.player__v.url
+          return false
+      return true
 
     $scope.startEventConfirm = () ->
       modal = $modal.open(
@@ -241,7 +243,7 @@ werControllers.controller 'StartEventConfirmController', ['$scope',
   ($scope, $modalInstance, event) ->
     $scope.event = event
     event.participant_set.then (participants) ->
-      $scope.recommended_rounds = Math.max(3, Math.floor(Math.log(participants.length) / Math.log(2)))
+      $scope.recommended_rounds = Math.max(3, Math.ceil(Math.log(participants.length) / Math.log(2)))
       $scope.event.nr_of_rounds = $scope.recommended_rounds
 
     $scope.start = () ->
