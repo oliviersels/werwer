@@ -1,0 +1,61 @@
+{% extends "partials/event-base.html" %}
+
+{% block content %}
+{% verbatim %}
+<div ng-show="false">
+    {{ page.menuName = 'phases' }}
+    {{ page.phaseMenuName = 'round' + round.roundNr }}
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <p>
+            <div class="col-md-12">
+                <h2>Round {{ round.roundNr }} - Manual matchmaking</h2>
+            </div>
+            <div class="col-md-12">
+                <div class="btn-group">
+                    <button class="btn btn-default">Reset match</button>
+                    <button class="btn btn-success" ng-click="saveMatches()" ng-show="participants.length == 0">Save matches</button>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <table class="table table-responsive table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 30px;">#</th>
+                            <th>Name</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="participant in participants | orderBy : '-score.points'" ng-click="addParticipant(participant)">
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ participant.player__v.first_name + ' ' + participant.player__v.last_name }}</td>
+                        <td>{{ participant.score.points }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-9">
+                <table class="table table-responsive table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 30px">#</th>
+                            <th>Player 1</th>
+                            <th>Player 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="match in matched">
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ match.participant1.player__v.first_name }}</td>
+                            <td>{{ match.participant2.player__v.first_name }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </p>
+    </div>
+</div>
+{% endverbatim %}
+{% endblock %}

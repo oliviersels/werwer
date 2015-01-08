@@ -18,7 +18,7 @@
                     <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="" ng-click="createMatchesRandom()">Random</a></li>
-                        <li><a href="">Manual</a></li>
+                        <li><a ng-href="{% endverbatim %}{% url 'werwer-root' %}{% verbatim %}event/{{ event.id }}/round/{{ round.roundNr }}/manual-matches/">Manual</a></li>
                     </ul>
                     <button class="btn btn-success" ng-click="endEvent()" ng-show="done && lastRound">End event</button>
                     <button class="btn btn-success" ng-click="nextRound()" ng-show="done && !lastRound">Next round</button>

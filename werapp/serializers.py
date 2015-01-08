@@ -1,7 +1,8 @@
-from rest_framework.fields import IntegerField, FloatField, BooleanField
+from rest_framework.fields import IntegerField, FloatField, BooleanField, CharField
 from rest_framework.relations import HyperlinkedRelatedField
 from rest_framework.serializers import HyperlinkedModelSerializer, Serializer
-from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest, EndOfEventMailingRequest
+from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest, EndOfEventMailingRequest, \
+    ManualMatchesRequest
 
 
 class PlayerSerializer(HyperlinkedModelSerializer):
@@ -57,6 +58,12 @@ class RandomMatchesRequestSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = RandomMatchesRequest
         fields = ("id", "url", "round", "state")
+        read_only_fields = ("state",)
+
+class ManualMatchesRequestSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = ManualMatchesRequest
+        fields = ("id", "url", "round", "state", "participants")
         read_only_fields = ("state",)
 
 class EndOfEventMailingRequestSerializer(HyperlinkedModelSerializer):

@@ -45,7 +45,7 @@ class EventState(Enum):
         (CONCLUSION, 'Conclusion'),
     )
 
-class RandomMatchesRequestState(Enum):
+class RequestState(Enum):
     NEW = 'new'
     PROCESSING = 'processing'
     COMPLETED = 'completed'
