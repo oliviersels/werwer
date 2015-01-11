@@ -34,6 +34,7 @@
                 <div>
                     <label for="recaptcha_response_field">{% trans "Solve the captcha" %}</label>
                     {% if form.recaptcha_response_field.errors %}<div class="alert alert-danger">{{ form.recaptcha_response_field.errors }}</div>{% endif %}
+                    {% if form.recaptcha_challenge_field.errors %}<div class="alert alert-danger">{{ form.recaptcha_challenge_field.errors }}</div>{% endif %}
                     {{ recaptcha_html|safe }}
                 </div>
                 <div class="checkbox">

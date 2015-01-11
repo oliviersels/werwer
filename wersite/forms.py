@@ -53,19 +53,20 @@ class WerwerSignupForm(forms.ModelForm):
         return self.cleaned_data['has_accepted_terms_and_conditions']
 
     def clean(self):
+        cleaned_data = super(WerwerSignupForm, self).clean()
         # Check recaptcha
-        if 'recaptcha_response_field' in self.cleaned_data:
-            recaptcha_challenge_field = self.cleaned_data['recaptcha_challenge_field']
-            recaptcha_response_field = self.cleaned_data['recaptcha_response_field']
+        if 'recaptcha_response_field' in cleaned_data and 'recaptcha_challenge_field' in cleaned_data:
+            recaptcha_challenge_field = cleaned_data['recaptcha_challenge_field']
+            recaptcha_response_field = cleaned_data['recaptcha_response_field']
             private_key = settings.RECAPTCHA_PRIVATE_KEY
             client_ip = get_client_ip(self.request)
 
             captcha_result = captcha.submit(recaptcha_challenge_field, recaptcha_response_field, private_key, client_ip)
             if not captcha_result.is_valid:
                 self._errors['recaptcha_response_field'] = self.error_class([_("The captcha you entered was not correct")])
-                del self.cleaned_data['recaptcha_response_field']
+                del cleaned_data['recaptcha_response_field']
 
-        return self.cleaned_data
+        return cleaned_data
 
 class PlayerAuthenticationForm(AuthenticationForm):
     username = forms.CharField(max_length=254, widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': _('Enter your email address')}))
