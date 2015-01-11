@@ -37,12 +37,14 @@ class EventState(Enum):
     DRAFT = 'draft'
     ROUNDS = 'rounds'
     CONCLUSION = 'conclusion'
+    DONE = 'done'
 
     choices = (
         (PLANNING, 'Planning'),
         (DRAFT, 'Draft'),
         (ROUNDS, 'Rounds'),
         (CONCLUSION, 'Conclusion'),
+        (DONE, 'Done'),
     )
 
 class RequestState(Enum):

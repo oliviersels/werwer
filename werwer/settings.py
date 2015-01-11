@@ -44,6 +44,7 @@ INSTALLED_APPS = (
 
     'werapp',
     'wersite',
+    'wallet',
 )
 
 MIDDLEWARE_CLASSES = (

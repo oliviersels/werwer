@@ -1,8 +1,13 @@
+from decimal import Decimal
 from django.contrib.auth.models import AbstractUser, UserManager, AbstractBaseUser, PermissionsMixin
 from django.core.mail import send_mail
 from django.db import models
+from django.db.transaction import atomic
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from wallet.enums import Currency, TransactionType
+from wallet.errors import InsufficientFundsError
+from wallet.models import Wallet, Transaction
 from werapp.enums import EventType, PairingMethod, EventState, RequestState, ParticipantMatchPlayerNr
 from werapp.managers import PlayerManager
 
@@ -48,14 +53,44 @@ class Player(AbstractBaseUser, PermissionsMixin):
         """
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+    @property
+    def credits(self):
+        credits_wallet = self.wallet_set.filter(currency=Currency.CREDITS).first()
+        if credits_wallet is not None:
+            return credits_wallet.amount
+        return Decimal("0")
+
     def __unicode__(self):
         if self.pk:
             return "Player [%s] %s" % (self.pk, self.email)
         else:
             return "Player %s" % self.email
 
+class Organization(models.Model):
+    name = models.CharField(max_length=250, unique=True)
+    organizers = models.ManyToManyField(Player)
+
+    @property
+    def credits_wallet(self):
+        # Check if the wallet exists
+        credits_wallet = self.wallet_set.filter(currency=Currency.CREDITS).first()
+        if credits_wallet is None:
+            credits_wallet = Wallet.objects.create(organization=self, currency=Currency.CREDITS)
+        return credits_wallet
+
+    @property
+    def credits(self):
+        return self.credits_wallet.amount
+
+    # Normally credits are added by a payment, but for now do it manually
+    def add_credits(self, amount):
+        # Do the transaction
+        return Transaction.objects.do_transaction(wallet_from=None, wallet_to=self.credits_wallet,
+                                                  transaction_type=TransactionType.MANUAL, amount=amount)
+
 class Event(models.Model):
     organizer = models.ForeignKey(Player)
+    organization = models.ForeignKey(Organization)
     name = models.CharField(max_length=250)
     date = models.DateField(default=timezone.now)
     event_type = models.CharField(max_length=250, choices=EventType.choices)
@@ -96,6 +131,32 @@ class Event(models.Model):
             else:
                 result_distribution[participant.id] = participant_price_support_points[participant.id] / total_participant_price_support_points * price_support_amount
         return result_distribution
+
+    def distribute_price_support(self, force=False):
+        if not force and self.state == EventState.DONE:
+            raise ValueError("You shouldn't distribute price support when the event is done. Override with force=True")
+
+        price_support_distribution = self.get_price_support_distribution()
+        total_amount = sum(price_support_distribution.values()) # This should be the same as nr_of_players * price_support
+
+        with atomic():
+            organization_wallet = Wallet.objects.select_for_update().filter(organization=self.organization, currency=Currency.CREDITS).first()
+            if organization_wallet is None:
+                organization_wallet = Wallet.objects.create(organization=self, currency=Currency.CREDITS)
+            if organization_wallet.amount < total_amount:
+                raise InsufficientFundsError()
+
+            # Do stuff
+            for participant_id, amount in price_support_distribution.items():
+                player = Participant.objects.get(id=participant_id).player
+                player_wallet = player.wallet_set.select_for_update().filter(currency=Currency.CREDITS).first()
+                if player_wallet is None:
+                    player = Player.objects.select_for_update().get(pk=player.pk)
+                    player_wallet = Wallet.objects.create(player=player, currency=Currency.CREDITS)
+
+                Transaction.objects.do_transaction(wallet_from=organization_wallet, wallet_to=player_wallet,
+                                                   transaction_type=TransactionType.EVENT_CREDITS, amount=amount)
+
 
     def __unicode__(self):
         description = "%s (%s)" % (self.name, self.date)

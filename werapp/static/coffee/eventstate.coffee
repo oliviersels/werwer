@@ -48,7 +48,7 @@ werServices.factory 'eventStateFactory', ['$q', '$http', '$resource', '$filter',
     enumerable: true
     get: () ->
       if not @_phases
-        phaseNames = ['planning', 'draft', 'rounds', 'conclusion']
+        phaseNames = ['planning', 'draft', 'rounds', 'conclusion', 'done']
         @_phases = []
         @_phases.push(new EventPhase('planning', phaseNames.indexOf('planning') < phaseNames.indexOf(@event.state), 'planning' == @event.state))
         @_phases.push(new EventPhase('draft', phaseNames.indexOf('draft') < phaseNames.indexOf(@event.state), 'draft' == @event.state))
