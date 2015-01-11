@@ -254,6 +254,9 @@ class Participant(models.Model):
     player = models.ForeignKey(Player)
     event = models.ForeignKey(Event)
     matches = models.ManyToManyField(to=Match, through="ParticipantMatch")
+    # The following fields are filled in when the event is done. The on-the-fly calculations can be quite expensive.
+    done_price_support = models.FloatField(blank=True, null=True)
+    done_points = models.IntegerField(blank=True, null=True)
 
     class Meta:
         unique_together = ("player", "event")
@@ -265,12 +268,16 @@ class Participant(models.Model):
     @property
     def price_support(self):
         # How much this player has earned in price support
+        if self.done_price_support is not None:
+            return self.done_price_support
         return self.event.get_price_support_distribution()[self.id]
 
     @property
     def points(self):
         # Make a separate function for points as it is often
         # used and the other score statistics take more time to calculate.
+        if self.done_points is not None:
+            return self.done_points
         return sum(match.points_for_participant(self) for match in self.matches.all())
 
     @property
