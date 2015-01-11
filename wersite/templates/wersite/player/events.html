@@ -23,8 +23,8 @@
             <td>{{ participation.event_name }}</td>
             <td>{{ participation.event_date }}</td>
             <td>{{ participation.event_state }}</td>
-            <td>{{ participation.points }}</td>
-            <td>{{ participation.price_support }}</td>
+            <td>{{ participation.points|floatformat:"-2" }}</td>
+            <td>{% if participation.event_price_support == 0 %}No price support{% else %}{{ participation.price_support|floatformat:"-2" }}{% endif %}</td>
         </tr>
         {% if forloop.last %}
             </tbody>

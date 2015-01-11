@@ -120,6 +120,7 @@ class PlayerEventsView(LoginRequiredMixin, DetailView):
         context_data['participations'] = [{
             'event_name': participation.event.name,
             'event_date': participation.event.date,
+            'event_price_support': participation.event.price_support,
             'event_state': EventState.get_choice_for_name(participation.event.state),
             'points': participation.points,
             'price_support': participation.price_support,
