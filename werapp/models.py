@@ -114,7 +114,7 @@ class Round(models.Model):
 
     @property
     def round_nr(self):
-        return list(self.event.round_set.all().order_by('-id').values_list('id', flat=True)).index(self.id) + 1
+        return list(self.event.round_set.all().order_by('id').values_list('id', flat=True)).index(self.id) + 1
 
     def is_participant(self, player):
         return self.event.participant_set.filter(player=player).exists()
