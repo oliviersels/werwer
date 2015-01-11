@@ -519,7 +519,8 @@ werControllers.controller 'EventConclusionController' , ['$scope',
                                                          'werApi',
                                                          'eventStateFactory',
                                                          'djangoEnums',
-  ($scope, $location, $routeParams, werApi, eventStateFactory, djangoEnums) ->
+                                                         'werwer_root',
+  ($scope, $location, $routeParams, werApi, eventStateFactory, djangoEnums, werwer_root) ->
     werApi.Event.then (Event) ->
       Event.get({id: $routeParams.eventId}, (event, response) ->
         event.eventState = eventStateFactory.createEventState(event)
@@ -532,6 +533,15 @@ werControllers.controller 'EventConclusionController' , ['$scope',
           event: $scope.event.url
         )
         endOfEventMailingRequest.$save({})
+
+    $scope.endEvent = () ->
+      werApi.EndEventRequest.then (EndEventRequest) ->
+        endEventRequest = new EndEventRequest(
+          event: $scope.event.url
+        )
+        endEventRequest.$save({}, () ->
+          $location.path(werwer_root + 'events-overview/')
+        )
 ]
 
 werControllers.controller 'LoginController', ['$scope',

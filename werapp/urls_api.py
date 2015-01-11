@@ -2,7 +2,7 @@ from django.conf.urls import url
 from rest_framework import routers
 from werapp.views import PlayerViewSet, EventViewSet, MatchViewSet, RoundViewSet, ParticipantViewSet, \
     RandomMatchesRequestViewSet, EndOfEventMailingRequestViewSet, PlayerMeRedirect, PublicEventViewSet, \
-    ManualMatchesRequestViewSet
+    ManualMatchesRequestViewSet, EndEventRequestViewSet
 
 router = routers.DefaultRouter()
 router.register("players", PlayerViewSet)
@@ -14,6 +14,7 @@ router.register("participants", ParticipantViewSet)
 router.register("random-matches-request", RandomMatchesRequestViewSet)
 router.register("manual-matches-request", ManualMatchesRequestViewSet)
 router.register("end-of-event-mailing-request", EndOfEventMailingRequestViewSet)
+router.register("end-event-request", EndEventRequestViewSet)
 
 urlpatterns = [
     url(r'^players/me/$', PlayerMeRedirect.as_view(), name='players-me'),

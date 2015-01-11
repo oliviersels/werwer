@@ -283,6 +283,12 @@ werServices.factory 'werApi', ['$q', '$http', '$resource', '$filter', 'authServi
       resource: "Event"
   )
 
+  resourceCache.EndEventRequest = createResource('end-event-request',
+    event:
+      isArray: false
+      resource: "Event"
+  )
+
   resourceCache
 ]
 

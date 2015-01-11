@@ -12,12 +12,12 @@ from wallet.enums import TransactionType
 from werapp.enums import EventType, PairingMethod, EventState, RequestState
 from werapp.filters import OrganizerFilterBackend, EventOrganizerFilterBackend, RoundEventOrganizerFilterBackend
 from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest, EndOfEventMailingRequest, \
-    ManualMatchesRequest, Organization
+    ManualMatchesRequest, Organization, EndEventRequest
 from werapp.permissions import IsOrganizer, IsEventOrganizer, OrganizerRequiredMixin
 from werapp.serializers import PlayerSerializer, EventSerializer, RoundSerializer, MatchSerializer, \
     ParticipantSerializer, RandomMatchesRequestSerializer, EndOfEventMailingRequestSerializer, PublicEventSerializer, \
-    ManualMatchesRequestSerializer
-from werapp.tasks import create_random_matches, end_of_event_mailing, create_manual_matches
+    ManualMatchesRequestSerializer, EndEventRequestSerializer
+from werapp.tasks import create_random_matches, end_of_event_mailing, create_manual_matches, end_event
 
 
 class PlayerMeRedirect(RedirectView):
@@ -123,6 +123,18 @@ class EndOfEventMailingRequestViewSet(OnlyOrganizerPreSaveMixin, ModelViewSet):
         if created:
             # Create the random matches task
             end_of_event_mailing.delay(obj.id)
+
+class EndEventRequestViewSet(OnlyOrganizerPreSaveMixin, ModelViewSet):
+    model = EndEventRequest
+    queryset = EndEventRequest.objects.all()
+    serializer_class = EndEventRequestSerializer
+    permission_classes = (IsAuthenticated, IsOrganizer, IsEventOrganizer)
+    filter_backends = (EventOrganizerFilterBackend,)
+
+    def post_save(self, obj, created=False):
+        if created:
+            # Create the random matches task
+            end_event.delay(obj.id)
 
 
 class WerView(LoginRequiredMixin, OrganizerRequiredMixin, TemplateView):

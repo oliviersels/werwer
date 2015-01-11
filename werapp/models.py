@@ -153,14 +153,17 @@ class Event(models.Model):
             # Do stuff
             for participant_id, amount in price_support_distribution.items():
                 if amount > 0:
-                    player = Participant.objects.get(id=participant_id).player
+                    participant = Participant.objects.get(id=participant_id)
+                    player = participant.player
                     player_wallet = player.wallet_set.select_for_update().filter(currency=Currency.CREDITS).first()
                     if player_wallet is None:
                         player = Player.objects.select_for_update().get(pk=player.pk)
                         player_wallet = Wallet.objects.create(player=player, currency=Currency.CREDITS)
 
-                    Transaction.objects.do_transaction(wallet_from=organization_wallet, wallet_to=player_wallet,
-                                                       transaction_type=TransactionType.EVENT_CREDITS, amount=amount)
+                    t = Transaction.objects.do_transaction(wallet_from=organization_wallet, wallet_to=player_wallet,
+                                                           transaction_type=TransactionType.EVENT_CREDITS, amount=amount)
+                    t.participant = participant
+                    t.save()
 
 
     def __unicode__(self):
@@ -356,6 +359,13 @@ class ManualMatchesRequest(models.Model):
         return self.round.event.organizer
 
 class EndOfEventMailingRequest(models.Model):
+    event = models.ForeignKey(Event)
+
+    @property
+    def organizer(self):
+        return self.event.organizer
+
+class EndEventRequest(models.Model):
     event = models.ForeignKey(Event)
 
     @property

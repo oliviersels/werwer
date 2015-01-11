@@ -5,9 +5,9 @@ import random
 from celery import shared_task
 from django.template import Context
 from django.template.loader import get_template
-from werapp.enums import RequestState, PairingMethod, ParticipantMatchPlayerNr
+from werapp.enums import RequestState, PairingMethod, ParticipantMatchPlayerNr, EventState
 from werapp.models import RandomMatchesRequest, Match, EndOfEventMailingRequest, ParticipantMatch, ManualMatchesRequest, \
-    Participant
+    Participant, EndEventRequest
 
 
 def match_making(participants):
@@ -138,3 +138,23 @@ def end_of_event_mailing(end_of_event_mailing_request_id):
         context = Context(context_dict)
         message = template.render(context)
         participant.player.email_user("Aether event overzicht", message, "olivier.sels@gmail.com")
+
+@shared_task
+def end_event(end_event_id):
+    end_event_request = EndEventRequest.objects.get(id=end_event_id)
+    event = end_event_request.event
+
+    # Do the following things at end of event:
+    #  1) Distribute price support
+    event.distribute_price_support()
+
+    #  2) Copy the price_support and points dynamic values to the db (as speedup)
+    price_support_distribution = event.get_price_support_distribution()
+    for participant in event.participant_set.all():
+        participant.done_price_support = price_support_distribution[participant.id]
+        participant.done_points = participant.points
+        participant.save()
+
+    #  3) Set the state of the event to DONE
+    event.state = EventState.DONE
+    event.save()
