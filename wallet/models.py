@@ -2,6 +2,7 @@ from decimal import Decimal
 from django.db import models
 
 # Create your models here.
+from django.db.transaction import atomic
 from django.utils import timezone
 from wallet.enums import Currency, TransactionState, TransactionType
 from wallet.managers import TransactionManager
@@ -32,3 +33,27 @@ class Transaction(models.Model):
         if self.wallet_from is None and self.wallet_to is None:
             raise ValueError('At least one of [wallet_from, wallet_to] must not be None')
         return super(Transaction, self).save(*args, **kwargs)
+
+    def revoke(self):
+        if self.state != TransactionState.COMPLETED:
+            raise ValueError("Can only revoke completed transactions")
+
+        with atomic():
+            # Lock the wallets and return the owed money. Warn when not enough money so when balance will become negative
+            wallet_from = None
+            if self.wallet_from:
+                wallet_from = Wallet.objects.select_for_update().get(pk=self.wallet_from.pk)
+            wallet_to = None
+            if self.wallet_to:
+                wallet_to = Wallet.objects.select_for_update().get(pk=self.wallet_to.pk)
+
+            if wallet_from:
+                wallet_from.amount += self.amount
+                wallet_from.save()
+            if wallet_to:
+                wallet_to.amount -= self.amount
+                wallet_to.save()
+
+            self.state = TransactionState.REVOKED
+            self.save()
+

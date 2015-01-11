@@ -54,11 +54,15 @@ class Player(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
     @property
-    def credits(self):
+    def credits_wallet(self):
         credits_wallet = self.wallet_set.filter(currency=Currency.CREDITS).first()
-        if credits_wallet is not None:
-            return credits_wallet.amount
-        return Decimal("0")
+        if credits_wallet is None:
+            credits_wallet = Wallet.objects.create(player=self, currency=Currency.CREDITS)
+        return credits_wallet
+
+    @property
+    def credits(self):
+        return self.credits_wallet.amount
 
     def __unicode__(self):
         if self.pk:
@@ -148,14 +152,15 @@ class Event(models.Model):
 
             # Do stuff
             for participant_id, amount in price_support_distribution.items():
-                player = Participant.objects.get(id=participant_id).player
-                player_wallet = player.wallet_set.select_for_update().filter(currency=Currency.CREDITS).first()
-                if player_wallet is None:
-                    player = Player.objects.select_for_update().get(pk=player.pk)
-                    player_wallet = Wallet.objects.create(player=player, currency=Currency.CREDITS)
+                if amount > 0:
+                    player = Participant.objects.get(id=participant_id).player
+                    player_wallet = player.wallet_set.select_for_update().filter(currency=Currency.CREDITS).first()
+                    if player_wallet is None:
+                        player = Player.objects.select_for_update().get(pk=player.pk)
+                        player_wallet = Wallet.objects.create(player=player, currency=Currency.CREDITS)
 
-                Transaction.objects.do_transaction(wallet_from=organization_wallet, wallet_to=player_wallet,
-                                                   transaction_type=TransactionType.EVENT_CREDITS, amount=amount)
+                    Transaction.objects.do_transaction(wallet_from=organization_wallet, wallet_to=player_wallet,
+                                                       transaction_type=TransactionType.EVENT_CREDITS, amount=amount)
 
 
     def __unicode__(self):

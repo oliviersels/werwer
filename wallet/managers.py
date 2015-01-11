@@ -13,6 +13,7 @@ class TransactionManager(models.Manager):
             raise ValueError("Transactions must be between wallets of same currency")
 
         amount = Decimal(amount)
+        assert amount > 0
 
         with atomic():
             # Lock both wallets
