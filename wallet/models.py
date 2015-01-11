@@ -2,6 +2,7 @@ from decimal import Decimal
 from django.db import models
 
 # Create your models here.
+from django.utils import timezone
 from wallet.enums import Currency, TransactionState, TransactionType
 from wallet.managers import TransactionManager
 
@@ -23,6 +24,7 @@ class Transaction(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     state = models.CharField(max_length=250, choices=TransactionState.choices, default=TransactionState.NEW)
     transaction_type = models.CharField(max_length=250, choices=TransactionType.choices)
+    completed_on = models.DateTimeField(default=timezone.now)
 
     objects = TransactionManager()
 
