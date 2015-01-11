@@ -4,6 +4,29 @@
 {% block credits_active %}active{% endblock %}
 
 {% block content_player %}
-    <h1>Credits info</h1>
-    <p>Not yet implemented</p>
+    <h1>Credits <span class="label label-success">{{ credits }}</span></h1>
+    {% for transaction in transactions %}
+        {% if forloop.first %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>{% trans "Description" %}</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Amount" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+        {% endif %}
+                <tr>
+            <td>{{ transaction.description }}</td>
+            <td>{{ transaction.completed_on }}</td>
+            <td><span class="label {% if transaction.amount < 0 %}label-danger{% else %}label-success{% endif %}">{{ transaction.amount }}</span></td>
+        </tr>
+        {% if forloop.last %}
+            </tbody>
+        </table>
+        {% endif %}
+    {% empty %}
+        <p>{% blocktrans %}No transactions found.{% endblocktrans %}</p>
+    {% endfor %}
 {% endblock %}

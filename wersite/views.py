@@ -3,6 +3,7 @@ from braces.views import LoginRequiredMixin
 from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.urlresolvers import reverse_lazy, reverse
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.http import urlencode
@@ -10,6 +11,8 @@ from django.views.generic import TemplateView, RedirectView, DetailView
 from django.views.generic.base import TemplateResponseMixin, ContextMixin
 from django.views.generic.edit import BaseCreateView, UpdateView
 from recaptcha.client import captcha
+from wallet.enums import TransactionType
+from wallet.models import Transaction
 from werapp.enums import EventState
 from werapp.models import Player, Event, Match
 from wersite.forms import FeatureFeedbackForm, WerwerSignupForm, PlayerProfileForm
@@ -188,6 +191,29 @@ class PlayerCreditsView(LoginRequiredMixin, DetailView):
 
     def get_queryset(self):
         return Player.objects.filter(id=self.request.user.id)
+
+    def get_context_data(self, **kwargs):
+        context_data = super(PlayerCreditsView, self).get_context_data(**kwargs)
+        context_data['credits'] = self.object.credits
+        transactions = Transaction.objects\
+            .filter(Q(wallet_from=self.object.credits_wallet) | Q(wallet_to=self.object.credits_wallet))\
+            .order_by('-completed_on')
+
+        def enrich_transaction(transaction):
+            if transaction.transaction_type == TransactionType.EVENT_CREDITS:
+                description = "Received in event (%s)" % Event.objects.get(date=transaction.completed_on).name
+            elif transaction.transaction_type == TransactionType.MANUAL:
+                description = "Credits manually added" if transaction.wallet_to == self.object.credits_wallet else "Credits manually removed"
+            else:
+                description = "No description available"
+
+            return {
+                'description': description,
+                'completed_on': transaction.completed_on,
+                'amount': transaction.amount if transaction.wallet_to == self.object.credits_wallet else -transaction.amount
+            }
+        context_data['transactions'] = map(enrich_transaction, transactions)
+        return context_data
 
 
 class PlayerProfileView(LoginRequiredMixin, UpdateView):
