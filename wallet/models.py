@@ -27,6 +27,8 @@ class Transaction(models.Model):
     transaction_type = models.CharField(max_length=250, choices=TransactionType.choices)
     completed_on = models.DateTimeField(default=timezone.now)
 
+    participant = models.ForeignKey("werapp.Participant", blank=True, null=True)
+
     objects = TransactionManager()
 
     def save(self, *args, **kwargs):

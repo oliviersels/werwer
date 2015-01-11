@@ -6,9 +6,12 @@ from werapp.models import Player, Event, Round, Match, Participant, RandomMatche
 
 
 class PlayerSerializer(HyperlinkedModelSerializer):
+    credits = FloatField(read_only=True)
+
     class Meta:
         model = Player
-        fields = ("id", "url", "first_name", "last_name", "email", "dcinumber", "is_judge", "participant_set", "event_set")
+        fields = ("id", "url", "first_name", "last_name", "email", "dcinumber", "is_judge", "credits",
+                  "participant_set", "event_set")
         read_only_fields = ("event_set", "participant_set")
         write_only_fields = ("email",)
 
@@ -52,7 +55,7 @@ class ParticipantSerializer(HyperlinkedModelSerializer):
 
     class Meta:
         model = Participant
-        fields = ("id", "url", "player", "event", "matches", "score", "price_support")
+        fields = ("id", "url", "player", "event", "matches", "score", "price_support", "pay_with_credits")
 
 class RandomMatchesRequestSerializer(HyperlinkedModelSerializer):
     class Meta:

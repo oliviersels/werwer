@@ -205,6 +205,11 @@ werControllers.controller 'EventPlanningController', ['$scope',
             $scope.addPlayer(player, true)
         )
 
+    $scope.pay_with_credits = (participant) ->
+      participant.pay_with_credits = true
+      postableEvent = participant.postable()
+      postableEvent.$update()
+
     $scope.filterAdded = (player) ->
       if !$scope.event
         return true

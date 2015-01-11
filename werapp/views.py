@@ -7,11 +7,12 @@ from rest_framework.filters import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.reverse import reverse
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from wallet.enums import TransactionType
 
 from werapp.enums import EventType, PairingMethod, EventState, RequestState
 from werapp.filters import OrganizerFilterBackend, EventOrganizerFilterBackend, RoundEventOrganizerFilterBackend
 from werapp.models import Player, Event, Round, Match, Participant, RandomMatchesRequest, EndOfEventMailingRequest, \
-    ManualMatchesRequest
+    ManualMatchesRequest, Organization
 from werapp.permissions import IsOrganizer, IsEventOrganizer, OrganizerRequiredMixin
 from werapp.serializers import PlayerSerializer, EventSerializer, RoundSerializer, MatchSerializer, \
     ParticipantSerializer, RandomMatchesRequestSerializer, EndOfEventMailingRequestSerializer, PublicEventSerializer, \
@@ -46,6 +47,7 @@ class EventViewSet(ModelViewSet):
         except Player.DoesNotExist:
             pass
         obj.organizer = self.request.user
+        obj.organization = Organization.objects.get()
 
 
 class PublicEventViewSet(ReadOnlyModelViewSet):
@@ -80,6 +82,10 @@ class ParticipantViewSet(OnlyOrganizerPreSaveMixin, ModelViewSet):
     serializer_class = ParticipantSerializer
     permission_classes = (IsAuthenticated, IsOrganizer, IsEventOrganizer)
     filter_backends = (EventOrganizerFilterBackend,)
+
+    def pre_save(self, obj):
+        if obj.pay_with_credits:
+            obj.do_pay_with_credits()
 
 
 class RandomMatchesRequestViewSet(OnlyOrganizerPreSaveMixin, ModelViewSet):

@@ -26,6 +26,7 @@
                     <tr>
                         <th>Player name</th>
                         <th>DCI number</th>
+                        <th>Credits</th>
                         <th>Judge</th>
                     </tr>
                 </thead>
@@ -33,6 +34,7 @@
                     <tr ng-repeat="player in players | filter:playerSearch" ng-click="editPlayer(player)">
                         <td>{{ player.first_name + " " + player.last_name }}</td>
                         <td>{{ player.dcinumber }}</td>
+                        <td>{{ player.credits }}</td>
                         <td><span class="glyphicon glyphicon-ok-circle" ng-show="player.is_judge"></span></td>
                     </tr>
                 </tbody>

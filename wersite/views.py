@@ -201,9 +201,11 @@ class PlayerCreditsView(LoginRequiredMixin, DetailView):
 
         def enrich_transaction(transaction):
             if transaction.transaction_type == TransactionType.EVENT_CREDITS:
-                description = "Received in event (%s)" % Event.objects.get(date=transaction.completed_on).name
+                description = "Received in event (%s)" % transaction.participant.event.name
             elif transaction.transaction_type == TransactionType.MANUAL:
                 description = "Credits manually added" if transaction.wallet_to == self.object.credits_wallet else "Credits manually removed"
+            elif transaction.transaction_type == TransactionType.EVENT_FEE:
+                description = "Credits payed for event (%s)" % transaction.participant.event.name
             else:
                 description = "No description available"
 

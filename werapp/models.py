@@ -5,7 +5,7 @@ from django.db import models
 from django.db.transaction import atomic
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from wallet.enums import Currency, TransactionType
+from wallet.enums import Currency, TransactionType, TransactionState
 from wallet.errors import InsufficientFundsError
 from wallet.models import Wallet, Transaction
 from werapp.enums import EventType, PairingMethod, EventState, RequestState, ParticipantMatchPlayerNr
@@ -254,6 +254,7 @@ class Participant(models.Model):
     player = models.ForeignKey(Player)
     event = models.ForeignKey(Event)
     matches = models.ManyToManyField(to=Match, through="ParticipantMatch")
+    pay_with_credits = models.BooleanField(default=False)
     # The following fields are filled in when the event is done. The on-the-fly calculations can be quite expensive.
     done_price_support = models.FloatField(blank=True, null=True)
     done_points = models.IntegerField(blank=True, null=True)
@@ -287,6 +288,10 @@ class Participant(models.Model):
             'opponents_match_win_percentage': 50,
         }
 
+    @property
+    def _has_payed_with_credits(self):
+        return self.transaction_set.filter(transaction_type=TransactionType.EVENT_FEE, state=TransactionState.COMPLETED).count() != 0
+
     def has_received_bye(self):
         for match in self.matches.all():
             if match.participant_set.count() == 1:
@@ -299,6 +304,22 @@ class Participant(models.Model):
                 if participant.id == otherParticipant.id:
                     return True
         return False
+
+    def do_pay_with_credits(self):
+        if not self._has_payed_with_credits:
+            transaction = Transaction.objects.do_transaction(
+                wallet_from=self.player.credits_wallet, wallet_to=self.event.organization.credits_wallet,
+                amount=Decimal("8"), transaction_type=TransactionType.EVENT_FEE
+            )
+            transaction.participant = self
+            transaction.save()
+            self.pay_with_credits = True
+            self.save()
+
+    def save(self, *args, **kwargs):
+        if self._has_payed_with_credits and not self.pay_with_credits:
+            raise ValueError('You cannot disable pay_with_credits when the transaction was completed')
+        super(Participant, self).save(*args, **kwargs)
 
     def __unicode__(self):
         description = "Participant "
