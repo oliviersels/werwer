@@ -5,7 +5,7 @@ Je hebt op {{ event.date }} meegedaan aan het Aether event "{{ event.name }}". {
 
 Hier volgt een overzicht van hoe je het hebt gedaan:
 {% for round in rounds %}
- - Ronde {{ round.nr }}: tegen {{ round.opponent_name }} heb je {{ round.result_text }} ({{ round.result }})
+ - Ronde {{ round.nr }}: {%if round.opponent_name %}tegen {{ round.opponent_name }} heb je {{ round.result_text }} ({{ round.result }}){% else %}bye{% endif %}
 {% endfor %}
 
 Je bent {{ event.standing }}e geworden met {{ event.points }} punten.

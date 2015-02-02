@@ -127,13 +127,19 @@ def end_of_event_mailing(end_of_event_mailing_request_id):
                 match_participants = match.participant_set.all()
                 for i, p in enumerate(match_participants):
                     if p.id == participant.id:
-                        points = match.points_for_participant(p)
-                        context_dict["rounds"].append({
-                            "nr": round_index + 1,
-                            "opponent_name": match_participants[(i + 1) % 2].player.first_name + " " + match_participants[(i + 1) % 2].player.last_name,
-                            "result_text": "gewonnen" if points == 3 else "gelijk gespeeld" if points == 1 else "verloren",
-                            "result": "%s - %s | %s" % ((match.wins, match.losses, match.draws) if points == 3 else (match.losses, match.wins, match.draws)),
-                        })
+                        if len(match_participants) == 1:
+                            context_dict["rounds"].append({
+                                "nr": round_index + 1,
+                                "opponent_name": None,
+                            })
+                        else:
+                            points = match.points_for_participant(p)
+                            context_dict["rounds"].append({
+                                "nr": round_index + 1,
+                                "opponent_name": match_participants[(i + 1) % 2].player.first_name + " " + match_participants[(i + 1) % 2].player.last_name,
+                                "result_text": "gewonnen" if points == 3 else "gelijk gespeeld" if points == 1 else "verloren",
+                                "result": "%s - %s | %s" % ((match.wins, match.losses, match.draws) if points == 3 else (match.losses, match.wins, match.draws)),
+                            })
 
         context = Context(context_dict)
         message = template.render(context)
