@@ -1,0 +1,76 @@
+{% extends "wersite/base.html" %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Purchase details</h2>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Description</th>
+                                <td>{{ object.description }}</td>
+                            </tr>
+                            <tr>
+                                <th>Estimated waiting time</th>
+                                <td>{{ object.estimated_shipping_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Price</th>
+                                <td>€{{ object.price }}</td>
+                            </tr>
+                            <tr>
+                                <th>Shipping address</th>
+                                <td>{{ object.name }}<br/>{{ object.address1 }}{% if object.address2 %}<br/>{{ object.address2 }}{% endif %}<br/>{{ object.postal_code }} {{ object.city }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>{{ object.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Payment method</th>
+                                <td>{{ object.readable_payment_method }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-4">
+                        <img class="center-block" src="{% static object.image_url %}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Read carefully</h2>
+            <p>1. You will receive the content of boosters that have been used in tournaments organized by Aethermagic.</p>
+            <p>2. Boosters are in the following condition:
+                <ul>
+                    <li>Opened</li>
+                    <li>Unsorted</li>
+                    <li>Played with (in sleeves)</li>
+                </ul>
+            </p>
+            <p>3. The shipping date is an estimation, boosters are sent as soon as they have been played with.</p>
+            <p>4. The cards in boosters are random, so the value you receive from your purchase is of course also random. We only guarantee that you will receive the entire content of your purchased boosters.</p>
+            <p>5. As soon as the boosters have been opened, refunds are no longer possible.</p>
+            <form class="form" action="{% url 'wersite-cbi-reservation-confirm' pk=object.pk %}" method="post">
+                {% csrf_token %}
+                {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+                <div class="checkbox">
+                    {% if form.accept_terms.errors %}<div class="alert alert-danger">{{ form.accept_terms.errors }}</div>{% endif %}
+                    <label>
+                        {{ form.accept_terms }} <strong>{% blocktrans %}I understand and agree with these terms and conditions{% endblocktrans %}</strong>
+                    </label>
+                </div>
+                <p>
+                    <br/><button type="submit" class="btn btn-primary">{% trans "Confirm purchase" %}</button>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

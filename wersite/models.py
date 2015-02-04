@@ -1,7 +1,8 @@
+import datetime
 from django.db import models
 
 # Create your models here.
-from wersite.enums import FeaturesChoices
+from wersite.enums import FeaturesChoices, ProductType, PaymentMethod, ReservationState
 from wersite.utils import GenerateToken
 
 
@@ -20,3 +21,57 @@ class WerwerSignup(models.Model):
     has_accepted_terms_and_conditions = models.BooleanField(default=False)
     email_verification_token = models.CharField(max_length=40, default=GenerateToken(40))
     email_verified = models.BooleanField(default=False)
+
+class CBIReservation(models.Model):
+    name = models.CharField(max_length=250)
+    email = models.EmailField(max_length=250)
+    address1 = models.CharField(max_length=250)
+    address2 = models.CharField(max_length=250, blank=True)
+    postal_code = models.CharField(max_length=20)
+    city = models.CharField(max_length=250)
+    country = models.CharField(max_length=250, default='BE')
+    product = models.CharField(max_length=250, choices=ProductType.choices)
+    payment_method = models.CharField(max_length=250, choices=PaymentMethod.choices, default=PaymentMethod.BANK_TRANSFER)
+    state = models.CharField(max_length=250, choices=ReservationState.choices, default=ReservationState.NEW)
+
+    @property
+    def price(self):
+        if self.product == ProductType.BOOSTERS_12:
+            return 24
+        elif self.product == ProductType.BOOSTERS_24:
+            return 44
+        elif self.product == ProductType.BOOSTERS_36:
+            return 60
+
+    @property
+    def description(self):
+        return '%s drafted boosters' % self.booster_amount
+
+    @property
+    def booster_amount(self):
+        if self.product == ProductType.BOOSTERS_12:
+            return 12
+        elif self.product == ProductType.BOOSTERS_24:
+            return 24
+        elif self.product == ProductType.BOOSTERS_36:
+            return 36
+
+    @property
+    def estimated_shipping_date(self):
+        if self.product == ProductType.BOOSTERS_12:
+            return '< 1 month'
+        elif self.product == ProductType.BOOSTERS_24:
+            return '< 1 month'
+        elif self.product == ProductType.BOOSTERS_36:
+            return '< 2 months'
+    @property
+    def readable_payment_method(self):
+        for k, v in PaymentMethod.choices:
+            if k == self.payment_method:
+                return v
+
+    @property
+    def image_url(self):
+        return 'img/fate-reforged-%s.jpg' % self.booster_amount
+
+

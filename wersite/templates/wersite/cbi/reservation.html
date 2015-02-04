@@ -1,0 +1,88 @@
+{% extends "wersite/base.html" %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Purchase details</h2>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Description</th>
+                                <td>{{ object.description }}</td>
+                            </tr>
+                            <tr>
+                                <th>Estimated waiting time</th>
+                                <td>{{ object.estimated_shipping_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Price</th>
+                                <td>€{{ object.price }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-4">
+                        <img class="center-block" src="{% static object.image_url %}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+        <h2>Shipping details</h2>
+            <form class="form" action="{% url 'wersite-cbi-reservation' booster_amount=object.booster_amount %}" method="post">
+                {% csrf_token %}
+                {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+                <div class="form-group{%if form.name.errors %} has-error{%endif%}">
+                    <label for="id_name">{% trans "Name" %}</label>
+                    {% if form.name.errors %}<div class="alert alert-danger">{{ form.name.errors }}</div>{% endif %}
+                    {{ form.name }}
+                </div>
+                <div class="form-group{%if form.email.errors %} has-error{%endif%}">
+                    <label for="id_email">{% trans "Email" %}</label>
+                    {% if form.email.errors %}<div class="alert alert-danger">{{ form.email.errors }}</div>{% endif %}
+                    {{ form.email }}
+                </div>
+                <div class="form-group{%if form.address1.errors %} has-error{%endif%}">
+                    <label for="id_address1">{% trans "Address (1)" %}</label>
+                    {% if form.address1.errors %}<div class="alert alert-danger">{{ form.address1.errors }}</div>{% endif %}
+                    {{ form.address1 }}
+                </div>
+                <div class="form-group{%if form.address2.errors %} has-error{%endif%}">
+                    <label for="id_address2">{% trans "Address (2)" %}</label>
+                    {% if form.address2.errors %}<div class="alert alert-danger">{{ form.address2.errors }}</div>{% endif %}
+                    {{ form.address2 }}
+                </div>
+                <div class="form-group{%if form.postal_code.errors %} has-error{%endif%}">
+                    <label for="id_postal_code">{% trans "Postal code" %}</label>
+                    {% if form.postal_code.errors %}<div class="alert alert-danger">{{ form.postal_code.errors }}</div>{% endif %}
+                    {{ form.postal_code }}
+                </div>
+                <div class="form-group{%if form.city.errors %} has-error{%endif%}">
+                    <label for="id_city">{% trans "City" %}</label>
+                    {% if form.city.errors %}<div class="alert alert-danger">{{ form.city.errors }}</div>{% endif %}
+                    {{ form.city }}
+                </div>
+                <div class="form-group{%if form.payment_method.errors %} has-error{%endif%}">
+                    <label for="id_payment_method">{% trans "Payment method" %}</label>
+                    {% if form.payment_method.errors %}<div class="alert alert-danger">{{ form.payment_method.errors }}</div>{% endif %}
+                    {{ form.payment_method }}
+                </div>
+                <div>
+                    <label for="recaptcha_response_field">{% trans "Solve the captcha" %}</label>
+                    {% if form.recaptcha_response_field.errors %}<div class="alert alert-danger">{{ form.recaptcha_response_field.errors }}</div>{% endif %}
+                    {% if form.recaptcha_challenge_field.errors %}<div class="alert alert-danger">{{ form.recaptcha_challenge_field.errors }}</div>{% endif %}
+                    {{ recaptcha_html|safe }}
+                </div>
+                <p>
+                    <br/><button type="submit" class="btn btn-primary">{% trans "Next: payment overview" %}</button>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

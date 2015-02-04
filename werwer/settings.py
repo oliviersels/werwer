@@ -146,6 +146,8 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 
 TEMPLATE_CONTEXT_PROCESSORS = TCP + ("django.core.context_processors.request",)
 
+ACCOUNT_NR = os.environ.get('ACCOUNT_NR', 'Error! Please contact olivier.sels@gmail.com')
+
 try:
     from local import *
 except ImportError:

@@ -85,6 +85,7 @@
                 <div class="collapse navbar-collapse" id="navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li><a href="{% url 'wersite-root' %}">{% trans "Home" %}</a></li>
+                        <li><a href="{% url 'wersite-cbi-home' %}">{% trans "Cheap Boosters" %}</a></li>
                         {% if request.user.is_authenticated and request.user.is_organizer %}
                         <li><a href="{% url 'werwer-root' %}">{% trans "WerWer app" %}</a></li>
                         {% endif %}

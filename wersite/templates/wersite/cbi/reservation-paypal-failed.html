@@ -1,0 +1,20 @@
+{% extends "wersite/base.html" %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+        {% if object.state == 'cancelled' %}
+            <h2>Payment failed</h2>
+            <p>Payment for {{ object.description }} failed. We have cancelled your reservation. If you wish to try again,
+            have a look at <a href="{% url 'wersite-cbi-home' %}">our products</a>.</p>
+        {% else %}
+            <h2>Error</h2>
+            <p>Something went wrong.</p>
+            <p><a href="">Back to home</a></p>
+        {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

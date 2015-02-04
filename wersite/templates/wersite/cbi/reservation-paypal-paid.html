@@ -1,0 +1,20 @@
+{% extends "wersite/base.html" %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+        {% if object.state == 'paid' %}
+            <h2>Payment completed</h2>
+            <p>Your payment for {{ object.description }} has been received. We will notify you when your boosters are
+            available and ready for shipment.</p>
+        {% else %}
+            <h2>Error</h2>
+            <p>Something went wrong.</p>
+            <p><a href="">Back to home</a></p>
+        {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

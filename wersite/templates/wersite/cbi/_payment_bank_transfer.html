@@ -1,0 +1,21 @@
+<p>Payment details:</p>
+<table class="table table-bordered">
+    <tr>
+        <th>Account holder</th>
+        <td>Aether</td>
+    </tr>
+    <tr>
+        <th>Amount</th>
+        <td>€{{ object.price }}</td>
+    </tr>
+    <tr>
+        <th>Account nr</th>
+        <td>{{ account_nr }}</td>
+    </tr>
+    <tr>
+        <th>Comment</th>
+        <td>reservation-{{ object.pk }}</td>
+    </tr>
+</table>
+<p>Be sure to include the comment!</p>
+<p>You will receive confirmation when the payment has been received.</p>
