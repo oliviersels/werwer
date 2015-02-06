@@ -5,21 +5,21 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
-            <h2>Purchase details</h2>
+            <h2>{% trans "Purchase details" %}</h2>
             <div class="container">
                 <div class="row">
                     <div class="col-md-8">
                         <table class="table table-bordered">
                             <tr>
-                                <th>Description</th>
+                                <th>{% trans "Description" %}</th>
                                 <td>{{ object.description }}</td>
                             </tr>
                             <tr>
-                                <th>Estimated waiting time</th>
+                                <th>{% trans "Estimated waiting time" %}</th>
                                 <td>{{ object.estimated_shipping_date }}</td>
                             </tr>
                             <tr>
-                                <th>Price</th>
+                                <th>{% trans "Price" %}</th>
                                 <td>€{{ object.price }}</td>
                             </tr>
                         </table>
@@ -33,7 +33,7 @@
     </div>
     <div class="row">
         <div class="col-sm-6">
-        <h2>Shipping details</h2>
+        <h2>{% trans "Shipping details" %}</h2>
             <form class="form" action="{% url 'wersite-cbi-reservation' booster_amount=object.booster_amount %}" method="post">
                 {% csrf_token %}
                 {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}

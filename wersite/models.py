@@ -1,5 +1,5 @@
-import datetime
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 # Create your models here.
 from wersite.enums import FeaturesChoices, ProductType, PaymentMethod, ReservationState
@@ -45,7 +45,7 @@ class CBIReservation(models.Model):
 
     @property
     def description(self):
-        return '%s drafted boosters' % self.booster_amount
+        return _('%s drafted boosters') % self.booster_amount
 
     @property
     def booster_amount(self):
@@ -59,11 +59,11 @@ class CBIReservation(models.Model):
     @property
     def estimated_shipping_date(self):
         if self.product == ProductType.BOOSTERS_12:
-            return '< 1 month'
+            return _('< 1 month')
         elif self.product == ProductType.BOOSTERS_24:
-            return '< 1 month'
+            return _('< 1 month')
         elif self.product == ProductType.BOOSTERS_36:
-            return '< 2 months'
+            return _('< 2 months')
     @property
     def readable_payment_method(self):
         for k, v in PaymentMethod.choices:

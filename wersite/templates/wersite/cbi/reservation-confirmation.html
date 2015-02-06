@@ -5,33 +5,33 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
-            <h2>Purchase details</h2>
+            <h2>{% trans "Purchase details" %}</h2>
             <div class="container">
                 <div class="row">
                     <div class="col-md-8">
                         <table class="table table-bordered">
                             <tr>
-                                <th>Description</th>
+                                <th>{% trans "Description" %}</th>
                                 <td>{{ object.description }}</td>
                             </tr>
                             <tr>
-                                <th>Estimated waiting time</th>
+                                <th>{% trans "Estimated waiting time" %}</th>
                                 <td>{{ object.estimated_shipping_date }}</td>
                             </tr>
                             <tr>
-                                <th>Price</th>
+                                <th>{% trans "Price" %}</th>
                                 <td>€{{ object.price }}</td>
                             </tr>
                             <tr>
-                                <th>Shipping address</th>
+                                <th>{% trans "Shipping address" %}</th>
                                 <td>{{ object.name }}<br/>{{ object.address1 }}{% if object.address2 %}<br/>{{ object.address2 }}{% endif %}<br/>{{ object.postal_code }} {{ object.city }}</td>
                             </tr>
                             <tr>
-                                <th>Email</th>
+                                <th>{% trans "Email" %}</th>
                                 <td>{{ object.email }}</td>
                             </tr>
                             <tr>
-                                <th>Payment method</th>
+                                <th>{% trans "Payment method" %}</th>
                                 <td>{{ object.readable_payment_method }}</td>
                             </tr>
                         </table>
@@ -45,18 +45,19 @@
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <h2>Read carefully</h2>
-            <p>1. You will receive the content of boosters that have been used in tournaments organized by Aethermagic.</p>
-            <p>2. Boosters are in the following condition:
+            <h2>{% trans "Read carefully" %}</h2>
+            <p>1. {% blocktrans %}You will receive the content of boosters that have been used in tournaments organized by Aethermagic.{% endblocktrans %}</p>
+            <p>2. {% blocktrans %}Boosters are in the following condition:{% endblocktrans %}
                 <ul>
-                    <li>Opened</li>
-                    <li>Unsorted</li>
-                    <li>Played with (in sleeves)</li>
+                    <li>{% trans "Opened" %}</li>
+                    <li>{% trans "Unsorted" %}</li>
+                    <li>{% trans "Played with (in sleeves)" %}</li>
                 </ul>
             </p>
-            <p>3. The shipping date is an estimation, boosters are sent as soon as they have been played with.</p>
-            <p>4. The cards in boosters are random, so the value you receive from your purchase is of course also random. We only guarantee that you will receive the entire content of your purchased boosters.</p>
-            <p>5. As soon as the boosters have been opened, refunds are no longer possible.</p>
+            <p>3. {% blocktrans %}The shipping date is an estimation, boosters are sent as soon as they have been played with.{% endblocktrans %}</p>
+            <p>4. {% blocktrans %}The cards in boosters are random, so the value you receive from your purchase is of course also random. We only guarantee that you will receive the entire content of your purchased boosters.{% endblocktrans %}</p>
+            <p>5. {% blocktrans %}As soon as the boosters have been opened, refunds are no longer possible.{% endblocktrans %}</p>
+            <p>6. {% blocktrans %}Shipping is only possible to Belgium.{% endblocktrans %}</p>
             <form class="form" action="{% url 'wersite-cbi-reservation-confirm' pk=object.pk %}" method="post">
                 {% csrf_token %}
                 {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}

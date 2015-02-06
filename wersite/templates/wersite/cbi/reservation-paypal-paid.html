@@ -6,9 +6,9 @@
     <div class="row">
         <div class="col-sm-12">
         {% if object.state == 'paid' %}
-            <h2>Payment completed</h2>
-            <p>Your payment for {{ object.description }} has been received. We will notify you when your boosters are
-            available and ready for shipment.</p>
+            <h2>{% trans "Payment completed" %}</h2>
+            <p>{% blocktrans with object_description=object.description %}Your payment for {{ object_description }} has
+            been received. We will notify you when your boosters are available and ready for shipment.{% endblocktrans %}</p>
         {% else %}
             <h2>Error</h2>
             <p>Something went wrong.</p>

@@ -1,21 +1,22 @@
+{% load i18n %}
 <p>Payment details:</p>
 <table class="table table-bordered">
     <tr>
-        <th>Account holder</th>
+        <th>{% trans "Account holder" %}</th>
         <td>Aether</td>
     </tr>
     <tr>
-        <th>Amount</th>
+        <th>{% trans "Amount" %}</th>
         <td>€{{ object.price }}</td>
     </tr>
     <tr>
-        <th>Account nr</th>
+        <th>{% trans "Account nr" %}</th>
         <td>{{ account_nr }}</td>
     </tr>
     <tr>
-        <th>Comment</th>
+        <th>{% trans "Comment" %}</th>
         <td>reservation-{{ object.pk }}</td>
     </tr>
 </table>
-<p>Be sure to include the comment!</p>
-<p>You will receive confirmation when the payment has been received.</p>
+<p>{% blocktrans %}Be sure to include the comment!{% endblocktrans %}</p>
+<p>{% blocktrans %}You will receive confirmation when the payment has been received.{% endblocktrans %}</p>

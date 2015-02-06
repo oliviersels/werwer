@@ -1,1 +1,2 @@
-<a href="{% url 'wersite-cbi-reservation-paypal' pk=object.pk %}" class="btn btn-primary">Continue to PayPal</a>
+{% load i18n %}
+<a href="{% url 'wersite-cbi-reservation-paypal' pk=object.pk %}" class="btn btn-primary">{% trans "Continue to PayPal" %}</a>

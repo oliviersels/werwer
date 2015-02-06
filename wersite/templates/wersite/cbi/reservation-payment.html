@@ -9,9 +9,10 @@
             <h2>Error</h2>
             <p>You have to accept the terms and conditions! <a href="{% url 'wersite-cbi-reservation-confirm' pk=object.pk %}">Back to payment overview</a></p>
         {% elif object.state == 'confirmed' %}
-            <h2>Payment details</h2>
-            <p>Thank you for your purchase! You have chosen to pay the total cost of <strong>€{{ object.price }}</strong>
-                via <strong>{{ object.readable_payment_method }}</strong>.</p>
+            <h2>{% trans "Payment details" %}</h2>
+            <p>{% blocktrans with object_price=object.price object_readable_payment_method=object.readable_payment_method %}
+                Thank you for your purchase! You have chosen to pay the total cost of <strong>€{{ object_price }}</strong>
+                via <strong>{{ object_readable_payment_method }}</strong>.{% endblocktrans %}</p>
             {% if object.payment_method == 'bank_transfer' %}
                 {% include "wersite/cbi/_payment_bank_transfer.html" %}
             {% elif object.payment_method == 'paypal' %}
