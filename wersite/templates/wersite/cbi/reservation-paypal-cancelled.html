@@ -1,0 +1,22 @@
+{% extends "wersite/base.html" %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+        {% if object.state == 'cancelled' %}
+            <h2>{% trans "Payment cancelled" %}</h2>
+            {% url 'wersite-cbi-home' as products_url %}
+            <p>{% blocktrans with object_description=object.description %}Your reservation for {{ object_description }}
+            has been cancelled. If you wish to buy anything else, take a look at <a href="{{ products_url }}">our
+            products</a>.{% endblocktrans %}</p>
+        {% else %}
+            <h2>Error</h2>
+            <p>Something went wrong.</p>
+            <p><a href="">Back to home</a></p>
+        {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -3,7 +3,9 @@ from django.contrib.auth.views import login, logout
 from wersite.forms import PlayerAuthenticationForm
 from wersite.views import WerHome, FeatureFeedbackView, WerwerSignupView, WerwerSignupSuccessView, EmailVerificationView, \
     EmailVerificationFailedView, EmailVerificationAlreadyDoneView, EmailVerificationDoneView, NotAnOrganizerView, \
-    PlayerProfileView, PlayerEventsView, PlayerPlayView, PlayerCreditsView, PlayerProfileUpdatedView
+    PlayerProfileView, PlayerEventsView, PlayerPlayView, PlayerCreditsView, PlayerProfileUpdatedView, CBIHomeView, \
+    CBIReservationView, CBIReservationConfirmationView, CBIReservationPaymentView, CBIReservationPaypalView, \
+    CBIReservationPaypalPaidView, CBIReservationPaypalCancelledView, CBIReservationPaypalFailedView
 
 urlpatterns = (
     url(r'^$', WerHome.as_view(), name='wersite-root'),
@@ -25,6 +27,15 @@ urlpatterns = (
     url(r'^player/(?P<pk>\d+)/profile/$', PlayerProfileView.as_view(), name='wersite-profile'),
     url(r'^player/profile/$', PlayerProfileView.as_view(), name='wersite-profile'),
     url(r'^player/profile-updated/$', PlayerProfileUpdatedView.as_view(), name='wersite-profile-updated'),
+
+    url(r'^cbi/home/$', CBIHomeView.as_view(), name='wersite-cbi-home'),
+    url(r'^cbi/reservation/(?P<booster_amount>\d+)/$', CBIReservationView.as_view(), name='wersite-cbi-reservation'),
+    url(r'^cbi/reservation/(?P<pk>\d+)/confirm/$', CBIReservationConfirmationView.as_view(), name='wersite-cbi-reservation-confirm'),
+    url(r'^cbi/reservation/(?P<pk>\d+)/payment/$', CBIReservationPaymentView.as_view(), name='wersite-cbi-reservation-payment'),
+    url(r'^cbi/reservation/(?P<pk>\d+)/paypal/$', CBIReservationPaypalView.as_view(), name='wersite-cbi-reservation-paypal'),
+    url(r'^cbi/reservation/(?P<pk>\d+)/paypal/paid/$', CBIReservationPaypalPaidView.as_view(), name='wersite-cbi-reservation-paypal-paid'),
+    url(r'^cbi/reservation/(?P<pk>\d+)/paypal/cancelled/$', CBIReservationPaypalCancelledView.as_view(), name='wersite-cbi-reservation-paypal-cancelled'),
+    url(r'^cbi/reservation/(?P<pk>\d+)/paypal/failed/$', CBIReservationPaypalFailedView.as_view(), name='wersite-cbi-reservation-paypal-failed'),
 
     url(r'^login/$', login, kwargs={'template_name': 'wersite/login.html',
                                     'authentication_form': PlayerAuthenticationForm}, name='wersite-login'),

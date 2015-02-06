@@ -1,4 +1,5 @@
 # Create your views here.
+import logging
 from braces.views import LoginRequiredMixin
 from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
@@ -8,15 +9,19 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.http import urlencode
 from django.views.generic import TemplateView, RedirectView, DetailView
-from django.views.generic.base import TemplateResponseMixin, ContextMixin
-from django.views.generic.edit import BaseCreateView, UpdateView
+from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
+from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.edit import BaseCreateView, UpdateView, FormView, FormMixin
+import paypalrestsdk
 from recaptcha.client import captcha
 from wallet.enums import TransactionType
 from wallet.models import Transaction
 from werapp.enums import EventState
 from werapp.models import Player, Event, Match
-from wersite.forms import FeatureFeedbackForm, WerwerSignupForm, PlayerProfileForm
-from wersite.models import WerwerSignup
+from wersite.enums import ProductType, ReservationState
+from wersite.forms import FeatureFeedbackForm, WerwerSignupForm, PlayerProfileForm, CBIReservationForm, \
+    CBIReservationConfirmationForm
+from wersite.models import WerwerSignup, CBIReservation
 from wersite.tasks import registration_verify_email
 
 
@@ -234,3 +239,183 @@ class PlayerProfileView(LoginRequiredMixin, UpdateView):
 class PlayerProfileUpdatedView(LoginRequiredMixin, TemplateView):
     template_name = "wersite/player/profile-updated.html"
 
+class CBIHomeView(TemplateView):
+    template_name = "wersite/cbi/home.html"
+
+class CBIReservationView(TemplateResponseMixin, BaseCreateView):
+    template_name = "wersite/cbi/reservation.html"
+    form_class = CBIReservationForm
+
+    def _product(self):
+        if int(self.kwargs['booster_amount']) == 12:
+            return ProductType.BOOSTERS_12
+        elif int(self.kwargs['booster_amount']) == 24:
+            return ProductType.BOOSTERS_24
+        elif int(self.kwargs['booster_amount']) == 36:
+            return ProductType.BOOSTERS_36
+    def get_context_data(self, **kwargs):
+        context_data = super(CBIReservationView, self).get_context_data(**kwargs)
+        context_data['recaptcha_html'] = captcha.displayhtml(settings.RECAPTCHA_PUBLIC_KEY)
+        reservation = CBIReservation()
+        reservation.product = self._product()
+        context_data['object'] = reservation
+        return context_data
+
+    def get_form_kwargs(self):
+        # Overwrite to add the request to the args
+        kwargs = super(CBIReservationView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('wersite-cbi-reservation-confirm', kwargs={'pk': self.object.pk})
+
+    def form_valid(self, form):
+        """
+        If the form is valid, save the associated model.
+        """
+        self.object = form.save(commit=False)
+        self.object.product = self._product()
+        self.object.save()
+        self.request.session['cbi_reservation_id'] = self.object.id
+        return super(CBIReservationView, self).form_valid(form)
+
+class CBIReservationConfirmationView(SingleObjectMixin, FormMixin, TemplateResponseMixin, View):
+    template_name = "wersite/cbi/reservation-confirmation.html"
+    form_class = CBIReservationConfirmationForm
+
+    def get_queryset(self):
+        return CBIReservation.objects.filter(id=self.request.session.get('cbi_reservation_id', 0))
+
+    def get(self, request, *args, **kwargs):
+        """
+        Handles GET requests and instantiates a blank version of the form.
+        """
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance with the passed
+        POST variables and then checked for validity.
+        """
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    # PUT is a valid HTTP verb for creating (with a known URL) or editing an
+    # object, note that browsers only support POST for now.
+    def put(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context_data = super(CBIReservationConfirmationView, self).get_context_data(**kwargs)
+        context_data['object'] = self.object
+        return context_data
+
+    def get_success_url(self):
+        return reverse('wersite-cbi-reservation-payment', kwargs={'pk': self.object.pk})
+
+    def form_valid(self, form):
+        self.object.state = ReservationState.CONFIRMED
+        self.object.save()
+        p = Player.objects.get(email='olivier.sels@gmail.com')
+        p.email_user("Reservation completed", "Somebody completed a reservation")
+        return super(CBIReservationConfirmationView, self).form_valid(form)
+
+class CBIReservationPaymentView(DetailView):
+    template_name = "wersite/cbi/reservation-payment.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super(CBIReservationPaymentView, self).get_context_data(**kwargs)
+        context_data['account_nr'] = settings.ACCOUNT_NR
+        return context_data
+
+    def get_queryset(self):
+        return CBIReservation.objects.filter(id=self.request.session.get('cbi_reservation_id', 0))
+
+class CBIReservationPaypalView(SingleObjectMixin, RedirectView):
+    permanent = False
+    def get_queryset(self):
+        return CBIReservation.objects.filter(state=ReservationState.CONFIRMED,
+                                             id=self.request.session.get('cbi_reservation_id', 0))
+
+    def get_redirect_url(self, *args, **kwargs):
+        self.object = self.get_object()
+        if 'token' in self.request.GET and 'paymentId' not in self.request.GET:
+            self.object.state = ReservationState.CANCELLED
+            self.object.save()
+            del self.request.session['cbi_reservation_id']
+            return reverse('wersite-cbi-reservation-paypal-cancelled', kwargs={'pk': self.object.pk}) # This is when the user cancels
+        elif 'paymentId' in self.request.GET:
+            payment = paypalrestsdk.Payment.find(self.request.GET['paymentId'])
+            if payment.execute({"payer_id": self.request.GET['PayerID']}):
+                self.object.state = ReservationState.PAID
+                self.object.save()
+                del self.request.session['cbi_reservation_id']
+                return reverse('wersite-cbi-reservation-paypal-paid', kwargs={'pk': self.object.pk}) # It worked!
+            else:
+                self.object.state = ReservationState.CANCELLED
+                self.object.save()
+                del self.request.session['cbi_reservation_id']
+                return reverse('wersite-cbi-reservation-paypal-failed', kwargs={'pk': self.object.pk})
+
+        # Create a payment with PayPal
+        payment = paypalrestsdk.Payment({
+            'intent': 'sale',
+            'redirect_urls': {
+                'return_url': 'http://' + settings.HOST_NAME + reverse('wersite-cbi-reservation-paypal', kwargs={'pk': self.object.pk}),
+                'cancel_url': 'http://' + settings.HOST_NAME + reverse('wersite-cbi-reservation-paypal', kwargs={'pk': self.object.pk}),
+            },
+            'payer': {
+                'payment_method': 'paypal',
+            },
+            'transactions': [{
+                'amount': {
+                    'total': self.object.price,
+                    'currency': 'EUR',
+                },
+                'item_list': {
+                    'items': [{
+                        'quantity': '1',
+                        'name': self.object.description,
+                        'price': self.object.price,
+                        'currency': 'EUR',
+                    }]
+                }
+            }],
+        })
+
+        if payment.create():
+            for link in payment.links:
+                if link['rel'] == 'approval_url':
+                    return link['href']
+
+        self.object.state = ReservationState.CANCELLED
+        self.object.save()
+        del self.request.session['cbi_reservation_id']
+        return reverse('wersite-cbi-reservation-paypal-failed', kwargs={'pk': self.object.pk})
+
+class CBIReservationPaypalPaidView(DetailView):
+    template_name = "wersite/cbi/reservation-paypal-paid.html"
+
+    def get_queryset(self):
+        return CBIReservation.objects.filter(state=ReservationState.PAID)
+
+class CBIReservationPaypalCancelledView(DetailView):
+    template_name = "wersite/cbi/reservation-paypal-cancelled.html"
+
+    def get_queryset(self):
+        return CBIReservation.objects.filter(state=ReservationState.CANCELLED)
+
+class CBIReservationPaypalFailedView(DetailView):
+    template_name = "wersite/cbi/reservation-paypal-failed.html"
+
+    def get_queryset(self):
+        return CBIReservation.objects.filter(state=ReservationState.CANCELLED)
