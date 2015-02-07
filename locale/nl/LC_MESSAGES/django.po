@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aether website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-06 21:32+0000\n"
-"PO-Revision-Date: 2015-02-06 22:33+0100\n"
+"POT-Creation-Date: 2015-02-07 08:08+0000\n"
+"PO-Revision-Date: 2015-02-07 09:08+0100\n"
 "Last-Translator: Olivier Sels <olivier.sels@gmail.com>\n"
 "Language-Team: Aether\n"
 "Language: nl\n"
@@ -40,8 +40,8 @@ msgid "Change password: %s"
 msgstr "Wijzig wachtwoord: %s"
 
 #: werapp/forms.py:8 werapp/forms.py:39
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:30
-#: wersite/templates/wersite/cbi/reservation.html:46
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:31
+#: wersite/templates/wersite/cbi/reservation.html:47
 #: wersite/templates/wersite/login.html:13
 #: wersite/templates/wersite/player/profile.html:21
 #: wersite/templates/wersite/werwer-signup.html:20
@@ -288,7 +288,7 @@ msgid "Home"
 msgstr "Home"
 
 #: wersite/templates/wersite/base.html:88
-#: wersite/templates/wersite/cbi/home.html:7
+#: wersite/templates/wersite/cbi/home.html:8
 msgid "Cheap Boosters"
 msgstr "Goedkope boosters"
 
@@ -333,15 +333,26 @@ msgstr "Je ontvangt een bevestiging zodra de betaling is ontvangen."
 msgid "Continue to PayPal"
 msgstr "Verder naar PayPal"
 
-#: wersite/templates/wersite/cbi/home.html:8
+#: wersite/templates/wersite/cbi/home.html:4
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:4
+#: wersite/templates/wersite/cbi/reservation-payment.html:4
+#: wersite/templates/wersite/cbi/reservation-paypal-cancelled.html:4
+#: wersite/templates/wersite/cbi/reservation-paypal-failed.html:4
+#: wersite/templates/wersite/cbi/reservation-paypal-paid.html:4
+#: wersite/templates/wersite/cbi/reservation.html:4
+#| msgid "Cheap Boosters"
+msgid "Cheap boosters"
+msgstr "Goedkope boosters"
+
+#: wersite/templates/wersite/cbi/home.html:9
 msgid "Products"
 msgstr "Producten"
 
-#: wersite/templates/wersite/cbi/home.html:32
+#: wersite/templates/wersite/cbi/home.html:33
 msgid "How are these boosters so cheap?"
 msgstr "Hoe zijn deze boosters zo goedkoop?"
 
-#: wersite/templates/wersite/cbi/home.html:33
+#: wersite/templates/wersite/cbi/home.html:34
 msgid ""
 "We are a small Magic club, a group of friends, and we organize weekly drafts "
 "for 4 years now. We are not\n"
@@ -362,29 +373,29 @@ msgstr ""
 "magiccardmarket, maar in bulk. En daarom zijn deze boosters zo goedkoop. "
 "<strong>Wij willen er vanaf!</strong>"
 
-#: wersite/templates/wersite/cbi/home.html:38
+#: wersite/templates/wersite/cbi/home.html:39
 msgid ""
 "Now you might be thinking: what's the catch? So without further delay, here "
 "it is:"
 msgstr "Nu denk je misschien: waar zit de adder onder het gras? Hier komt ie:"
 
-#: wersite/templates/wersite/cbi/home.html:40
+#: wersite/templates/wersite/cbi/home.html:41
 msgid "The boosters are <strong>opened</strong>."
 msgstr "De boosters zijn <strong>geopend</strong>."
 
-#: wersite/templates/wersite/cbi/home.html:41
+#: wersite/templates/wersite/cbi/home.html:42
 msgid "The cards have been <strong>played</strong> with once in sleeves."
 msgstr ""
 "Er is met deze kaarten <strong>gespeeld</strong>, zij het wel in sleeves."
 
-#: wersite/templates/wersite/cbi/home.html:42
+#: wersite/templates/wersite/cbi/home.html:43
 msgid ""
 "The cards are <strong>unsorted</strong>. We have created decks with them."
 msgstr ""
 "De kaarten zijn <strong>niet gesorteerd</strong>. Wij hebben er decks mee "
 "gemaakt."
 
-#: wersite/templates/wersite/cbi/home.html:43
+#: wersite/templates/wersite/cbi/home.html:44
 msgid ""
 "<strong>Shipping is not instantaneous</strong>. You will have to wait until "
 "we actually played with\n"
@@ -393,7 +404,7 @@ msgstr ""
 "We kunnen ze <strong>niet onmiddellijk versturen</strong>. Je moet wachten "
 "tot wij er effectief mee gespeeld hebben."
 
-#: wersite/templates/wersite/cbi/home.html:45
+#: wersite/templates/wersite/cbi/home.html:46
 msgid ""
 "You <strong>cannot choose the type</strong> of boosters. You get a mix of "
 "the currently drafted\n"
@@ -402,11 +413,11 @@ msgstr ""
 "Je kan het <strong>type boosters niet kiezen</strong>. Je krijgt de boosters "
 "waar we mee draften. Momenteel is dit FRF-KTK-KTK."
 
-#: wersite/templates/wersite/cbi/home.html:49
+#: wersite/templates/wersite/cbi/home.html:50
 msgid "With these disadvantages the good news must be very good:"
 msgstr "Gelukkig zijn de voordelen ook erg goed:"
 
-#: wersite/templates/wersite/cbi/home.html:51
+#: wersite/templates/wersite/cbi/home.html:52
 msgid ""
 "These boosters are <strong>super cheap</strong>. Prices rapidly drop to €2/"
 "booster when ordering\n"
@@ -417,7 +428,7 @@ msgstr ""
 "tot €2/booster als je er meerdere bestelt. Ze kunnen zelfs zo laag gaan tot "
 "€1.67/booster voor een volledige boosterdoos."
 
-#: wersite/templates/wersite/cbi/home.html:53
+#: wersite/templates/wersite/cbi/home.html:54
 msgid ""
 "All prices <strong>include shipping</strong> to Belgium. No surprises, you "
 "pay the price you see."
@@ -425,7 +436,7 @@ msgstr ""
 "Voor België is <strong>verzending inbegrepen</strong> in alle prijzen. Je "
 "betaalt wat er staat."
 
-#: wersite/templates/wersite/cbi/home.html:54
+#: wersite/templates/wersite/cbi/home.html:55
 #, python-format
 msgid ""
 "A 100%% guarantee from Aetherclub that you actually get what was inside the "
@@ -435,7 +446,7 @@ msgstr ""
 "De 100%% garantie van Aetherclub dat je echt krijgt wat wij openen. Als we "
 "een foil openen die €60+ waard is dan krijg je hem ook echt."
 
-#: wersite/templates/wersite/cbi/home.html:56
+#: wersite/templates/wersite/cbi/home.html:57
 msgid ""
 "A best effort to only allow purchases when we think we can fulfill them "
 "within a month. No promises\n"
@@ -445,11 +456,11 @@ msgstr ""
 "boosters binnen de maand kunnen versturen. Dat kunnen we helaas wel niet "
 "beloven."
 
-#: wersite/templates/wersite/cbi/home.html:58
+#: wersite/templates/wersite/cbi/home.html:59
 msgid "Easy payment with bank transfer or PayPal."
 msgstr "Je kan makkelijk betalen met overschrijving of PayPal."
 
-#: wersite/templates/wersite/cbi/home.html:61
+#: wersite/templates/wersite/cbi/home.html:62
 msgid ""
 "So if you're the kind of player that's interested in random cheap cards: we "
 "can help you."
@@ -457,41 +468,41 @@ msgstr ""
 "Dus als jij het type speler bent dat geïnteresseerd is in gratis, random "
 "kaarten: wij kunnen je helpen."
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:8
-#: wersite/templates/wersite/cbi/reservation.html:8
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:9
+#: wersite/templates/wersite/cbi/reservation.html:9
 msgid "Purchase details"
 msgstr "Aankoopgegevens"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:14
-#: wersite/templates/wersite/cbi/reservation.html:14
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:15
+#: wersite/templates/wersite/cbi/reservation.html:15
 #: wersite/templates/wersite/player/credits.html:13
 msgid "Description"
 msgstr "Omschrijving"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:18
-#: wersite/templates/wersite/cbi/reservation.html:18
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:19
+#: wersite/templates/wersite/cbi/reservation.html:19
 msgid "Estimated waiting time"
 msgstr "Geschatte wachttijd"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:22
-#: wersite/templates/wersite/cbi/reservation.html:22
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:23
+#: wersite/templates/wersite/cbi/reservation.html:23
 msgid "Price"
 msgstr "Prijs"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:26
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:27
 msgid "Shipping address"
 msgstr "Verzendadres"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:34
-#: wersite/templates/wersite/cbi/reservation.html:71
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:35
+#: wersite/templates/wersite/cbi/reservation.html:72
 msgid "Payment method"
 msgstr "Betalingsmethode"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:48
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:49
 msgid "Read carefully"
 msgstr "Lees aandachtig"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:49
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:50
 msgid ""
 "You will receive the content of boosters that have been used in tournaments "
 "organized by Aethermagic."
@@ -499,23 +510,23 @@ msgstr ""
 "Je krijgt de inhoud van boosters die gebruikt zijn in een toernooi van "
 "Aethermagic."
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:50
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:51
 msgid "Boosters are in the following condition:"
 msgstr "Boosters bevinden zich in de volgende staat:"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:52
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:53
 msgid "Opened"
 msgstr "Geopend"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:53
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:54
 msgid "Unsorted"
 msgstr "Ongesorteerd"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:54
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:55
 msgid "Played with (in sleeves)"
 msgstr "Gespeeld (in sleeves)"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:57
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:58
 msgid ""
 "The shipping date is an estimation, boosters are sent as soon as they have "
 "been played with."
@@ -523,7 +534,7 @@ msgstr ""
 "De verzenddatum is een schatting. Boosters worden verzonden zodra wij ermee "
 "gespeeld hebben."
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:58
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:59
 msgid ""
 "The cards in boosters are random, so the value you receive from your "
 "purchase is of course also random. We only guarantee that you will receive "
@@ -534,30 +545,30 @@ msgstr ""
 "volledige inhoud krijgt van je boosters en dat reeds vast ligt welke "
 "boosters van jou zijn voor we ze openen."
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:59
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:60
 msgid ""
 "As soon as the boosters have been opened, refunds are no longer possible."
 msgstr ""
 "Zodra de boosters geopend zijn, is een terugbetaling van je aankoop niet "
 "meer mogelijk."
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:60
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:61
 msgid "Shipping is only possible to Belgium."
 msgstr "Verzending enkel naar België."
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:67
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:68
 msgid "I understand and agree with these terms and conditions"
 msgstr "Ik begrijp de voorwaarden en ga ermee akkoord"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:71
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:72
 msgid "Confirm purchase"
 msgstr "Aankoop bevestigen"
 
-#: wersite/templates/wersite/cbi/reservation-payment.html:12
+#: wersite/templates/wersite/cbi/reservation-payment.html:13
 msgid "Payment details"
 msgstr "Betaalgegevens"
 
-#: wersite/templates/wersite/cbi/reservation-payment.html:13
+#: wersite/templates/wersite/cbi/reservation-payment.html:14
 #, python-format
 msgid ""
 "\n"
@@ -570,11 +581,11 @@ msgstr ""
 "%(object_price)s</strong> te betalen via <strong>"
 "%(object_readable_payment_method)s</strong>."
 
-#: wersite/templates/wersite/cbi/reservation-paypal-cancelled.html:9
+#: wersite/templates/wersite/cbi/reservation-paypal-cancelled.html:10
 msgid "Payment cancelled"
 msgstr "Betaling geannuleerd"
 
-#: wersite/templates/wersite/cbi/reservation-paypal-cancelled.html:11
+#: wersite/templates/wersite/cbi/reservation-paypal-cancelled.html:12
 #, python-format
 msgid ""
 "Your reservation for %(object_description)s\n"
@@ -586,11 +597,11 @@ msgstr ""
 "anders wenst te kopen kan je altijd een kijkje nemen naar <a href="
 "\"%(products_url)s\">onze producten</a>."
 
-#: wersite/templates/wersite/cbi/reservation-paypal-failed.html:9
+#: wersite/templates/wersite/cbi/reservation-paypal-failed.html:10
 msgid "Payment failed"
 msgstr "Betaling mislukt"
 
-#: wersite/templates/wersite/cbi/reservation-paypal-failed.html:11
+#: wersite/templates/wersite/cbi/reservation-paypal-failed.html:12
 #, python-format
 msgid ""
 "Payment for %(object_description)s failed.\n"
@@ -602,11 +613,11 @@ msgstr ""
 "wilt proberen kan je altijd een kijkje nemen naar <a href=\"%(products_url)s"
 "\">onze producten</a>."
 
-#: wersite/templates/wersite/cbi/reservation-paypal-paid.html:9
+#: wersite/templates/wersite/cbi/reservation-paypal-paid.html:10
 msgid "Payment completed"
 msgstr "Betaling afgerond"
 
-#: wersite/templates/wersite/cbi/reservation-paypal-paid.html:10
+#: wersite/templates/wersite/cbi/reservation-paypal-paid.html:11
 #, python-format
 msgid ""
 "Your payment for %(object_description)s has\n"
@@ -616,39 +627,39 @@ msgstr ""
 "Je betaling voor %(object_description)s is goed ontvangen. We houden je op "
 "de hoogte wanneer je boosters beschikbaar zijn en verzonden kunnen worden."
 
-#: wersite/templates/wersite/cbi/reservation.html:36
+#: wersite/templates/wersite/cbi/reservation.html:37
 msgid "Shipping details"
 msgstr "Verzendgegevens"
 
-#: wersite/templates/wersite/cbi/reservation.html:41
+#: wersite/templates/wersite/cbi/reservation.html:42
 #: wersite/templates/wersite/home.html:99
 #: wersite/templates/wersite/player/events.html:13
 #: wersite/templates/wersite/werwer-signup.html:15
 msgid "Name"
 msgstr "Naam"
 
-#: wersite/templates/wersite/cbi/reservation.html:51
+#: wersite/templates/wersite/cbi/reservation.html:52
 msgid "Address (1)"
 msgstr "Adres (1)"
 
-#: wersite/templates/wersite/cbi/reservation.html:56
+#: wersite/templates/wersite/cbi/reservation.html:57
 msgid "Address (2)"
 msgstr "Adres (2)"
 
-#: wersite/templates/wersite/cbi/reservation.html:61
+#: wersite/templates/wersite/cbi/reservation.html:62
 msgid "Postal code"
 msgstr "Postcode"
 
-#: wersite/templates/wersite/cbi/reservation.html:66
+#: wersite/templates/wersite/cbi/reservation.html:67
 msgid "City"
 msgstr "Stad"
 
-#: wersite/templates/wersite/cbi/reservation.html:76
+#: wersite/templates/wersite/cbi/reservation.html:77
 #: wersite/templates/wersite/werwer-signup.html:35
 msgid "Solve the captcha"
 msgstr "Los de captcha op"
 
-#: wersite/templates/wersite/cbi/reservation.html:82
+#: wersite/templates/wersite/cbi/reservation.html:83
 msgid "Next: payment overview"
 msgstr "Volgende: betalingsoverzicht"
 
