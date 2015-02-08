@@ -59,11 +59,11 @@ class CBIReservation(models.Model):
     @property
     def estimated_shipping_date(self):
         if self.product == ProductType.BOOSTERS_12:
-            return _('< 1 month')
+            return _('2-3 months')
         elif self.product == ProductType.BOOSTERS_24:
-            return _('< 1 month')
+            return _('2-3 months')
         elif self.product == ProductType.BOOSTERS_36:
-            return _('< 2 months')
+            return _('3-4 months')
     @property
     def readable_payment_method(self):
         for k, v in PaymentMethod.choices:
