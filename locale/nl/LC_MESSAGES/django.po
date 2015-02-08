@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aether website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-08 17:09+0000\n"
+"POT-Creation-Date: 2015-02-08 17:22+0000\n"
 "PO-Revision-Date: 2015-02-08 18:10+0100\n"
 "Last-Translator: Olivier Sels <olivier.sels@gmail.com>\n"
 "Language-Team: Aether\n"
@@ -276,12 +276,10 @@ msgid "%s drafted boosters"
 msgstr "%s gedraftte boosters"
 
 #: wersite/models.py:62 wersite/models.py:64
-#| msgid "< 2 months"
 msgid "2-3 months"
 msgstr "2 - 3 maanden"
 
 #: wersite/models.py:66
-#| msgid "< 2 months"
 msgid "3-4 months"
 msgstr "3 - 4 maanden"
 
@@ -349,11 +347,17 @@ msgstr "Goedkope boosters"
 msgid "Products"
 msgstr "Producten"
 
-#: wersite/templates/wersite/cbi/home.html:36
+#: wersite/templates/wersite/cbi/home.html:11
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:13
+#: wersite/templates/wersite/cbi/reservation.html:13
+msgid "Due to high demand, the estimated waiting time is more than 2 months"
+msgstr "Door de hoge vraag is de wachttijd meer dan 2 maanden"
+
+#: wersite/templates/wersite/cbi/home.html:37
 msgid "How are these boosters so cheap?"
 msgstr "Hoe zijn deze boosters zo goedkoop?"
 
-#: wersite/templates/wersite/cbi/home.html:37
+#: wersite/templates/wersite/cbi/home.html:38
 msgid ""
 "We are a small Magic club, a group of friends, and we organize weekly drafts "
 "for 4 years now. We are not\n"
@@ -374,29 +378,29 @@ msgstr ""
 "magiccardmarket, maar in bulk. En daarom zijn deze boosters zo goedkoop. "
 "<strong>Wij willen er vanaf!</strong>"
 
-#: wersite/templates/wersite/cbi/home.html:42
+#: wersite/templates/wersite/cbi/home.html:43
 msgid ""
 "Now you might be thinking: what's the catch? So without further delay, here "
 "it is:"
 msgstr "Nu denk je misschien: waar zit de adder onder het gras? Hier komt ie:"
 
-#: wersite/templates/wersite/cbi/home.html:44
+#: wersite/templates/wersite/cbi/home.html:45
 msgid "The boosters are <strong>opened</strong>."
 msgstr "De boosters zijn <strong>geopend</strong>."
 
-#: wersite/templates/wersite/cbi/home.html:45
+#: wersite/templates/wersite/cbi/home.html:46
 msgid "The cards have been <strong>played</strong> with once in sleeves."
 msgstr ""
 "Er is met deze kaarten <strong>gespeeld</strong>, zij het wel in sleeves."
 
-#: wersite/templates/wersite/cbi/home.html:46
+#: wersite/templates/wersite/cbi/home.html:47
 msgid ""
 "The cards are <strong>unsorted</strong>. We have created decks with them."
 msgstr ""
 "De kaarten zijn <strong>niet gesorteerd</strong>. Wij hebben er decks mee "
 "gemaakt."
 
-#: wersite/templates/wersite/cbi/home.html:47
+#: wersite/templates/wersite/cbi/home.html:48
 msgid ""
 "<strong>Shipping is not instantaneous</strong>. You will have to wait until "
 "we actually played with\n"
@@ -405,7 +409,7 @@ msgstr ""
 "We kunnen ze <strong>niet onmiddellijk versturen</strong>. Je moet wachten "
 "tot wij er effectief mee gespeeld hebben."
 
-#: wersite/templates/wersite/cbi/home.html:49
+#: wersite/templates/wersite/cbi/home.html:50
 msgid ""
 "You <strong>cannot choose the type</strong> of boosters. You get a mix of "
 "the currently drafted\n"
@@ -414,11 +418,11 @@ msgstr ""
 "Je kan het <strong>type boosters niet kiezen</strong>. Je krijgt de boosters "
 "waar we mee draften. Momenteel is dit FRF-KTK-KTK."
 
-#: wersite/templates/wersite/cbi/home.html:53
+#: wersite/templates/wersite/cbi/home.html:54
 msgid "With these disadvantages the good news must be very good:"
 msgstr "Gelukkig zijn de voordelen ook erg goed:"
 
-#: wersite/templates/wersite/cbi/home.html:55
+#: wersite/templates/wersite/cbi/home.html:56
 msgid ""
 "These boosters are <strong>super cheap</strong>. Prices rapidly drop to €2/"
 "booster when ordering\n"
@@ -429,7 +433,7 @@ msgstr ""
 "tot €2/booster als je er meerdere bestelt. Ze kunnen zelfs zo laag gaan tot "
 "€1.67/booster voor een volledige boosterdoos."
 
-#: wersite/templates/wersite/cbi/home.html:57
+#: wersite/templates/wersite/cbi/home.html:58
 msgid ""
 "All prices <strong>include shipping</strong> to Belgium. No surprises, you "
 "pay the price you see."
@@ -437,7 +441,7 @@ msgstr ""
 "Voor België is <strong>verzending inbegrepen</strong> in alle prijzen. Je "
 "betaalt wat er staat."
 
-#: wersite/templates/wersite/cbi/home.html:58
+#: wersite/templates/wersite/cbi/home.html:59
 #, python-format
 msgid ""
 "A 100%% guarantee from Aetherclub that you actually get what was inside the "
@@ -447,7 +451,7 @@ msgstr ""
 "De 100%% garantie van Aetherclub dat je echt krijgt wat wij openen. Als we "
 "een foil openen die €60+ waard is dan krijg je hem ook echt."
 
-#: wersite/templates/wersite/cbi/home.html:60
+#: wersite/templates/wersite/cbi/home.html:61
 msgid ""
 "A best effort to only allow purchases when we think we can fulfill them "
 "within a month. No promises\n"
@@ -457,11 +461,11 @@ msgstr ""
 "boosters binnen de maand kunnen versturen. Dat kunnen we helaas wel niet "
 "beloven."
 
-#: wersite/templates/wersite/cbi/home.html:62
+#: wersite/templates/wersite/cbi/home.html:63
 msgid "Easy payment with bank transfer or PayPal."
 msgstr "Je kan makkelijk betalen met overschrijving of PayPal."
 
-#: wersite/templates/wersite/cbi/home.html:65
+#: wersite/templates/wersite/cbi/home.html:66
 msgid ""
 "So if you're the kind of player that's interested in random cheap cards: we "
 "can help you."
@@ -473,11 +477,6 @@ msgstr ""
 #: wersite/templates/wersite/cbi/reservation.html:9
 msgid "Purchase details"
 msgstr "Aankoopgegevens"
-
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:13
-#: wersite/templates/wersite/cbi/reservation.html:13
-msgid "Due to high demand, the estimated waiting time is more than 2 months"
-msgstr "Door de hoge vraag is de wachttijd meer dan 2 maanden"
 
 #: wersite/templates/wersite/cbi/reservation-confirmation.html:16
 #: wersite/templates/wersite/cbi/reservation.html:16
