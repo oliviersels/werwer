@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aether website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-08 17:22+0000\n"
-"PO-Revision-Date: 2015-02-08 18:10+0100\n"
+"POT-Creation-Date: 2015-02-08 17:35+0000\n"
+"PO-Revision-Date: 2015-02-08 18:37+0100\n"
 "Last-Translator: Olivier Sels <olivier.sels@gmail.com>\n"
 "Language-Team: Aether\n"
 "Language: nl\n"
@@ -510,28 +510,32 @@ msgstr "Lees aandachtig"
 #: wersite/templates/wersite/cbi/reservation-confirmation.html:51
 msgid ""
 "You will receive the content of boosters that have been used in tournaments "
-"organized by Aethermagic."
+"organized\n"
+"                by Aethermagic. You cannot choose the type of boosters, you "
+"get the type of boosters that were used in\n"
+"                that tournament."
 msgstr ""
 "Je krijgt de inhoud van boosters die gebruikt zijn in een toernooi van "
-"Aethermagic."
+"Aethermagic. Je kan zelf niet kiezen welk type boosters dit zijn, je krijgt "
+"degene die in het toernooi gebruikt werden."
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:52
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:54
 msgid "Boosters are in the following condition:"
 msgstr "Boosters bevinden zich in de volgende staat:"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:54
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:56
 msgid "Opened"
 msgstr "Geopend"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:55
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:57
 msgid "Unsorted"
 msgstr "Ongesorteerd"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:56
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:58
 msgid "Played with (in sleeves)"
 msgstr "Gespeeld (in sleeves)"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:59
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:61
 msgid ""
 "The shipping date is an estimation, boosters are sent as soon as they have "
 "been played with."
@@ -539,7 +543,7 @@ msgstr ""
 "De verzenddatum is een schatting. Boosters worden verzonden zodra wij ermee "
 "gespeeld hebben."
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:60
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:62
 msgid ""
 "The cards in boosters are random, so the value you receive from your "
 "purchase is of course also random. We only guarantee that you will receive "
@@ -550,22 +554,22 @@ msgstr ""
 "volledige inhoud krijgt van je boosters en dat reeds vast ligt welke "
 "boosters van jou zijn voor we ze openen."
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:61
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:63
 msgid ""
 "As soon as the boosters have been opened, refunds are no longer possible."
 msgstr ""
 "Zodra de boosters geopend zijn, is een terugbetaling van je aankoop niet "
 "meer mogelijk."
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:62
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:64
 msgid "Shipping is only possible to Belgium."
 msgstr "Verzending enkel naar België."
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:69
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:71
 msgid "I understand and agree with these terms and conditions"
 msgstr "Ik begrijp de voorwaarden en ga ermee akkoord"
 
-#: wersite/templates/wersite/cbi/reservation-confirmation.html:73
+#: wersite/templates/wersite/cbi/reservation-confirmation.html:75
 msgid "Confirm purchase"
 msgstr "Aankoop bevestigen"
 
@@ -1175,6 +1179,13 @@ msgstr "Nederlands"
 #: werwer/settings.py:97
 msgid "English"
 msgstr "Engels"
+
+#~ msgid ""
+#~ "You will receive the content of boosters that have been used in "
+#~ "tournaments organized by Aethermagic."
+#~ msgstr ""
+#~ "Je krijgt de inhoud van boosters die gebruikt zijn in een toernooi van "
+#~ "Aethermagic."
 
 #~ msgid "< 1 month"
 #~ msgstr "< 1 maand"
