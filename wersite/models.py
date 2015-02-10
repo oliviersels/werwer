@@ -74,4 +74,7 @@ class CBIReservation(models.Model):
     def image_url(self):
         return 'img/fate-reforged-%s.jpg' % self.booster_amount
 
+    def __unicode__(self):
+        return '[%s] CBIReservation - %s (%s)' % (self.pk, self.product, self.state)
+
 
