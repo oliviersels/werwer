@@ -317,17 +317,19 @@ class Participant(models.Model):
         tie_breakers_info = self._get_tie_breakers_info()
         tie_breakers = {
             'match_points': tie_breakers_info['match_points_total'],
-            'game_win_percentage': float(tie_breakers_info['game_points_total']) / (3 * tie_breakers_info['games']),
+            'game_win_percentage': 0 if tie_breakers_info['games'] == 0 else float(tie_breakers_info['game_points_total']) / (3 * tie_breakers_info['games']),
         }
         opponents_match_win_percentages = []
         opponents_game_win_percentages = []
         for opponent in tie_breakers_info['opponents']:
             opponent_tie_breakers_info = opponent._get_tie_breakers_info()
-            opponents_match_win_percentages.append(max(0.33, float(opponent_tie_breakers_info['match_points_total']) / (3 * opponent_tie_breakers_info['rounds'])))
-            opponents_game_win_percentages.append(float(opponent_tie_breakers_info['game_points_total']) / (3 * opponent_tie_breakers_info['games']))
+            opponents_match_win_percentages.append(0 if opponent_tie_breakers_info['rounds'] == 0 else
+                max(0.33, float(opponent_tie_breakers_info['match_points_total']) / (3 * opponent_tie_breakers_info['rounds'])))
+            opponents_game_win_percentages.append(0 if opponent_tie_breakers_info['games'] == 0 else
+                float(opponent_tie_breakers_info['game_points_total']) / (3 * opponent_tie_breakers_info['games']))
 
-        tie_breakers['opponents_match_win_percentage'] = float(sum(opponents_match_win_percentages)) / len(opponents_match_win_percentages)
-        tie_breakers['opponents_game_win_percentage'] = float(sum(opponents_game_win_percentages)) / len(opponents_game_win_percentages)
+        tie_breakers['opponents_match_win_percentage'] = 0 if len(opponents_match_win_percentages) == 0 else float(sum(opponents_match_win_percentages)) / len(opponents_match_win_percentages)
+        tie_breakers['opponents_game_win_percentage'] = 0 if len(opponents_game_win_percentages) == 0 else float(sum(opponents_game_win_percentages)) / len(opponents_game_win_percentages)
         return tie_breakers
 
     def _get_tie_breakers_info(self):
