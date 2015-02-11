@@ -205,6 +205,13 @@ werControllers.controller 'EventPlanningController', ['$scope',
             $scope.addPlayer(player, true)
         )
 
+    $scope.removeParticipant = (participant) ->
+      if $scope.event.state == 'planning'
+        participant.$delete({}, (value, responseHeaders) ->
+          index = $scope.event.participant_set__v.indexOf(participant)
+          $scope.event.participant_set__v.splice(index, 1)
+        )
+
     $scope.pay_with_credits = (participant) ->
       participant.pay_with_credits = true
       postableEvent = participant.postable()

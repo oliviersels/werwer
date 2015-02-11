@@ -43,7 +43,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="participant in event.participant_set__v | filter : searchPlayer" class="success">
+                    <tr ng-repeat="participant in event.participant_set__v | filter : searchPlayer" ng-click="removeParticipant(participant)" class="success">
                         <td>{{ $index + 1 }}</td>
                         <td>{{ participant.player__v.first_name + ' ' + participant.player__v.last_name }} <a href="#" class="small success" ng-click="pay_with_credits(participant)" ng-show="participant.player__v.credits >= 8 && !participant.pay_with_credits">Pay with credits (C {{ participant.player__v.credits }})</a><span ng-show="participant.pay_with_credits" class="small text-success">Payed with credits</span></td>
                         <td>{{ participant.player__v.dcinumber }}</td>
