@@ -1,9 +1,13 @@
+import pprint
+import timeit
+from django.conf import settings
+from django.db import connection
 from django.test import TestCase
 
 # Create your tests here.
 from django.utils.timezone import now
 from werapp.enums import EventType, PairingMethod, ParticipantMatchPlayerNr
-from werapp.models import Player, Event, RandomMatchesRequest, Round, Participant, Match, ParticipantMatch
+from werapp.models import Player, Event, RandomMatchesRequest, Round, Participant, Match, ParticipantMatch, Organization
 from werapp.tasks import create_random_matches
 
 
@@ -21,10 +25,12 @@ class CreateRandomMatchesTaskTest(TestCase):
         self.player_dreadnaught = Player.objects.create_user('dreadnaught@lostfleet.com', 'password')
         self.player_invincible = Player.objects.create_user('invincible@lostfleet.com', 'password')
 
+        self.organization = Organization.objects.create(name='Test')
+
         # Initial event
         self.event = Event.objects.create(name='Test', date=now(), event_type=EventType.CASUAL_LIMITED,
                                              pairing_method=PairingMethod.SWISS, nr_of_rounds=3,
-                                             organizer=self.organizer)
+                                             organizer=self.organizer, organization=self.organization)
 
         # Add players as participants
         self.participant_dauntless = Participant.objects.create(player=self.player_dauntless, event=self.event)
@@ -206,10 +212,12 @@ class ModelsTest(TestCase):
         self.player_dreadnaught = Player.objects.create_user('dreadnaught@lostfleet.com', 'password')
         self.player_invincible = Player.objects.create_user('invincible@lostfleet.com', 'password')
 
+        self.organization = Organization.objects.create(name='Test')
+
         # Initial event
         self.event = Event.objects.create(name='Test', date=now(), event_type=EventType.CASUAL_LIMITED,
                                              pairing_method=PairingMethod.SWISS, nr_of_rounds=3,
-                                             organizer=self.organizer)
+                                             organizer=self.organizer, organization=self.organization)
 
         # Add players as participants
         self.participant_dauntless = Participant.objects.create(player=self.player_dauntless, event=self.event)
@@ -324,3 +332,64 @@ class ModelsTest(TestCase):
         self.assertTrue(self.participant_dauntless.has_played_against(self.participant_courageous))
         self.assertTrue(self.participant_relentless.has_played_against(self.participant_dreadnaught))
         self.assertTrue(participant_guardian.has_played_against(self.participant_fearless))
+
+    def test_tie_breakers(self):
+        # Create the first round
+        round1 = Round.objects.create(event=self.event)
+
+        # Create the matches manually
+        match1 = Match.objects.create(round=round1, wins=2)
+        ParticipantMatch.objects.create(participant=self.participant_dauntless, match=match1, player_nr=ParticipantMatchPlayerNr.PLAYER_1)
+        ParticipantMatch.objects.create(participant=self.participant_fearless, match=match1, player_nr=ParticipantMatchPlayerNr.PLAYER_2)
+        match2 = Match.objects.create(round=round1, wins=2)
+        ParticipantMatch.objects.create(participant=self.participant_courageous, match=match2, player_nr=ParticipantMatchPlayerNr.PLAYER_1)
+        ParticipantMatch.objects.create(participant=self.participant_valiant, match=match2, player_nr=ParticipantMatchPlayerNr.PLAYER_2)
+        match3 = Match.objects.create(round=round1, wins=2)
+        ParticipantMatch.objects.create(participant=self.participant_relentless, match=match3, player_nr=ParticipantMatchPlayerNr.PLAYER_1)
+        ParticipantMatch.objects.create(participant=self.participant_victorious, match=match3, player_nr=ParticipantMatchPlayerNr.PLAYER_2)
+        match4 = Match.objects.create(round=round1, wins=2)
+        ParticipantMatch.objects.create(participant=self.participant_dreadnaught, match=match4, player_nr=ParticipantMatchPlayerNr.PLAYER_1)
+        ParticipantMatch.objects.create(participant=self.participant_invincible, match=match4, player_nr=ParticipantMatchPlayerNr.PLAYER_2)
+
+        # Create the second round
+        round2 = Round.objects.create(event=self.event)
+
+        match5 = Match.objects.create(round=round2, wins=2)
+        ParticipantMatch.objects.create(participant=self.participant_dauntless, match=match5, player_nr=ParticipantMatchPlayerNr.PLAYER_1)
+        ParticipantMatch.objects.create(participant=self.participant_courageous, match=match5, player_nr=ParticipantMatchPlayerNr.PLAYER_2)
+        match6 = Match.objects.create(round=round2, wins=2)
+        ParticipantMatch.objects.create(participant=self.participant_relentless, match=match6, player_nr=ParticipantMatchPlayerNr.PLAYER_1)
+        ParticipantMatch.objects.create(participant=self.participant_dreadnaught, match=match6, player_nr=ParticipantMatchPlayerNr.PLAYER_2)
+        match7 = Match.objects.create(round=round2, wins=2)
+        ParticipantMatch.objects.create(participant=self.participant_fearless, match=match7, player_nr=ParticipantMatchPlayerNr.PLAYER_1)
+        ParticipantMatch.objects.create(participant=self.participant_valiant, match=match7, player_nr=ParticipantMatchPlayerNr.PLAYER_2)
+        match8 = Match.objects.create(round=round2, wins=2)
+        ParticipantMatch.objects.create(participant=self.participant_victorious, match=match8, player_nr=ParticipantMatchPlayerNr.PLAYER_1)
+        ParticipantMatch.objects.create(participant=self.participant_invincible, match=match8, player_nr=ParticipantMatchPlayerNr.PLAYER_2)
+
+        # Create the last round
+        round3 = Round.objects.create(event=self.event)
+
+        match9 = Match.objects.create(round=round3, wins=2)
+        ParticipantMatch.objects.create(participant=self.participant_dauntless, match=match9, player_nr=ParticipantMatchPlayerNr.PLAYER_1)
+        ParticipantMatch.objects.create(participant=self.participant_relentless, match=match9, player_nr=ParticipantMatchPlayerNr.PLAYER_2)
+        match10 = Match.objects.create(round=round3, wins=2)
+        ParticipantMatch.objects.create(participant=self.participant_courageous, match=match10, player_nr=ParticipantMatchPlayerNr.PLAYER_1)
+        ParticipantMatch.objects.create(participant=self.participant_dreadnaught, match=match10, player_nr=ParticipantMatchPlayerNr.PLAYER_2)
+        match11 = Match.objects.create(round=round3, wins=2)
+        ParticipantMatch.objects.create(participant=self.participant_fearless, match=match11, player_nr=ParticipantMatchPlayerNr.PLAYER_1)
+        ParticipantMatch.objects.create(participant=self.participant_victorious, match=match11, player_nr=ParticipantMatchPlayerNr.PLAYER_2)
+        match12 = Match.objects.create(round=round3, wins=2)
+        ParticipantMatch.objects.create(participant=self.participant_valiant, match=match12, player_nr=ParticipantMatchPlayerNr.PLAYER_1)
+        ParticipantMatch.objects.create(participant=self.participant_invincible, match=match12, player_nr=ParticipantMatchPlayerNr.PLAYER_2)
+
+        # Check the tie breakers
+        print self.participant_dauntless.tie_breakers
+        print self.participant_relentless.tie_breakers
+        print self.participant_courageous.tie_breakers
+        print self.participant_dreadnaught.tie_breakers
+        print self.participant_fearless.tie_breakers
+        print self.participant_victorious.tie_breakers
+        print self.participant_valiant.tie_breakers
+        print self.participant_invincible.tie_breakers
+

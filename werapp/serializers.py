@@ -48,6 +48,8 @@ class MatchSerializer(HyperlinkedModelSerializer):
 class ParticipantScoreSerializer(Serializer):
     points = IntegerField()
     opponents_match_win_percentage = FloatField()
+    game_win_percentage = FloatField()
+    opponents_game_win_percentage = FloatField()
 
 class ParticipantSerializer(HyperlinkedModelSerializer):
     score = ParticipantScoreSerializer(read_only=True)

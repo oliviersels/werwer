@@ -206,39 +206,67 @@ class Match(models.Model):
 
     @property
     def participant1(self):
-        for participant_match in self.participantmatch_set.all():
-            if participant_match.player_nr == ParticipantMatchPlayerNr.PLAYER_1:
-                return participant_match.participant
+        if not hasattr(self, '_participant1'):
+            self._participant1 = self.participantmatch_set.select_related('participant')\
+                .get(player_nr=ParticipantMatchPlayerNr.PLAYER_1).participant
+        return self._participant1
 
     @property
     def participant2(self):
-        for participant_match in self.participantmatch_set.all():
-            if participant_match.player_nr == ParticipantMatchPlayerNr.PLAYER_2:
-                return participant_match.participant
+        if not hasattr(self, '_participant2'):
+            self._participant2 = self.participantmatch_set.select_related('participant')\
+                .get(player_nr=ParticipantMatchPlayerNr.PLAYER_2).participant
+        return self._participant2
+
+    def get_opponent(self, participant):
+        if participant == self.participant1:
+            return self.participant2
+        elif participant == self.participant2:
+            return self.participant1
+        else:
+            return None
 
     @property
     def bye(self):
         return self.participant_set.count() == 1
 
-    def points_for_participant(self, participant):
+    def points_for_participant(self, participant, include_game_points=False):
         if self.bye:
-            return 3 # Player has a bye
-        if self.wins == 0 and self.losses == 0 and self.draws == 0:
+            # Bye counts as 2-0 win
+            player_wins = 2
+            player_losses = 0
+            player_draws = 0
+        elif self.wins == 0 and self.losses == 0 and self.draws == 0:
             # No results entry yet
-            return 0
-        if participant == self.participant1:
-            player_wins = self.wins
-            player_losses = self.losses
+            if not include_game_points:
+                return 0
+            else:
+                return None
         else:
-            player_wins = self.losses
-            player_losses = self.wins
+            if participant == self.participant1:
+                player_wins = self.wins
+                player_losses = self.losses
+                player_draws = self.draws
+            else:
+                player_wins = self.losses
+                player_losses = self.wins
+                player_draws = self.draws
 
         if player_wins > player_losses:
-            return 3
+            points = 3
         elif player_losses > player_wins:
-            return 0
+            points = 0
         else:
-            return 1
+            points = 1
+
+        if not include_game_points:
+            return points
+        else:
+            return {
+                'match_points': points,
+                'game_points': 3 * player_wins + player_draws,
+                'games': player_wins + player_draws + player_losses,
+            }
 
     def __unicode__(self):
         description = "Match -%s- " % self.round.event.name
@@ -285,10 +313,52 @@ class Participant(models.Model):
         return sum(match.points_for_participant(self) for match in self.matches.all())
 
     @property
+    def tie_breakers(self):
+        tie_breakers_info = self._get_tie_breakers_info()
+        tie_breakers = {
+            'match_points': tie_breakers_info['match_points_total'],
+            'game_win_percentage': float(tie_breakers_info['game_points_total']) / (3 * tie_breakers_info['games']),
+        }
+        opponents_match_win_percentages = []
+        opponents_game_win_percentages = []
+        for opponent in tie_breakers_info['opponents']:
+            opponent_tie_breakers_info = opponent._get_tie_breakers_info()
+            opponents_match_win_percentages.append(max(0.33, float(opponent_tie_breakers_info['match_points_total']) / (3 * opponent_tie_breakers_info['rounds'])))
+            opponents_game_win_percentages.append(float(opponent_tie_breakers_info['game_points_total']) / (3 * opponent_tie_breakers_info['games']))
+
+        tie_breakers['opponents_match_win_percentage'] = float(sum(opponents_match_win_percentages)) / len(opponents_match_win_percentages)
+        tie_breakers['opponents_game_win_percentage'] = float(sum(opponents_game_win_percentages)) / len(opponents_game_win_percentages)
+        return tie_breakers
+
+    def _get_tie_breakers_info(self):
+        tie_breakers_info = {
+            'match_points_total': 0,
+            'game_points_total': 0,
+            'games': 0,
+            'rounds': 0,
+            'opponents': [],
+        }
+        for match in self.matches.all().order_by('round__id'):
+            points = match.points_for_participant(self, True)
+            if points is not None:
+                tie_breakers_info['match_points_total'] += points['match_points']
+                tie_breakers_info['game_points_total'] += points['game_points']
+                tie_breakers_info['games'] += points['games']
+                tie_breakers_info['rounds'] += 1
+                if not match.bye:
+                    tie_breakers_info['opponents'].append(match.get_opponent(self))
+        return tie_breakers_info
+
+    @property
     def score(self):
+        tie_breakers = self.tie_breakers
+
         return {
-            'points': self.points,
-            'opponents_match_win_percentage': 50,
+            'points': tie_breakers['match_points'],
+            'match_points': tie_breakers['match_points'],
+            'opponents_match_win_percentage': tie_breakers['opponents_match_win_percentage'],
+            'game_win_percentage': tie_breakers['game_win_percentage'],
+            'opponents_game_win_percentage': tie_breakers['opponents_game_win_percentage'],
         }
 
     @property

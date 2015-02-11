@@ -14,16 +14,18 @@
                         <tr>
                             <th style="width: 30px;">#</th>
                             <th>Points</th>
+                            <th>Tie breakers</th>
                             <th>Price support</th>
                             <th>Name</th>
                             <th>DCI number</th>
                         </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="participant in event.participant_set__v | orderBy : '-score.points'">
+                    <tr ng-repeat="participant in event.participant_set__v | orderBy : ['-score.points', '-score.opponents_match_win_percentage', '-score.game_win_percentage', '-score.opponents_game_win_percentage']">
                         <td>{{ $index + 1 }}</td>
                         <td>{{ participant.score.points }}</td>
-                        <td>{{ participant.price_support }}</td>
+                        <td>{{ participant.score.opponents_match_win_percentage|number:2 }} - {{ participant.score.game_win_percentage|number:2 }} - {{ participant.score.opponents_game_win_percentage|number:2 }}</td>
+                        <td>{{ participant.price_support|number:2 }}</td>
                         <td>{{ participant.player__v.first_name + ' ' + participant.player__v.last_name }}</td>
                         <td>{{ participant.player__v.dcinumber }}</td>
                     </tr>

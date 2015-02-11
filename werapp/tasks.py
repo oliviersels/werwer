@@ -102,7 +102,10 @@ def end_of_event_mailing(end_of_event_mailing_request_id):
 
     # Calculate participant points for standing
     participants = list(event.participant_set.all())
-    participants.sort(key=lambda p: p.points, reverse=True)
+    def score_key(p):
+        score = p.score
+        return (score['match_points'], score['opponents_match_win_percentage'], score['game_win_percentage'], score['opponents_game_win_percentage'])
+    participants.sort(key=score_key, reverse=True)
 
     # Send a mail to all players with their info
     for index, participant in enumerate(participants):
