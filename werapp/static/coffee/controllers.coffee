@@ -369,6 +369,7 @@ werControllers.controller 'EventRoundController' , ['$scope',
           $scope.round.match_set.then (matches) ->
             $scope.done = matches.length > 0
             for match in matches
+              match.submitting = false
               match.done = match.bye || match.wins != 0 || match.losses != 0 or match.draws != 0
               if !match.done
                 $scope.done = false
@@ -376,6 +377,9 @@ werControllers.controller 'EventRoundController' , ['$scope',
       , (response) ->
         $scope.error = response.status
       )
+
+    $scope.getSelectedMatch = () ->
+      return $scope.round.match_set__v[$scope.selectedMatch]
 
     $scope.createMatchesRandom = () ->
       # 1) Create the random creation request.
@@ -394,6 +398,7 @@ werControllers.controller 'EventRoundController' , ['$scope',
                   $scope.round.match_set.then (matches) ->
                     $scope.done = matches.length > 0
                     for match in matches
+                      match.submitting = false
                       match.done = match.bye || match.wins != 0 || match.losses != 0 or match.draws != 0
                       if !match.done
                         $scope.done = false
@@ -411,14 +416,18 @@ werControllers.controller 'EventRoundController' , ['$scope',
         match.losses = losses ? 0
         match.draws = draws ? 0
         matchPostable = match.postable()
-        matchPostable.$update();
+        matchPostable.$update({}, () ->
+          match.done = true
+          match.submitting = false
+          for match in $scope.round.match_set__v
+            if !match.done
+              return
 
-        match.done = true
-        for match in $scope.round.match_set__v
-          if !match.done
-            return
-
-        $scope.done = true
+          $scope.done = true
+        , () ->
+          match.submitting = false
+        );
+        match.submitting = true
 
     $scope.nextRound = () ->
       # If the round exists, just move to it

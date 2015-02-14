@@ -26,7 +26,8 @@
             </div>
             <div class="col-md-3" ng-show="selectedMatch != undefined">
                 <h3>Result entry</h3>
-                <div class="btn-group-vertical center-block">
+                <p ng-show="selectedMatch != undefined && getSelectedMatch().submitting">Submitting. Please wait...</p>
+                <div ng-show="selectedMatch != undefined && !getSelectedMatch().submitting" class="btn-group-vertical center-block">
                     <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 2, 0)"><span class="pull-left text-muted">{{ round.match_set__v[selectedMatch].participant1__v.player__v.first_name }}</span><span class="pull-right text-muted">{{ round.match_set__v[selectedMatch].participant2__v.player__v.first_name }}</span> 2 - 0</div>
                     <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 2, 1)"><span class="pull-left text-muted">{{ round.match_set__v[selectedMatch].participant1__v.player__v.first_name }}</span><span class="pull-right text-muted">{{ round.match_set__v[selectedMatch].participant2__v.player__v.first_name }}</span> 2 - 1</div>
                     <div class="btn btn-default btn-block" ng-click="updateScore(selectedMatch, 1, 1)"><span class="pull-left text-muted">{{ round.match_set__v[selectedMatch].participant1__v.player__v.first_name }}</span><span class="pull-right text-muted">{{ round.match_set__v[selectedMatch].participant2__v.player__v.first_name }}</span> 1 - 1</div>
