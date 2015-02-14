@@ -367,8 +367,9 @@ werControllers.controller 'EventRoundController' , ['$scope',
           if parseInt($scope.round.roundNr) == $scope.event.nr_of_rounds
             $scope.lastRound = true
           $scope.round.match_set.then (matches) ->
-            $scope.done = true
+            $scope.done = matches.length > 0
             for match in matches
+              match.submitting = false
               match.done = match.bye || match.wins != 0 || match.losses != 0 or match.draws != 0
               if !match.done
                 $scope.done = false
@@ -376,6 +377,9 @@ werControllers.controller 'EventRoundController' , ['$scope',
       , (response) ->
         $scope.error = response.status
       )
+
+    $scope.getSelectedMatch = () ->
+      return $scope.round.match_set__v[$scope.selectedMatch]
 
     $scope.createMatchesRandom = () ->
       # 1) Create the random creation request.
@@ -392,8 +396,9 @@ werControllers.controller 'EventRoundController' , ['$scope',
                 $scope.round.$get(() ->
                   $scope.round.roundNr = $routeParams.roundId
                   $scope.round.match_set.then (matches) ->
-                    $scope.done = true
+                    $scope.done = matches.length > 0
                     for match in matches
+                      match.submitting = false
                       match.done = match.bye || match.wins != 0 || match.losses != 0 or match.draws != 0
                       if !match.done
                         $scope.done = false
@@ -411,14 +416,30 @@ werControllers.controller 'EventRoundController' , ['$scope',
         match.losses = losses ? 0
         match.draws = draws ? 0
         matchPostable = match.postable()
-        matchPostable.$update();
+        matchPostable.$update({}, () ->
+          match.done = true
+          match.submitting = false
+          if matchNr == $scope.selectedMatch
+            $scope.selectedMatch = null
+          for match in $scope.round.match_set__v
+            if !match.done
+              return
 
-        match.done = true
-        for match in $scope.round.match_set__v
-          if !match.done
-            return
-
-        $scope.done = true
+          $scope.done = true
+        , () ->
+          match.submitting = false
+        );
+        match.submitting = true
+        # Update the selected match to the next one for fast input
+        nextMatchNr = (matchNr + 1) % matches.length
+        nextMatch = matches[nextMatchNr]
+        while (nextMatchNr != matchNr && (nextMatch.done || nextMatch.submitting))
+          nextMatchNr = (nextMatchNr + 1) % matches.length
+          nextMatch = matches[nextMatchNr]
+        if (nextMatchNr != matchNr)
+          $scope.selectedMatch = nextMatchNr
+        else
+          $scope.selectedMatch = null
 
     $scope.nextRound = () ->
       # If the round exists, just move to it
@@ -529,6 +550,8 @@ werControllers.controller 'EventConclusionController' , ['$scope',
                                                          'werwer_root',
   ($scope, $location, $routeParams, werApi, eventStateFactory, djangoEnums, werwer_root) ->
     werApi.Event.then (Event) ->
+      $scope.sending_mail = 'unsent'
+
       Event.get({id: $routeParams.eventId}, (event, response) ->
         event.eventState = eventStateFactory.createEventState(event)
         $scope.event = event
@@ -539,7 +562,22 @@ werControllers.controller 'EventConclusionController' , ['$scope',
         endOfEventMailingRequest = new EndOfEventMailingRequest(
           event: $scope.event.url
         )
-        endOfEventMailingRequest.$save({})
+        endOfEventMailingRequest.$save({}, () ->
+          $scope.sending_mail = 'sent'
+        , () ->
+          $scope.sending_mail = 'error'
+        )
+        $scope.sending_mail = 'sending'
+
+    $scope.getMailButtonText = () ->
+      if $scope.sending_mail == 'unsent'
+        return 'Send mails to players'
+      else if $scope.sending_mail == 'sent'
+        return 'Mails sent successfully'
+      else if $scope.sending_mail == 'sending'
+        return 'Mails are being sent'
+      else if $scope.sending_mail == 'error'
+        return 'An error occurred. Try again?'
 
     $scope.endEvent = () ->
       werApi.EndEventRequest.then (EndEventRequest) ->

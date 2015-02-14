@@ -18,10 +18,13 @@ def match_making(participants):
     match_candidate_index = 0
     while match_candidate_index != len(participants):
         if not match_person.has_played_against(participants[match_candidate_index]):
-            result = (match_person, participants.pop(match_candidate_index))
+            possible_opponent = participants.pop(match_candidate_index)
+            result = (match_person, possible_opponent)
             recursive_result = match_making(copy(participants))
             if recursive_result is not None:
                 return [result] + recursive_result
+            else:
+                participants.insert(match_candidate_index, possible_opponent)
         match_candidate_index += 1
     return None # No solution
 
