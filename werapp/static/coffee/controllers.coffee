@@ -419,6 +419,8 @@ werControllers.controller 'EventRoundController' , ['$scope',
         matchPostable.$update({}, () ->
           match.done = true
           match.submitting = false
+          if matchNr == $scope.selectedMatch
+            $scope.selectedMatch = null
           for match in $scope.round.match_set__v
             if !match.done
               return
@@ -428,6 +430,16 @@ werControllers.controller 'EventRoundController' , ['$scope',
           match.submitting = false
         );
         match.submitting = true
+        # Update the selected match to the next one for fast input
+        nextMatchNr = (matchNr + 1) % matches.length
+        nextMatch = matches[nextMatchNr]
+        while (nextMatchNr != matchNr && (nextMatch.done || nextMatch.submitting))
+          nextMatchNr = (nextMatchNr + 1) % matches.length
+          nextMatch = matches[nextMatchNr]
+        if (nextMatchNr != matchNr)
+          $scope.selectedMatch = nextMatchNr
+        else
+          $scope.selectedMatch = null
 
     $scope.nextRound = () ->
       # If the round exists, just move to it
