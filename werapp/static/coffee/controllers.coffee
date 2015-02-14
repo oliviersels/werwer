@@ -367,7 +367,7 @@ werControllers.controller 'EventRoundController' , ['$scope',
           if parseInt($scope.round.roundNr) == $scope.event.nr_of_rounds
             $scope.lastRound = true
           $scope.round.match_set.then (matches) ->
-            $scope.done = true
+            $scope.done = matches.length > 0
             for match in matches
               match.done = match.bye || match.wins != 0 || match.losses != 0 or match.draws != 0
               if !match.done
@@ -392,7 +392,7 @@ werControllers.controller 'EventRoundController' , ['$scope',
                 $scope.round.$get(() ->
                   $scope.round.roundNr = $routeParams.roundId
                   $scope.round.match_set.then (matches) ->
-                    $scope.done = true
+                    $scope.done = matches.length > 0
                     for match in matches
                       match.done = match.bye || match.wins != 0 || match.losses != 0 or match.draws != 0
                       if !match.done
