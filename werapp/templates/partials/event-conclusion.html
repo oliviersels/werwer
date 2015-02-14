@@ -39,7 +39,7 @@
         <p>
             <div class="col-sm-12">
                 <button class="btn btn-success" ng-click="endEvent()">End event</button>
-                <button class="btn btn-default" ng-click="endOfEventMailing()">Send mails to players</button>
+                <button ng-class="(sending_mail == 'sent' || sending_mail == 'error' ? 'btn btn-default disabled' : 'btn btn-default')" ng-click="endOfEventMailing()">{{ getMailButtonText() }}</button>
             </div>
         </p>
     </div>

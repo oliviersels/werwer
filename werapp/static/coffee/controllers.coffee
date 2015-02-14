@@ -550,6 +550,8 @@ werControllers.controller 'EventConclusionController' , ['$scope',
                                                          'werwer_root',
   ($scope, $location, $routeParams, werApi, eventStateFactory, djangoEnums, werwer_root) ->
     werApi.Event.then (Event) ->
+      $scope.sending_mail = 'unsent'
+
       Event.get({id: $routeParams.eventId}, (event, response) ->
         event.eventState = eventStateFactory.createEventState(event)
         $scope.event = event
@@ -560,7 +562,22 @@ werControllers.controller 'EventConclusionController' , ['$scope',
         endOfEventMailingRequest = new EndOfEventMailingRequest(
           event: $scope.event.url
         )
-        endOfEventMailingRequest.$save({})
+        endOfEventMailingRequest.$save({}, () ->
+          $scope.sending_mail = 'sent'
+        , () ->
+          $scope.sending_mail = 'error'
+        )
+        $scope.sending_mail = 'sending'
+
+    $scope.getMailButtonText = () ->
+      if $scope.sending_mail == 'unsent'
+        return 'Send mails to players'
+      else if $scope.sending_mail == 'sent'
+        return 'Mails sent successfully'
+      else if $scope.sending_mail == 'sending'
+        return 'Mails are being sent'
+      else if $scope.sending_mail == 'error'
+        return 'An error occurred. Try again?'
 
     $scope.endEvent = () ->
       werApi.EndEventRequest.then (EndEventRequest) ->
