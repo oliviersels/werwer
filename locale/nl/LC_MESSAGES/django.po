@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Aether website\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-08 17:35+0000\n"
-"PO-Revision-Date: 2015-02-08 18:37+0100\n"
+"POT-Creation-Date: 2015-02-26 15:33+0000\n"
+"PO-Revision-Date: 2015-02-26 16:34+0100\n"
 "Last-Translator: Olivier Sels <olivier.sels@gmail.com>\n"
 "Language-Team: Aether\n"
 "Language: nl\n"
@@ -206,6 +206,10 @@ msgstr "Afgehandeld"
 msgid "Cancelled"
 msgstr "Geannuleerd"
 
+#: wersite/enums.py:62
+msgid "Discount percentage"
+msgstr "Kortingspercentage"
+
 #: wersite/forms.py:19
 msgid "Enter your name (optional)"
 msgstr "Geef je naam in (optioneel)"
@@ -242,7 +246,7 @@ msgstr "Vertel ons een beetje over hoe je WerWer wilt gebruiken"
 msgid "You must accept the terms and conditions"
 msgstr "Je moet de gebruiksvoorwaarden accepteren"
 
-#: wersite/forms.py:67 wersite/forms.py:120
+#: wersite/forms.py:67 wersite/forms.py:123
 msgid "The captcha you entered was not correct"
 msgstr "De ingegeven captcha  was niet correct"
 
@@ -266,20 +270,24 @@ msgstr "Geef je acternaam in"
 msgid "Enter your DCI number"
 msgstr "Geef je DCI nummer in"
 
-#: wersite/forms.py:98
+#: wersite/forms.py:90 wersite/forms.py:99
 msgid "Optional"
 msgstr "Optioneel"
 
-#: wersite/models.py:48
+#: wersite/forms.py:132
+msgid "Coupon is not valid or has expired"
+msgstr "Kortingscode is niet geldig of is vervallen"
+
+#: wersite/models.py:56
 #, python-format
 msgid "%s drafted boosters"
 msgstr "%s gedraftte boosters"
 
-#: wersite/models.py:62 wersite/models.py:64
+#: wersite/models.py:70 wersite/models.py:72
 msgid "2-3 months"
 msgstr "2 - 3 maanden"
 
-#: wersite/models.py:66
+#: wersite/models.py:74
 msgid "3-4 months"
 msgstr "3 - 4 maanden"
 
@@ -664,11 +672,15 @@ msgid "City"
 msgstr "Stad"
 
 #: wersite/templates/wersite/cbi/reservation.html:78
+msgid "Coupon code"
+msgstr "Kortingscode"
+
+#: wersite/templates/wersite/cbi/reservation.html:83
 #: wersite/templates/wersite/werwer-signup.html:35
 msgid "Solve the captcha"
 msgstr "Los de captcha op"
 
-#: wersite/templates/wersite/cbi/reservation.html:84
+#: wersite/templates/wersite/cbi/reservation.html:89
 msgid "Next: payment overview"
 msgstr "Volgende: betalingsoverzicht"
 
