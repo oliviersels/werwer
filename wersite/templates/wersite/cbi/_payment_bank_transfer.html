@@ -7,7 +7,7 @@
     </tr>
     <tr>
         <th>{% trans "Amount" %}</th>
-        <td>€{{ object.price }}</td>
+        <td>€{{ object.price|floatformat:"-2" }}</td>
     </tr>
     <tr>
         <th>{% trans "Account nr" %}</th>

@@ -11,7 +11,7 @@
             <p>You have to accept the terms and conditions! <a href="{% url 'wersite-cbi-reservation-confirm' pk=object.pk %}">Back to payment overview</a></p>
         {% elif object.state == 'confirmed' %}
             <h2>{% trans "Payment details" %}</h2>
-            <p>{% blocktrans with object_price=object.price object_readable_payment_method=object.readable_payment_method %}
+            <p>{% blocktrans with object_price=object.price|floatformat:"-2" object_readable_payment_method=object.readable_payment_method %}
                 Thank you for your purchase! You have chosen to pay the total cost of <strong>€{{ object_price }}</strong>
                 via <strong>{{ object_readable_payment_method }}</strong>.{% endblocktrans %}</p>
             {% if object.payment_method == 'bank_transfer' %}

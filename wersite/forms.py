@@ -5,8 +5,8 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from recaptcha.client import captcha
 from werapp.models import Player
-from wersite.enums import PaymentMethod
-from wersite.models import FeatureFeedback, WerwerSignup, CBIReservation
+from wersite.enums import PaymentMethod, ProductType
+from wersite.models import FeatureFeedback, WerwerSignup, CBIReservation, Coupon
 from wersite.utils import get_client_ip
 
 
@@ -87,6 +87,7 @@ class PlayerProfileForm(forms.ModelForm):
 class CBIReservationForm(forms.ModelForm):
     recaptcha_challenge_field = forms.CharField()
     recaptcha_response_field = forms.CharField()
+    coupon_code = forms.CharField(max_length=12, required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Optional')}))
 
     class Meta:
         model = CBIReservation
@@ -104,6 +105,8 @@ class CBIReservationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
+        self.product = kwargs.pop('product')
+        self.coupon = None
         super(CBIReservationForm, self).__init__(*args, **kwargs)
 
     def clean(self):
@@ -119,6 +122,15 @@ class CBIReservationForm(forms.ModelForm):
             if not captcha_result.is_valid:
                 self._errors['recaptcha_response_field'] = self.error_class([_("The captcha you entered was not correct")])
                 del cleaned_data['recaptcha_response_field']
+            else:
+                # Clean the coupon code
+                coupon_code = self.cleaned_data.get('coupon_code', None)
+                if coupon_code is not None and coupon_code != '':
+                    # Check to see if it exists, isn't expired and isn't claimed
+                    self.coupon = Coupon.objects.find_coupon(coupon_code)
+                    if self.coupon is None or self.product != ProductType.BOOSTERS_36:
+                        self._errors['coupon_code'] = self.error_class([_("Coupon is not valid or has expired")])
+                        del cleaned_data['coupon_code']
 
         return cleaned_data
 

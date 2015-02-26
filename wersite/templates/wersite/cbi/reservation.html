@@ -22,7 +22,7 @@
                             </tr>
                             <tr>
                                 <th>{% trans "Price" %}</th>
-                                <td>€{{ object.price }}</td>
+                                <td>€{{ object.price|floatformat:"-2" }}</td>
                             </tr>
                         </table>
                     </div>
@@ -73,6 +73,11 @@
                     <label for="id_payment_method">{% trans "Payment method" %}</label>
                     {% if form.payment_method.errors %}<div class="alert alert-danger">{{ form.payment_method.errors }}</div>{% endif %}
                     {{ form.payment_method }}
+                </div>
+                <div class="form-group{%if form.coupon_code.errors %} has-error{%endif%}">
+                    <label for="id_coupon_code">{% trans "Coupon code" %}</label>
+                    {% if form.coupon_code.errors %}<div class="alert alert-danger">{{ form.coupon_code.errors }}</div>{% endif %}
+                    {{ form.coupon_code }}
                 </div>
                 <div>
                     <label for="recaptcha_response_field">{% trans "Solve the captcha" %}</label>

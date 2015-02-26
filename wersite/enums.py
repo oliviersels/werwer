@@ -53,3 +53,11 @@ class ReservationState(object):
         (COMPLETED, _('Completed')),
         (CANCELLED, _('Cancelled')),
     )
+
+
+class CouponType(object):
+    DISCOUNT_PERCENTAGE = 'discount_percentage'
+
+    choices = (
+        (DISCOUNT_PERCENTAGE, _('Discount percentage')),
+    )

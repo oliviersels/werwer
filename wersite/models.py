@@ -2,7 +2,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 # Create your models here.
-from wersite.enums import FeaturesChoices, ProductType, PaymentMethod, ReservationState
+from wersite.enums import FeaturesChoices, ProductType, PaymentMethod, ReservationState, CouponType
+from wersite.managers import CouponManager
 from wersite.utils import GenerateToken
 
 
@@ -37,11 +38,18 @@ class CBIReservation(models.Model):
     @property
     def price(self):
         if self.product == ProductType.BOOSTERS_12:
-            return 24
+            base_price = 24
         elif self.product == ProductType.BOOSTERS_24:
-            return 44
+            base_price = 44
         elif self.product == ProductType.BOOSTERS_36:
-            return 60
+            base_price = 60
+
+        # Coupon?
+        try:
+            if self.coupon is not None:
+                return self.coupon.adjust_price(base_price)
+        except Coupon.DoesNotExist:
+            return base_price
 
     @property
     def description(self):
@@ -78,3 +86,24 @@ class CBIReservation(models.Model):
         return '[%s] CBIReservation - %s (%s)' % (self.pk, self.product, self.state)
 
 
+class Coupon(models.Model):
+    code = models.CharField(max_length=255)
+    expires_on = models.DateTimeField(blank=True, null=True)
+    reservation = models.OneToOneField(CBIReservation, blank=True, null=True)
+    coupon_type = models.CharField(max_length=255, choices=CouponType.choices)
+    discount_percentage = models.DecimalField(max_digits=10, decimal_places=4)
+
+    objects = CouponManager()
+
+    @property
+    def code_masked(self):
+        if self.code is not None and len(self.code) >= 4:
+            return ''.join('X' for x in range(len(self.code) - 4)) + self.code[-4:]
+        return self.code
+
+    def adjust_price(self, base_price):
+        if self.coupon_type == CouponType.DISCOUNT_PERCENTAGE:
+            return base_price - (base_price * self.discount_percentage)
+
+    def __unicode__(self):
+        return '[%s] Coupon - %s (%s)' % (self.pk, self.code_masked, self.coupon_type)

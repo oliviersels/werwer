@@ -1,4 +1,5 @@
 # Create your views here.
+from decimal import Decimal
 import logging
 from braces.views import LoginRequiredMixin
 from django.conf import settings
@@ -265,6 +266,7 @@ class CBIReservationView(TemplateResponseMixin, BaseCreateView):
         # Overwrite to add the request to the args
         kwargs = super(CBIReservationView, self).get_form_kwargs()
         kwargs['request'] = self.request
+        kwargs['product'] = self._product()
         return kwargs
 
     def get_success_url(self):
@@ -277,6 +279,9 @@ class CBIReservationView(TemplateResponseMixin, BaseCreateView):
         self.object = form.save(commit=False)
         self.object.product = self._product()
         self.object.save()
+        if form.coupon is not None:
+            form.coupon.reservation = self.object
+            form.coupon.save()
         self.request.session['cbi_reservation_id'] = self.object.id
         return super(CBIReservationView, self).form_valid(form)
 
@@ -378,14 +383,14 @@ class CBIReservationPaypalView(SingleObjectMixin, RedirectView):
             },
             'transactions': [{
                 'amount': {
-                    'total': self.object.price,
+                    'total': '%.2f' % round(self.object.price, 2),
                     'currency': 'EUR',
                 },
                 'item_list': {
                     'items': [{
                         'quantity': '1',
                         'name': self.object.description,
-                        'price': self.object.price,
+                        'price': '%.2f' % round(self.object.price, 2),
                         'currency': 'EUR',
                     }]
                 }

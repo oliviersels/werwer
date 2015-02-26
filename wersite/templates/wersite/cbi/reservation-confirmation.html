@@ -22,7 +22,7 @@
                             </tr>
                             <tr>
                                 <th>{% trans "Price" %}</th>
-                                <td>€{{ object.price }}</td>
+                                <td>€{{ object.price|floatformat:"-2" }}</td>
                             </tr>
                             <tr>
                                 <th>{% trans "Shipping address" %}</th>
