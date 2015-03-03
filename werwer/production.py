@@ -33,6 +33,7 @@ HOST_NAME = 'aetherclub.be'
 
 SERVER_EMAIL = 'olivier.sels@gmail.com'
 
+GA_ID = 'UA-55858591-1'
 
 # Sentry settings
 RAVEN_CONFIG = {

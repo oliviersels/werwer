@@ -144,7 +144,10 @@ RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY', '')
 
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 
-TEMPLATE_CONTEXT_PROCESSORS = TCP + ("django.core.context_processors.request",)
+TEMPLATE_CONTEXT_PROCESSORS = TCP + (
+    "django.core.context_processors.request",
+    "wersite.context_processors.analytics_processor",
+)
 
 ACCOUNT_NR = os.environ.get('ACCOUNT_NR', 'Error! Please contact olivier.sels@gmail.com')
 HOST_NAME = os.environ.get('HOST_NAME', 'localhost:8000')
