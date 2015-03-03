@@ -212,7 +212,9 @@ werControllers.controller 'EventPlanningController', ['$scope',
           $scope.event.participant_set__v.splice(index, 1)
         )
 
-    $scope.pay_with_credits = (participant) ->
+    $scope.pay_with_credits = (participant, $event) ->
+      $event.stopPropagation()
+      $event.preventDefault()
       participant.pay_with_credits = true
       postableEvent = participant.postable()
       postableEvent.$update()
